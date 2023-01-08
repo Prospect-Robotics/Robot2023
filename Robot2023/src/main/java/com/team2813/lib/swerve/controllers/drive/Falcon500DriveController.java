@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 public class Falcon500DriveController implements DriveController {
     private final TalonFX motor;
+    private final double sensorPositionCoefficient;
     private final double sensorVelocityCoefficient;
 
     private SimpleMotorFeedforward feedforward;
@@ -18,7 +19,7 @@ public class Falcon500DriveController implements DriveController {
     public Falcon500DriveController(int id, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration) {
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
-        double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
+        sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
         sensorVelocityCoefficient = sensorPositionCoefficient * 10;
 
         motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
@@ -44,7 +45,7 @@ public class Falcon500DriveController implements DriveController {
     public Falcon500DriveController(int id, String canbus, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration) {
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
-        double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
+        sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
         sensorVelocityCoefficient = sensorPositionCoefficient * 10;
 
         motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
@@ -101,6 +102,11 @@ public class Falcon500DriveController implements DriveController {
         else {
             motor.set(TalonFXControlMode.Velocity, velocityRawUnits);
         }
+    }
+
+    @Override
+    public double getDistanceDriven() {
+        return motor.getSelectedSensorPosition() * sensorPositionCoefficient;
     }
 
     @Override
