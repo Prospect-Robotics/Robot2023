@@ -34,6 +34,11 @@ public class SparkMaxWrapper extends CANSparkMax implements Motor {
         setInverted(inverted);
     }
 
+    /**
+     * If control mode is duty cycle, demand should a value between -1 and 1 (fractional power)
+     * If control mode is velocity, demand should be desired motor velocity in RPM
+     * If control mode is motion magic, demand should be a desired motor position in rotations
+     */
     @Override
     public void set(ControlMode controlMode, double demand) {
         pidController.setReference(demand, controlMode.getSparkMode());
@@ -44,16 +49,25 @@ public class SparkMaxWrapper extends CANSparkMax implements Motor {
         pidController.setReference(demand, controlMode.getSparkMode(), 0, feedForward);
     }
 
+    /**
+     * @return motor encoder position in rotations
+     */
     @Override
     public double getEncoderPosition() {
         return encoder.getPosition();
     }
 
+    /**
+     * @param position desired position in motor rotations
+     */
     @Override
     public void setEncoderPosition(double position) {
         encoder.setPosition(position);
     }
 
+    /**
+     * @return motor velocity in RPM
+     */
     @Override
     public double getVelocity() {
         return encoder.getVelocity();
@@ -96,6 +110,10 @@ public class SparkMaxWrapper extends CANSparkMax implements Motor {
         configMotionMagic(slot, 0, maxVelocity, maxAcceleration);
     }
 
+    /**
+     * @param maxVelocity max velocity in RPM
+     * @param maxAcceleration max acceleration in RPM/s
+     */
     @Override
     public void configMotionMagic(double maxVelocity, double maxAcceleration) {
         configMotionMagic(0, 0, maxVelocity, maxAcceleration);
