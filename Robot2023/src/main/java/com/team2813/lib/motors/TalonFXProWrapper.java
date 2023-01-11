@@ -19,11 +19,11 @@ import java.util.Map;
  */
 public class TalonFXProWrapper extends TalonFX {
     private final List<TalonFX> followers = new ArrayList<>();
-    private final Map<String, StatusSignalValue> statusSignals = new HashMap<>();
+    private final Map<String, StatusSignalValue<Object>> statusSignals = new HashMap<>();
     private final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
 
     private StatusSignalValue<Double> encoderPosition = getRotorPosition();
-    private StatusSignalValue<Double> motorVelocity = getVelocity();
+    private StatusSignalValue<Double> motorVelocity = getRotorVelocity();
 
     /**
      * Constructor
@@ -73,7 +73,7 @@ public class TalonFXProWrapper extends TalonFX {
     public void set(ControlMode controlMode, double demand) {
         switch (controlMode) {
             case DUTY_CYCLE:
-                setControl(new DutyCycleOut(demand, true, false));
+                setControl(new DutyCycleOut(demand));
                 break;
             case VELOCITY:
                 set(controlMode, demand, 0, false);
@@ -197,7 +197,7 @@ public class TalonFXProWrapper extends TalonFX {
     }
 
 
-    public void registerStatusSignal(String key, StatusSignalValue statusSignal) {
+    public void registerStatusSignal(String key, StatusSignalValue<Object> statusSignal) {
         statusSignals.put(key, statusSignal);
     }
 
@@ -217,7 +217,7 @@ public class TalonFXProWrapper extends TalonFX {
      * @return the current value of the registered status signal
      */
     public Object getStatusSignalValue(String key) {
-        StatusSignalValue statusSignal = statusSignals.get(key);
+        StatusSignalValue<Object> statusSignal = statusSignals.get(key);
         statusSignal = statusSignal.refresh();
         return statusSignal.getValue();
     }
