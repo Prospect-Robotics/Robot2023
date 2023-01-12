@@ -41,6 +41,9 @@ public class TalonFXProWrapper extends TalonFX {
         motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
 
+        motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+        motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
         motorConfiguration.MotorOutput.Inverted = invertType;
 
         ConfigUtils.ctreProConfig(() -> getConfigurator().apply(motorConfiguration));
@@ -59,6 +62,9 @@ public class TalonFXProWrapper extends TalonFX {
 
         motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
+
+        motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+        motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
         motorConfiguration.MotorOutput.Inverted = invertType;
 
@@ -79,7 +85,7 @@ public class TalonFXProWrapper extends TalonFX {
                 set(controlMode, demand, 0, false);
                 break;
             case MOTION_MAGIC:
-                setControl(new MotionMagicDutyCycle(demand));
+                setControl(new MotionMagicTorqueCurrentFOC(demand));
                 break;
         }
     }
@@ -88,10 +94,12 @@ public class TalonFXProWrapper extends TalonFX {
         switch (controlMode) {
             case VELOCITY:
                 demand /= 60;
-                setControl(new VelocityVoltage(demand, true, feedForward, 0, brakeMode));
+                if (feedForward == 0) setControl(new VelocityTorqueCurrentFOC(demand, feedForward, 0, brakeMode));
+                else setControl(new VelocityVoltage(demand, true, feedForward, 0, brakeMode));
                 break;
             case MOTION_MAGIC:
-                setControl(new MotionMagicDutyCycle(demand, true, feedForward, 0, brakeMode));
+                if (feedForward == 0) setControl(new MotionMagicTorqueCurrentFOC(demand, feedForward, 0, brakeMode));
+                else setControl(new MotionMagicVoltage(demand, true, feedForward, 0, brakeMode));
                 break;
         }
     }

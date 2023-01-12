@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import com.ctre.phoenixpro.StatusSignalValue;
 import com.ctre.phoenixpro.controls.DutyCycleOut;
+import com.ctre.phoenixpro.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenixpro.controls.VelocityVoltage;
 import com.ctre.phoenixpro.signals.InvertedValue;
 import com.ctre.phoenixpro.signals.NeutralModeValue;
@@ -198,16 +199,15 @@ public class Falcon500DriveController implements DriveController {
             else {
                 if (licensed) {
                     if (velocityRawUnits == 0) {
-                        licensedMotor.setControl(new VelocityVoltage(
+                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(
                                 velocityRawUnits,
-                                true,
                                 0,
                                 0,
                                 true
                         ));
                     }
                     else {
-                        licensedMotor.setControl(new VelocityVoltage(velocityRawUnits));
+                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
                     }
                 }
                 else {
@@ -231,7 +231,7 @@ public class Falcon500DriveController implements DriveController {
     @Override
     public double getStateVelocity() {
         if (licensed) {
-            motorVelocity.refresh();
+            motorVelocity = motorVelocity.refresh();
             return motorVelocity.getValue() * sensorVelocityCoefficient;
         }
         else {
