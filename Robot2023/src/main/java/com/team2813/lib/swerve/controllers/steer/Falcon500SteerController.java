@@ -70,6 +70,9 @@ public class Falcon500SteerController implements SteerController {
             motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getSteerCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
             motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
             motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isSteerInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;

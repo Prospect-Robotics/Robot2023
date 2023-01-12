@@ -11,10 +11,14 @@ public class NeoDriveController implements DriveController {
     private final CANSparkMax motor;
     private final RelativeEncoder encoder;
     private final SparkMaxPIDController pidController;
+    private final double maxVelocity;
 
     private SimpleMotorFeedforward feedforward;
+    private boolean hasPidConstants = false;
 
     public NeoDriveController(int id, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration) {
+        maxVelocity = 5676.0 / 60.0 * moduleConfiguration.getDriveReduction() * moduleConfiguration.getWheelDiameter();
+
         motor = new CANSparkMax(id, CANSparkMaxLowLevel.MotorType.kBrushless);
         motor.setInverted(moduleConfiguration.isDriveInverted());
 
@@ -38,6 +42,8 @@ public class NeoDriveController implements DriveController {
 
     @Override
     public NeoDriveController withPidConstants(double proportional, double integral, double derivative) {
+        hasPidConstants = true;
+
         ConfigUtils.revConfig(() -> pidController.setP(proportional));
         ConfigUtils.revConfig(() -> pidController.setI(integral));
         ConfigUtils.revConfig(() -> pidController.setD(derivative));
@@ -56,14 +62,22 @@ public class NeoDriveController implements DriveController {
         return feedforward != null;
     }
 
-    // velocity in m/s
+    /**
+     * @param velocity desired velocity in m/s
+     */
     @Override
     public void setReferenceVelocity(double velocity) {
-        if (hasFeedForward()) {
-            pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
+        if (hasPidConstants) {
+            if (hasFeedForward()) {
+                pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
+            }
+            else {
+                pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
+            }
         }
         else {
-            pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity);
+            double dutyCycle = velocity / maxVelocity;
+            pidController.setReference(dutyCycle, CANSparkMax.ControlType.kDutyCycle);
         }
     }
 
