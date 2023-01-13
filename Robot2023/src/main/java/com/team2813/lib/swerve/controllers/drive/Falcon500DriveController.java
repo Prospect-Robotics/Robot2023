@@ -179,58 +179,28 @@ public class Falcon500DriveController implements DriveController {
 
             if (hasFeedForward()) {
                 if (licensed) {
-                    if (velocityRawUnits == 0) {
-                        licensedMotor.setControl(new VelocityVoltage(
-                                velocityRawUnits,
-                                true,
-                                feedforward.calculate(velocity),
-                                0,
-                                true
-                        ));
-                    }
-                    else {
-                        licensedMotor.setControl(new VelocityVoltage(
-                                velocityRawUnits,
-                                true,
-                                feedforward.calculate(velocity),
-                                0,
-                                false
-                        ));
-                    }
+                    licensedMotor.setControl(new VelocityVoltage(
+                            velocityRawUnits,
+                            true,
+                            feedforward.calculate(velocity),
+                            0,
+                            false
+                    ));
                 }
                 else {
                     unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits, DemandType.ArbitraryFeedForward, feedforward.calculate(velocity));
                 }
             }
             else {
-                if (licensed) {
-                    if (velocityRawUnits == 0) {
-                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(
-                                velocityRawUnits,
-                                0,
-                                0,
-                                true
-                        ));
-                    }
-                    else {
-                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
-                    }
-                }
-                else {
-                    unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits);
-                }
+                if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                else unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits);
             }
         }
         else {
             double dutyCycle = velocity / maxVelocity;
 
-            if (licensed) {
-                if (dutyCycle == 0) licensedMotor.setControl(new DutyCycleOut(dutyCycle, true, true));
-                else licensedMotor.setControl(new DutyCycleOut(dutyCycle));
-            }
-            else {
-                unlicensedMotor.set(TalonFXControlMode.PercentOutput, dutyCycle);
-            }
+            if (licensed) licensedMotor.setControl(new DutyCycleOut(dutyCycle));
+            else unlicensedMotor.set(TalonFXControlMode.PercentOutput, dutyCycle);
         }
     }
 

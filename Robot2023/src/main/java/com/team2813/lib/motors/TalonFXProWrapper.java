@@ -21,6 +21,7 @@ public class TalonFXProWrapper extends TalonFX {
     private final List<TalonFX> followers = new ArrayList<>();
     private final Map<String, StatusSignalValue<Object>> statusSignals = new HashMap<>();
     private final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+    private final boolean canivore;
 
     private StatusSignalValue<Double> encoderPosition = getRotorPosition();
     private StatusSignalValue<Double> motorVelocity = getRotorVelocity();
@@ -34,6 +35,7 @@ public class TalonFXProWrapper extends TalonFX {
      */
     public TalonFXProWrapper(int deviceNumber, String canbus, InvertedValue invertType) {
         super(deviceNumber, canbus);
+        canivore = true;
 
         motorConfiguration.Voltage.PeakForwardVoltage = 12;
         motorConfiguration.Voltage.PeakReverseVoltage = -12;
@@ -56,6 +58,7 @@ public class TalonFXProWrapper extends TalonFX {
      */
     public TalonFXProWrapper(int deviceNumber, InvertedValue invertType) {
         super(deviceNumber);
+        canivore = false;
 
         motorConfiguration.Voltage.PeakForwardVoltage = 12;
         motorConfiguration.Voltage.PeakReverseVoltage = -12;
@@ -82,7 +85,7 @@ public class TalonFXProWrapper extends TalonFX {
                 setControl(new DutyCycleOut(demand));
                 break;
             case VELOCITY:
-                set(controlMode, demand, 0, false);
+                set(controlMode, demand, 0);
                 break;
             case MOTION_MAGIC:
                 setControl(new MotionMagicTorqueCurrentFOC(demand));
@@ -90,16 +93,15 @@ public class TalonFXProWrapper extends TalonFX {
         }
     }
 
-    public void set(ControlMode controlMode, double demand, double feedForward, boolean brakeMode) {
+    public void set(ControlMode controlMode, double demand, double feedForward) {
         switch (controlMode) {
             case VELOCITY:
                 demand /= 60;
-                if (feedForward == 0) setControl(new VelocityTorqueCurrentFOC(demand, feedForward, 0, brakeMode));
-                else setControl(new VelocityVoltage(demand, true, feedForward, 0, brakeMode));
+                if (feedForward == 0) setControl(new VelocityTorqueCurrentFOC(demand));
+                else setControl(new VelocityVoltage(demand, true, feedForward, 0, false));
                 break;
             case MOTION_MAGIC:
-                if (feedForward == 0) setControl(new MotionMagicTorqueCurrentFOC(demand, feedForward, 0, brakeMode));
-                else setControl(new MotionMagicVoltage(demand, true, feedForward, 0, brakeMode));
+                setControl(new MotionMagicVoltage(demand, true, feedForward, 0, false));
                 break;
         }
     }
@@ -113,8 +115,8 @@ public class TalonFXProWrapper extends TalonFX {
         setControl(new TorqueCurrentFOC(current, 1, 1, false));
     }
 
-    public void setTorqueCurrent(double current, double maxAbsDutyCycle, boolean brakeMode) {
-        setControl(new TorqueCurrentFOC(current, maxAbsDutyCycle, 1, brakeMode));
+    public void setTorqueCurrent(double current, double maxAbsDutyCycle) {
+        setControl(new TorqueCurrentFOC(current, maxAbsDutyCycle, 1, false));
     }
 
     /**
@@ -138,6 +140,10 @@ public class TalonFXProWrapper extends TalonFX {
     public double getMotorVelocity() {
         motorVelocity = motorVelocity.refresh();
         return motorVelocity.getValue() * 60;
+    }
+
+    public boolean isOnCANivore() {
+        return canivore;
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {

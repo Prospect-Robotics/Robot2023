@@ -201,18 +201,11 @@ public class Falcon500SteerController implements SteerController {
         }
 
         if (licensed) {
-            licensedMotor.setControl(new PositionVoltage(
-                    adjustedReferenceAngleRadians / sensorPositionCoefficient,
-                    true,
-                    0,
-                    0,
-                    true
-            ));
+            licensedMotor.setControl(new PositionVoltage(adjustedReferenceAngleRadians / sensorPositionCoefficient));
         }
         else {
             unlicensedMotor.set(controlMode, adjustedReferenceAngleRadians / sensorPositionCoefficient);
         }
-
 
         this.referenceAngleRadians = referenceAngleRadians;
     }

@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class TalonFXWrapper extends TalonFX implements Motor {
     private final List<TalonFX> followers = new ArrayList<>();
+    private final boolean canivore;
 
     /**
      * Constructor
@@ -24,6 +25,7 @@ public class TalonFXWrapper extends TalonFX implements Motor {
      */
     public TalonFXWrapper(int deviceNumber, String canbus, TalonFXInvertType invertType) {
         super(deviceNumber, canbus);
+        canivore = true;
 
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
         motorConfiguration.voltageCompSaturation = 12;
@@ -41,6 +43,7 @@ public class TalonFXWrapper extends TalonFX implements Motor {
      */
     public TalonFXWrapper(int deviceNumber, TalonFXInvertType invertType) {
         super(deviceNumber);
+        canivore = false;
 
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
         motorConfiguration.voltageCompSaturation = 12;
@@ -95,6 +98,10 @@ public class TalonFXWrapper extends TalonFX implements Motor {
     @Override
     public double getVelocity() {
         return Units2813.ticksToMotorRevs(getSelectedSensorVelocity(), 2048) * 10 * 60;
+    }
+
+    public boolean isOnCANivore() {
+        return canivore;
     }
 
     @Override

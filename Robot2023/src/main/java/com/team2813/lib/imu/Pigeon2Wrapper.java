@@ -19,7 +19,6 @@ public class Pigeon2Wrapper extends Pigeon2 {
      */
     public Pigeon2Wrapper(int deviceNumber, String canbus) {
         super(deviceNumber, canbus);
-
         canivore = true;
 
         ConfigUtils.ctreConfig(() -> configAllSettings(new Pigeon2Configuration()));
@@ -31,7 +30,6 @@ public class Pigeon2Wrapper extends Pigeon2 {
      */
     public Pigeon2Wrapper(int deviceNumber) {
         super(deviceNumber);
-
         canivore = false;
 
         ConfigUtils.ctreConfig(() -> configAllSettings(new Pigeon2Configuration()));
