@@ -227,6 +227,7 @@ public class TalonFXProWrapper extends TalonFX {
     public Object getStatusSignalValue(String key) {
         StatusSignalValue<Object> statusSignal = statusSignals.get(key);
         statusSignal = statusSignal.refresh();
+        statusSignals.replace(key, statusSignal);
         return statusSignal.getValue();
     }
 

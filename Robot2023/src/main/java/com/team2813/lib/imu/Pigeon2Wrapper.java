@@ -9,6 +9,8 @@ public class Pigeon2Wrapper extends Pigeon2 {
 
     private double currentHeading = 0;
 
+    private final boolean canivore;
+
     /**
      * Constructor
      * @param deviceNumber [0,62]
@@ -18,10 +20,9 @@ public class Pigeon2Wrapper extends Pigeon2 {
     public Pigeon2Wrapper(int deviceNumber, String canbus) {
         super(deviceNumber, canbus);
 
+        canivore = true;
+
         ConfigUtils.ctreConfig(() -> configAllSettings(new Pigeon2Configuration()));
-        ConfigUtils.ctreConfig(
-                () -> setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, 20)
-        );
     }
 
     /**
@@ -30,6 +31,8 @@ public class Pigeon2Wrapper extends Pigeon2 {
      */
     public Pigeon2Wrapper(int deviceNumber) {
         super(deviceNumber);
+
+        canivore = false;
 
         ConfigUtils.ctreConfig(() -> configAllSettings(new Pigeon2Configuration()));
         ConfigUtils.ctreConfig(
@@ -57,9 +60,11 @@ public class Pigeon2Wrapper extends Pigeon2 {
             currentHeading = getHeading();
         }
         else {
-            ConfigUtils.ctreConfig(
-                    () -> setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, 20)
-            );
+            if (!canivore) {
+                ConfigUtils.ctreConfig(
+                        () -> setStatusFramePeriod(PigeonIMU_StatusFrame.CondStatus_9_SixDeg_YPR, 20)
+                );
+            }
             setHeading(currentHeading);
         }
     }
