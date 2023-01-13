@@ -62,6 +62,8 @@ public class TalonFXWrapper extends TalonFX implements Motor {
             case MOTION_MAGIC:
                 demand = Units2813.motorRevsToTicks(demand, 2048);
                 break;
+            case DUTY_CYCLE:
+                break;
         }
         set(controlMode.getTalonMode(), demand, DemandType.ArbitraryFeedForward, feedForward);
     }
