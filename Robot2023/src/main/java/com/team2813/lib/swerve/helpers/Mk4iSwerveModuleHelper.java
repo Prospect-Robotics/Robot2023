@@ -1,20 +1,20 @@
 package com.team2813.lib.swerve.helpers;
 
 import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper.GearRatio;
+import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.ctre.CanCoderAbsoluteConfiguration;
+import com.team2813.lib.swerve.controllers.SwerveModule;
 import com.team2813.lib.swerve.controllers.drive.Falcon500DriveController;
 import com.team2813.lib.swerve.controllers.drive.NeoDriveController;
-import com.team2813.lib.swerve.controllers.SwerveModule;
 import com.team2813.lib.swerve.controllers.steer.Falcon500SteerController;
 import com.team2813.lib.swerve.controllers.steer.NeoSteerController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 
-public class Mk4SwerveModuleHelper {
+public class Mk4iSwerveModuleHelper {
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -55,7 +55,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -100,7 +100,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -134,7 +134,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -172,7 +172,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -208,7 +208,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -248,7 +248,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive Falcon 500.
@@ -278,7 +278,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param canbus           Name of the CANbus; can be a SocketCAN interface (on Linux),
@@ -312,7 +312,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -363,7 +363,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -418,7 +418,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -464,7 +464,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -514,7 +514,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -560,7 +560,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -610,7 +610,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive Falcon 500.
@@ -652,7 +652,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses Falcon 500s for driving and steering.
+     * Creates a Mk4i swerve module that uses Falcon 500s for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param canbus           Name of the CANbus; can be a SocketCAN interface (on Linux),
@@ -698,7 +698,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -736,7 +736,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -767,7 +767,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -800,7 +800,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive NEO.
@@ -827,7 +827,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -875,7 +875,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -918,7 +918,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -961,7 +961,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses NEOs for driving and steering.
+     * Creates a Mk4i swerve module that uses NEOs for driving and steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive NEO.
@@ -1000,7 +1000,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a Falcon 500 for driving and a NEO steering.
+     * Creates a Mk4i swerve module that uses a Falcon 500 for driving and a NEO steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -1050,7 +1050,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a Falcon 500 for driving and a NEO steering.
+     * Creates a Mk4i swerve module that uses a Falcon 500 for driving and a NEO steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -1096,7 +1096,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a Falcon 500 for driving and a NEO steering.
+     * Creates a Mk4i swerve module that uses a Falcon 500 for driving and a NEO steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -1141,7 +1141,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a Falcon 500 for driving and a NEO steering.
+     * Creates a Mk4i swerve module that uses a Falcon 500 for driving and a NEO steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive Falcon 500.
@@ -1183,7 +1183,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a NEO for driving and a Falcon 500 for steering.
+     * Creates a Mk4i swerve module that uses a NEO for driving and a Falcon 500 for steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -1232,7 +1232,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a NEO for driving and a Falcon 500 for steering.
+     * Creates a Mk4i swerve module that uses a NEO for driving and a Falcon 500 for steering.
      * Module information is displayed in the specified Shuffleboard container.
      *
      * @param container        The container to display module information in
@@ -1275,7 +1275,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a NEO for driving and a Falcon 500 for steering.
+     * Creates a Mk4i swerve module that uses a NEO for driving and a Falcon 500 for steering.
      *
      * @param configuration    Module configuration parameters to use.
      * @param gearRatio        The gearing configuration the module is in.
@@ -1319,7 +1319,7 @@ public class Mk4SwerveModuleHelper {
     }
 
     /**
-     * Creates a Mk4 swerve module that uses a NEO for driving and a Falcon 500 for steering.
+     * Creates a Mk4i swerve module that uses a NEO for driving and a Falcon 500 for steering.
      *
      * @param gearRatio        The gearing configuration the module is in.
      * @param driveMotorPort   The CAN ID of the drive NEO.
