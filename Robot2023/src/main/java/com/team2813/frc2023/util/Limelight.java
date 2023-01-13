@@ -33,18 +33,10 @@ public class Limelight {
     }
 
     /**
-     * Gets the position on the playing field using position relative to Apriltags
-     */
-    // Do the output how you want to. (but make it make sense)
-    public void getPositionTracking() {
-        // TODO: add code here
-    }
-
-    /**
      * Gets the position on the playing field using build-in robot localization
      */
     // Do the output how you want to. (but make it make sense)
-    public void getPositionLocalization() {
+    public void getPosition() {
         // TODO: add code here
     }
 }
