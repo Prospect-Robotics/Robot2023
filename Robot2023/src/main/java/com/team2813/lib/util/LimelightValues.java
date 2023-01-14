@@ -7,7 +7,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimelightValues {
     private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private NetworkTableEntry botposeEntry = table.getEntry("botepose");
+    private NetworkTableEntry botposeEntry = table.getEntry("botpose");
+    private NetworkTableEntry jsonDump = table.getEntry("json");
     private NetworkTableEntry tv = table.getEntry("tv");
     private NetworkTableEntry tx = table.getEntry("tx");
     private NetworkTableEntry ty = table.getEntry("ty");
@@ -16,10 +17,6 @@ public class LimelightValues {
     private NetworkTableEntry tl = table.getEntry("tl");
     private NetworkTableEntry ledMode = table.getEntry("ledMode");
     private NetworkTableEntry stream = table.getEntry("stream");
-
-    public void update() {
-        table = NetworkTableInstance.getDefault().getTable("limelight");
-    }
 
     public NetworkTable getTable() {
         return table;
@@ -59,5 +56,9 @@ public class LimelightValues {
 
     public NetworkTableEntry getStream() {
         return stream;
+    }
+
+    public String getJSON() {
+        return jsonDump.getString("");
     }
 }
