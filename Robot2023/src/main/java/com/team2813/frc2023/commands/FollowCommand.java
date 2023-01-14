@@ -24,10 +24,11 @@ public class FollowCommand extends PPSwerveControllerCommand {
     private static final PIDController thetaController = new PIDController(3.5, 1, 0);
 
     private final PathPlannerTrajectory trajectory;
+    private final Consumer<ChassisSpeeds> chassisSpeedsConsumer;
 
-    public FollowCommand(String trajectoryName, Drive driveSubsystem) {
+    public FollowCommand(PathPlannerTrajectory trajectory, Drive driveSubsystem) {
         super(
-                PathPlanner.loadPath(trajectoryName, AUTO_MAX_VEL, AUTO_MAX_ACCEL),
+                trajectory,
                 driveSubsystem::getPose,
                 xController,
                 yController,
@@ -36,21 +37,8 @@ public class FollowCommand extends PPSwerveControllerCommand {
                 driveSubsystem
         );
 
-        trajectory = PathPlanner.loadPath(trajectoryName, AUTO_MAX_VEL, AUTO_MAX_ACCEL);
-    }
-
-    public FollowCommand(String trajectoryName, boolean reversed, Drive driveSubsystem) {
-        super(
-                PathPlanner.loadPath(trajectoryName, AUTO_MAX_VEL, AUTO_MAX_ACCEL, reversed),
-                driveSubsystem::getPose,
-                xController,
-                yController,
-                thetaController,
-                getChassisSpeedsConsumer(driveSubsystem),
-                driveSubsystem
-        );
-
-        trajectory = PathPlanner.loadPath(trajectoryName, AUTO_MAX_VEL, AUTO_MAX_ACCEL, reversed);
+        chassisSpeedsConsumer = getChassisSpeedsConsumer(driveSubsystem);
+        this.trajectory = trajectory;
     }
 
     private static Consumer<ChassisSpeeds> getChassisSpeedsConsumer(Drive driveSubsystem) {
@@ -69,5 +57,11 @@ public class FollowCommand extends PPSwerveControllerCommand {
         PathPlannerState goalState = trajectory.getEndState();
         Pose2d goalPose = new Pose2d(goalState.poseMeters.getTranslation(), goalState.holonomicRotation);
         SmartDashboard.putString("Goal Pose", goalPose.toString());
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        super.end(interrupted);
+        chassisSpeedsConsumer.accept(new ChassisSpeeds());
     }
 }

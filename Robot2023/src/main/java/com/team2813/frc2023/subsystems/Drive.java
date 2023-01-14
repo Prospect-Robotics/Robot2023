@@ -1,10 +1,8 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import com.team2813.frc2023.Robot;
 import com.team2813.lib.imu.Pigeon2Wrapper;
 import com.team2813.lib.swerve.helpers.Mk4SwerveModuleHelper;
 import com.team2813.lib.swerve.controllers.SwerveModule;
@@ -139,13 +137,13 @@ public class Drive extends SubsystemBase {
         chassisSpeedDemand = demand;
     }
 
-    public void initAutonomous(PathPlannerState initialState) {
+    public void initAutonomous(Pose2d initialPose) {
         frontLeftModule.resetDriveEncoder();
         frontRightModule.resetDriveEncoder();
         backLeftModule.resetDriveEncoder();
         backRightModule.resetDriveEncoder();
 
-        pigeon.setHeading(initialState.holonomicRotation.getDegrees());
+        pigeon.setHeading(initialPose.getRotation().getDegrees());
 
         SwerveModulePosition[] modulePositions = {
                 frontLeftModule.getPosition(),
@@ -153,11 +151,7 @@ public class Drive extends SubsystemBase {
                 backLeftModule.getPosition(),
                 backRightModule.getPosition()
         };
-        odometry = new SwerveDriveOdometry(kinematics, initialState.holonomicRotation, modulePositions);
-    }
-
-    public void initAutonomous(Rotation2d initialRotation) {
-        pigeon.setHeading(initialRotation.getDegrees());
+        odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions);
     }
 
     @Override
