@@ -245,7 +245,7 @@ public class Falcon500DriveController implements DriveController {
 
         if (licensed) {
             container.addNumber("Drive Motor Temp (degrees Celsius)", () -> {
-                motorTemp.refresh();
+                motorTemp = motorTemp.refresh();
                 return motorTemp.getValue();
             });
         }
