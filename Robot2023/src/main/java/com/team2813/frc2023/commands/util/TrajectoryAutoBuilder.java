@@ -6,13 +6,11 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.BaseAutoBuilder;
 import com.team2813.frc2023.commands.FollowCommand;
 import com.team2813.frc2023.subsystems.Drive;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 import static com.team2813.frc2023.Constants.*;
 import static com.team2813.frc2023.RobotContainer.EVENT_MAP;
@@ -24,12 +22,7 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
     public TrajectoryAutoBuilder(Drive driveSubsystem) {
         super(
                 driveSubsystem::getPose,
-                new Consumer<Pose2d>() {
-                    @Override
-                    public void accept(Pose2d pose2d) {
-                        driveSubsystem.initAutonomous(pose2d);
-                    }
-                },
+                driveSubsystem::initAutonomous,
                 EVENT_MAP,
                 DrivetrainType.HOLONOMIC
         );
