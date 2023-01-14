@@ -7,11 +7,15 @@ import com.pathplanner.lib.auto.BaseAutoBuilder;
 import com.team2813.frc2023.commands.FollowCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
+import java.util.Map;
 import java.util.function.Consumer;
 
 import static com.team2813.frc2023.Constants.*;
+import static com.team2813.frc2023.RobotContainer.EVENT_MAP;
 
 public class TrajectoryAutoBuilder extends BaseAutoBuilder {
 
@@ -36,6 +40,17 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
     @Override
     public CommandBase followPath(PathPlannerTrajectory trajectory) {
         return new FollowCommand(trajectory, driveSubsystem);
+    }
+
+    /**
+     * Use this to get a command to customize the event map.
+     * This should be the first command in your auto if
+     * you did have custom events.
+     * @param addOnEventMap event map of custom events (Commands) and event markers (Strings)
+     * @return a command that customizes the event map
+     */
+    public CommandBase customizeEventMap(Map<String, Command> addOnEventMap) {
+        return new InstantCommand(() -> eventMap.putAll(addOnEventMap));
     }
 
     public CommandBase buildTrajectoryAuto(String trajectoryName) {

@@ -68,12 +68,4 @@ public final class Constants
     // Auto Constants
     public static final double AUTO_MAX_VEL = 2.25; // m/s
     public static final double AUTO_MAX_ACCEL = 6; // m/s
-
-    /*
-    String key is the name of the event marker in an auto routine,
-    Command value is the command associated with that event marker.
-
-    Refer to this when creating event markers in Path Planner.
-     */
-    public static final Map<String, Command> EVENT_MAP = new HashMap<>();
 }
