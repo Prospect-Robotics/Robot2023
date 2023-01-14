@@ -40,12 +40,6 @@ public class Limelight {
      */
     // Do the output how you want to. (but make it make sense)
     public Double[] getPosition() {
-        Double[] location;
-        try {
-            location = Arrays.copyOfRange(values.getFieldLocation(), 0, 2);
-        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
-            location = new Double[] { 0.0, 0.0 };
-        }
-        return location;
+        return Arrays.copyOfRange(values.getFieldLocation(), 0, 2);
     }
 }

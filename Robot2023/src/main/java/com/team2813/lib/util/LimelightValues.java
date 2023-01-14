@@ -56,7 +56,7 @@ public class LimelightValues {
         /** Returns the current value, or NaN if there is no value. */
         @Override
         public Double[] get() {
-            return entry.getDoubleArray(new Double[]{Double.NaN});
+            return entry.getDoubleArray(new Double[0]);
         }
     }
 
@@ -86,7 +86,20 @@ public class LimelightValues {
         return stream;
     }
 
+    /**
+     * Gets the location on the field.<br>
+     * If there location is undefined, returns an array with all 0s
+     * @return a {@link Double} array with the following entries: x, y, z, pitch, yaw, roll
+     * @see <a href="https://docs.limelightvision.io/en/latest/coordinate_systems_fiducials.html#field-space">Field space</a>
+     */
     public Double[] getFieldLocation() {
-        return fieldLocation.get();
+        Double[] location = fieldLocation.get();
+        if (location.length == 0) {
+            location = new Double[6];
+            for (int i = 0; i < location.length; i++) {
+                location[i] = 0.0;
+            }
+        }
+        return location;
     }
 }
