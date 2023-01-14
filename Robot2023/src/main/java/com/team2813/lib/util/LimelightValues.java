@@ -1,57 +1,71 @@
 package com.team2813.lib.util;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightValues {
-    private NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private NetworkTableEntry botposeEntry = table.getEntry("botpose");
-    private NetworkTableEntry jsonDump = table.getEntry("json");
-    private NetworkTableEntry tv = table.getEntry("tv");
-    private NetworkTableEntry tx = table.getEntry("tx");
-    private NetworkTableEntry ty = table.getEntry("ty");
-    private NetworkTableEntry ta = table.getEntry("ta");
-    private NetworkTableEntry ts = table.getEntry("ts");
-    private NetworkTableEntry tl = table.getEntry("tl");
-    private NetworkTableEntry ledMode = table.getEntry("ledMode");
-    private NetworkTableEntry stream = table.getEntry("stream");
+    private final NetworkTableEntry jsonDump = table.getEntry("json");
+    private final NetworkTableEntry ledMode = table.getEntry("ledMode");
+    private final NetworkTableEntry stream = table.getEntry("stream");
 
-    public NetworkTable getTable() {
-        return table;
+    private final DoubleValue horizonalOffset = new DoubleValue(table, "tx");
+    private final DoubleValue verticalOffset = new DoubleValue(table, "ty");
+    private final DoubleValue hasTargets = new DoubleValue(table, "tv");
+
+    public static enum LedState {
+        /** Use the LED Mode set in the current pipeline. */
+        DEFAULT,
+    
+        /** Force off. */
+        OFF,
+    
+        /** Force blink. */
+        BLINK,
+        
+        /** Force on. */
+        ON
     }
 
-    public NetworkTableEntry getBotposeEntry() {
-        return botposeEntry;
+    private static class DoubleValue implements Supplier<Double> {
+        private final NetworkTableEntry entry;
+    
+        DoubleValue(NetworkTable table, String key) {
+            entry = table.getEntry(key);
+        }
+
+        /** Returns the current value, or NaN if there is no value. */
+        @Override
+        public Double get() {
+            return entry.getDouble(Double.NaN);
+        }
     }
 
-    public NetworkTableEntry getTv() {
-        return tv;
+
+    /** Whether the limelight has any valid targets. */
+    public boolean hasTargets() {
+        return hasTargets.get() == 1;
     }
 
     public double getTx() {
-        return tx.getDouble(0);
+       return horizonalOffset.get();
     }
 
     public double getTy() {
-        return ty.getDouble(0);
+        return verticalOffset.get();
     }
 
-    public NetworkTableEntry getTa() {
-        return ta;
+    public void setLedState(LedState state) {
+        ledMode.setNumber(state.ordinal());
     }
 
-    public NetworkTableEntry getTs() {
-        return ts;
-    }
-
-    public NetworkTableEntry getTl() {
-        return tl;
-    }
-
-    public NetworkTableEntry getLedMode() {
-        return ledMode;
+    public LedState getLedState() {
+        return LedState.values()[(int) ledMode.getNumber(0)];
     }
 
     public NetworkTableEntry getStream() {
