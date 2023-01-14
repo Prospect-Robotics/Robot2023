@@ -10,10 +10,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimelightValues {
     private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    private final NetworkTableEntry jsonDump = table.getEntry("json");
     private final NetworkTableEntry ledMode = table.getEntry("ledMode");
     private final NetworkTableEntry stream = table.getEntry("stream");
 
+    private final DoubleArrayValue fieldLocation = new DoubleArrayValue(table, "botpose");
     private final DoubleValue horizonalOffset = new DoubleValue(table, "tx");
     private final DoubleValue verticalOffset = new DoubleValue(table, "ty");
     private final DoubleValue hasTargets = new DoubleValue(table, "tv");
@@ -46,6 +46,20 @@ public class LimelightValues {
         }
     }
 
+    private static class DoubleArrayValue implements Supplier<Double[]> {
+        private final NetworkTableEntry entry;
+    
+        DoubleArrayValue(NetworkTable table, String key) {
+            entry = table.getEntry(key);
+        }
+
+        /** Returns the current value, or NaN if there is no value. */
+        @Override
+        public Double[] get() {
+            return entry.getDoubleArray(new Double[]{Double.NaN});
+        }
+    }
+
 
     /** Whether the limelight has any valid targets. */
     public boolean hasTargets() {
@@ -72,7 +86,7 @@ public class LimelightValues {
         return stream;
     }
 
-    public String getJSON() {
-        return jsonDump.getString("");
+    public Double[] getFieldLocation() {
+        return fieldLocation.get();
     }
 }

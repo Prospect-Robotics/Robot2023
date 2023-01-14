@@ -1,5 +1,7 @@
 package com.team2813.frc2023.util;
 
+import java.util.Arrays;
+
 import com.team2813.lib.util.LimelightValues;
 import com.team2813.lib.util.LimelightValues.LedState;
 
@@ -37,7 +39,13 @@ public class Limelight {
      * Gets the position on the playing field using build-in robot localization
      */
     // Do the output how you want to. (but make it make sense)
-    public void getPosition() {
-        // TODO: add code here
+    public Double[] getPosition() {
+        Double[] location;
+        try {
+            location = Arrays.copyOfRange(values.getFieldLocation(), 0, 2);
+        } catch (ArrayIndexOutOfBoundsException | NullPointerException e) {
+            location = new Double[] { 0.0, 0.0 };
+        }
+        return location;
     }
 }
