@@ -33,23 +33,14 @@ public class FollowCommand extends PPSwerveControllerCommand {
                 xController,
                 yController,
                 thetaController,
-                getChassisSpeedsConsumer(driveSubsystem),
+                driveSubsystem::drive,
                 driveSubsystem
         );
 
-        chassisSpeedsConsumer = getChassisSpeedsConsumer(driveSubsystem);
+        chassisSpeedsConsumer = driveSubsystem::drive;
         this.trajectory = trajectory;
     }
-
-    private static Consumer<ChassisSpeeds> getChassisSpeedsConsumer(Drive driveSubsystem) {
-        return new Consumer<ChassisSpeeds>() {
-            @Override
-            public void accept(ChassisSpeeds chassisSpeeds) {
-                driveSubsystem.drive(chassisSpeeds);
-            }
-        };
-    }
-
+    
     @Override
     public void initialize() {
         super.initialize();
