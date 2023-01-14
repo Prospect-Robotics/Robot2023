@@ -3,6 +3,7 @@ package com.team2813.lib.swerve.controllers;
 import com.swervedrivespecialties.swervelib.SteerController;
 import com.team2813.lib.swerve.controllers.drive.DriveController;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 
 public class SwerveModule {
@@ -59,7 +60,7 @@ public class SwerveModule {
         driveController.resetEncoder();
     }
 
-    public SwerveModuleState getState() {
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getSteerAngle()));
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(driveController.getDistanceDriven(), new Rotation2d(getSteerAngle()));
     }
 }

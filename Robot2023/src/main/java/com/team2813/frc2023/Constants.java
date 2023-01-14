@@ -5,6 +5,8 @@
 
 package com.team2813.frc2023;
 
+import edu.wpi.first.math.util.Units;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -19,4 +21,37 @@ public final class Constants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
     }
+
+    // CAN IDs
+
+    // Swerve Modules
+
+    // Front Left
+    public static final int FRONT_LEFT_DRIVE_ID = 2;
+    public static final int FRONT_LEFT_STEER_ID = 3;
+    public static final int FRONT_LEFT_ENCODER_ID = 4;
+
+    // Front Right
+    public static final int FRONT_RIGHT_DRIVE_ID = 5;
+    public static final int FRONT_RIGHT_STEER_ID = 6;
+    public static final int FRONT_RIGHT_ENCODER_ID = 7;
+
+    // Back Left
+    public static final int BACK_LEFT_DRIVE_ID = 8;
+    public static final int BACK_LEFT_STEER_ID = 9;
+    public static final int BACK_LEFT_ENCODER_ID = 10;
+
+    // Back Right
+    public static final int BACK_RIGHT_DRIVE_ID = 11;
+    public static final int BACK_RIGHT_STEER_ID = 12;
+    public static final int BACK_RIGHT_ENCODER_ID = 13;
+
+    // Other Drive Stuff
+
+    public static final int PIGEON_ID = 14;
+
+    // Physical Constants
+
+    public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
+    public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
 }

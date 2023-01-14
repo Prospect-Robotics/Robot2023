@@ -8,6 +8,8 @@ public interface DriveController {
     public DriveController withFeedforward(SimpleMotorFeedforward feedforward);
     public boolean hasFeedForward();
 
+    public double getDistanceDriven();
+
     public void setReferenceVelocity(double velocity);
     public double getStateVelocity();
 

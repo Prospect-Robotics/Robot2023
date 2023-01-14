@@ -102,6 +102,19 @@ public class Pigeon2ProWrapper extends Pigeon2 {
     }
 
     /**
+     * @param yaw mount pose yaw (degrees)
+     * @param pitch mount pose pitch (degrees)
+     * @param roll mount pose roll (degrees)
+     */
+    public void configMountPose(double yaw, double pitch, double roll) {
+        pigeonConfig.MountPose.MountPoseYaw = yaw;
+        pigeonConfig.MountPose.MountPosePitch = pitch;
+        pigeonConfig.MountPose.MountPoseRoll = roll;
+
+        ConfigUtils.ctreProConfig(() -> getConfigurator().apply(pigeonConfig.MountPose));
+    }
+
+    /**
      * Checks if a reset has occurred and restores non-persistent settings if so.
      * Implement periodically (e.g. in a subsystem's periodic() method)
      */
