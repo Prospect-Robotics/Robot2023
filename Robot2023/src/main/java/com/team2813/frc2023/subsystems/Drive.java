@@ -139,10 +139,6 @@ public class Drive extends SubsystemBase {
         chassisSpeedDemand = demand;
     }
 
-    public void drive(SwerveModuleState[] demandStates) {
-        states = demandStates;
-    }
-
     public void initAutonomous(PathPlannerState initialState) {
         frontLeftModule.resetDriveEncoder();
         frontRightModule.resetDriveEncoder();
@@ -181,7 +177,6 @@ public class Drive extends SubsystemBase {
             SmartDashboard.putString("Current Pose", odometry.getPoseMeters().toString());
         }
 
-        if (!Robot.isAuto) states = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY);
 
         frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians());
