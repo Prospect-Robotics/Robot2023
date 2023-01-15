@@ -133,6 +133,15 @@ public class Drive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    public ChassisSpeeds getChassisSpeeds() {
+        return kinematics.toChassisSpeeds(
+                frontLeftModule.getState(),
+                frontRightModule.getState(),
+                backLeftModule.getState(),
+                backRightModule.getState()
+        );
+    }
+
     public void drive(ChassisSpeeds demand) {
         chassisSpeedDemand = demand;
     }
@@ -152,6 +161,16 @@ public class Drive extends SubsystemBase {
                 backRightModule.getPosition()
         };
         odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions);
+    }
+
+    public void resetOdometry(Pose2d newPose) {
+        SwerveModulePosition[] modulePositions = {
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                backLeftModule.getPosition(),
+                backRightModule.getPosition()
+        };
+        odometry.resetPosition(getRotation(), modulePositions, newPose);
     }
 
     @Override

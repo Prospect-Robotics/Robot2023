@@ -60,6 +60,10 @@ public class SwerveModule {
         driveController.resetEncoder();
     }
 
+    public SwerveModuleState getState() {
+        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getSteerAngle()));
+    }
+
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(driveController.getDistanceDriven(), new Rotation2d(getSteerAngle()));
     }
