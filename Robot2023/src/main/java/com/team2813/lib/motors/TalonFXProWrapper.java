@@ -22,9 +22,12 @@ public class TalonFXProWrapper extends TalonFX {
     private final Map<String, StatusSignalValue<Object>> statusSignals = new HashMap<>();
     private final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
     private final boolean canivore;
+    private double kT;
 
     private StatusSignalValue<Double> encoderPosition = getRotorPosition();
     private StatusSignalValue<Double> motorVelocity = getRotorVelocity();
+    private StatusSignalValue<Double> supplyVoltage = getSupplyVoltage();
+    private boolean voltageUpdateFreqSet = false;
 
     /**
      * Constructor
@@ -107,16 +110,29 @@ public class TalonFXProWrapper extends TalonFX {
     }
 
     /**
-     * Sets the motor to a current, which scales to a torque
-     * based on the motor's kT constant.
-     * @param current current in Amps
+     * Sets the motor to a torque
+     * @param torque desired torque in N*m (Newton-meters)
      */
-    public void setTorqueCurrent(double current) {
-        setControl(new TorqueCurrentFOC(current, 1, 1, false));
+    public void setTorque(double torque) {
+        setTorque(torque, 1);
     }
 
-    public void setTorqueCurrent(double current, double maxAbsDutyCycle) {
-        setControl(new TorqueCurrentFOC(current, maxAbsDutyCycle, 1, false));
+    public void setTorque(double torque, double maxAbsDutyCycle) {
+        if (!voltageUpdateFreqSet && !canivore) {
+            ConfigUtils.ctreProConfig(() -> supplyVoltage.setUpdateFrequency(4));
+            voltageUpdateFreqSet = true;
+        }
+
+        supplyVoltage = supplyVoltage.refresh();
+        double voltage = supplyVoltage.getValue();
+
+        /*
+        Calculate motor's kT constant, which varies with supply voltage
+         */
+        kT = 0.005112676 + (14150.89 - 0.005112676) / (1 + Math.pow(voltage / 0.0001558867, 1.234789));
+        double amps = torque / kT;
+
+        setControl(new TorqueCurrentFOC(amps, maxAbsDutyCycle, 1, false));
     }
 
     /**
