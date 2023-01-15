@@ -8,15 +8,13 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class LimelightValues {
-    private final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    private final NetworkTableEntry ledMode;
+    private final NetworkTableEntry stream;
 
-    private final NetworkTableEntry ledMode = table.getEntry("ledMode");
-    private final NetworkTableEntry stream = table.getEntry("stream");
-
-    private final DoubleArrayValue fieldLocation = new DoubleArrayValue(table, "botpose");
-    private final DoubleValue horizonalOffset = new DoubleValue(table, "tx");
-    private final DoubleValue verticalOffset = new DoubleValue(table, "ty");
-    private final DoubleValue hasTargets = new DoubleValue(table, "tv");
+    private final DoubleArrayValue fieldLocation;
+    private final DoubleValue horizonalOffset;
+    private final DoubleValue verticalOffset;
+    private final DoubleValue hasTargets;
 
     public static enum LedState {
         /** Use the LED Mode set in the current pipeline. */
@@ -30,6 +28,19 @@ public class LimelightValues {
         
         /** Force on. */
         ON
+    }
+
+    public LimelightValues() {
+        this(NetworkTableInstance.getDefault().getTable("limelight"));
+    }
+
+    LimelightValues(NetworkTable table) {
+        ledMode = table.getEntry("ledMode");
+        stream = table.getEntry("stream");
+        fieldLocation = new DoubleArrayValue(table, "botpose");
+        horizonalOffset = new DoubleValue(table, "tx");
+        verticalOffset = new DoubleValue(table, "ty");
+        hasTargets = new DoubleValue(table, "tv");
     }
 
     private static class DoubleValue implements Supplier<Double> {
