@@ -1,6 +1,5 @@
 package com.team2813.frc2023.commands;
 
-import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
@@ -11,8 +10,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.Consumer;
-
-import static com.team2813.frc2023.Constants.*;
 
 /**
  * Command to follow a given trajectory

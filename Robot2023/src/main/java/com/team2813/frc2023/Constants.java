@@ -6,6 +6,8 @@
 package com.team2813.frc2023;
 
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -66,6 +68,13 @@ public final class Constants
     public static final double WHEEL_CIRCUMFERENCE = SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI; // meters
 
     // Auto Constants
+
+    // Path Constraints
     public static final double AUTO_MAX_VEL = 2.25; // m/s
     public static final double AUTO_MAX_ACCEL = 6; // m/s
+
+    // AprilTag ID location goals
+    public static final Map<Integer, Pose2d> APRILTAG_MAP = new HashMap<>() {{
+        // TODO: populate with tag IDs and Pose2d locations. Need to do Limelight AprilTag testing first.
+    }};
 }
