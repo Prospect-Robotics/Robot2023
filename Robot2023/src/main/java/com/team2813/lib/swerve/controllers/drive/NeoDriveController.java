@@ -68,6 +68,11 @@ public class NeoDriveController implements DriveController {
     }
 
     @Override
+    public double getDistanceDriven() {
+        return encoder.getPosition();
+    }
+
+    @Override
     public double getStateVelocity() {
         return encoder.getVelocity();
     }
