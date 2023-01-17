@@ -1,5 +1,7 @@
 package com.team2813.frc2023.util;
 
+import java.util.Optional;
+
 import com.team2813.lib.util.LimelightValues;
 import com.team2813.lib.util.LimelightValues.LedState;
 
@@ -42,19 +44,24 @@ public class Limelight extends SubsystemBase {
      * Gets the position on the playing field using build-in robot localization
      */
     // Do the output how you want to. (but make it make sense)
-    public Pose2d getPosition() {
-        Double[] location = values.getFieldLocation();
-        location[0] = location[0] + 8.27;
-        location[1] = location[1] + 4.01;
-        Pose2d pose = new Pose2d(location[0], location[1], new Rotation2d(location[3], location[4]));
-        return pose;
+    public Optional<Pose2d> getPosition() {
+        if (values.hasTargets()) {
+            Double[] location = values.getFieldLocation();
+            location[0] = location[0] + 8.27;
+            location[1] = location[1] + 4.01;
+            Pose2d pose = new Pose2d(location[0], location[1], new Rotation2d(location[3], location[4]));
+            return Optional.of(pose);
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
     public void periodic() {
-        Pose2d position = getPosition();
-        SmartDashboard.putNumber("tx", position.getX());
-        SmartDashboard.putNumber("ty", position.getY());
+        getPosition().ifPresent((Pose2d position) -> {
+            SmartDashboard.putNumber("tx", position.getX());
+            SmartDashboard.putNumber("ty", position.getY());
+        });
         SmartDashboard.putBoolean("Valid apriltag", values.hasTargets());
         SmartDashboard.putNumber("Id of primary AprilTag", values.primaryApriltag());
     }
