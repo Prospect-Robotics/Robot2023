@@ -11,6 +11,7 @@ import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.commands.ExampleCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
+import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,6 +31,7 @@ public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    private final Limelight limelight = Limelight.getInstance();
     private final Drive drive = new Drive();
     
     private final XboxController driver = new XboxController(0);
