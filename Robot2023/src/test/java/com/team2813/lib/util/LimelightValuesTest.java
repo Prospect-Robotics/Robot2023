@@ -2,7 +2,6 @@ package com.team2813.lib.util;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;

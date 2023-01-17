@@ -3,6 +3,8 @@ package com.team2813.lib.util;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -107,7 +109,7 @@ public class LimelightValues {
     /**
      * Gets the location on the field.<br>
      * If there location is undefined, returns an array with all 0s
-     * @return a {@link Double} array with the following entries: x, y, z, pitch, yaw, roll
+     * @return a {@link Double} array with the following entries: x, y, z, roll, yaw, pitch
      * @see <a href="https://docs.limelightvision.io/en/latest/coordinate_systems_fiducials.html#field-space">Field space</a>
      */
     public Double[] getFieldLocation() {
