@@ -29,6 +29,18 @@ import java.util.Map;
  */
 public class RobotContainer
 {
+    /*
+    String key is the name of the event marker in an auto routine,
+    Command value is the command associated with that event marker.
+
+    Refer to this when creating event markers in Path Planner.
+    Note: this is just the default event map that is meant to have easy-to-
+    predict commands (such as intake, place-cube-high, etc.), not commands such
+    as rotating a specific number of degrees. You'll have to customize the event map
+    that TrajectoryAutoBuilder.java uses to use commands like that.
+     */
+    public static final Map<String, Command> EVENT_MAP = new HashMap<>();
+
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
@@ -51,17 +63,9 @@ public class RobotContainer
         configureBindings();
     }
 
-    /*
-    String key is the name of the event marker in an auto routine,
-    Command value is the command associated with that event marker.
-
-    Refer to this when creating event markers in Path Planner.
-    Note: this is just the default event map that is meant to have easy-to-
-    predict commands (such as intake, place-cube-high, etc.), not commands such
-    as rotating a specific number of degrees. You'll have to customize the event map
-    that TrajectoryAutoBuilder.java uses to use commands like that.
-     */
-    public static final Map<String, Command> EVENT_MAP = new HashMap<>();
+    Drive getDrive() {
+        return drive;
+    }
     
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
