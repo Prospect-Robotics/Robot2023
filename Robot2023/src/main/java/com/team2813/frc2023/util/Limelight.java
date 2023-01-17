@@ -49,7 +49,7 @@ public class Limelight extends SubsystemBase {
             Double[] location = values.getFieldLocation();
             location[0] = location[0] + 8.27;
             location[1] = location[1] + 4.01;
-            Pose2d pose = new Pose2d(location[0], location[1], new Rotation2d(location[3], location[4]));
+            Pose2d pose = new Pose2d(location[0], location[1], Rotation2d.fromDegrees(location[5]));
             return Optional.of(pose);
         } else {
             return Optional.empty();
