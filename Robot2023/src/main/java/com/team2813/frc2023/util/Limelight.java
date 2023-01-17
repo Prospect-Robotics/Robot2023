@@ -59,8 +59,9 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         getPosition().ifPresent((Pose2d position) -> {
-            SmartDashboard.putNumber("tx", position.getX());
-            SmartDashboard.putNumber("ty", position.getY());
+            SmartDashboard.putNumber("x position (meters):", position.getX());
+            SmartDashboard.putNumber("y position (meters):", position.getY());
+            SmartDashboard.putNumber("robot heading (degrees):", position.getRotation().getDegrees());
         });
         SmartDashboard.putBoolean("Valid apriltag", values.hasTargets());
         SmartDashboard.putNumber("Id of primary AprilTag", values.primaryApriltag());
