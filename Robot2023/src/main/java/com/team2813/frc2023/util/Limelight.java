@@ -1,11 +1,14 @@
 package com.team2813.frc2023.util;
 
-import java.util.Arrays;
-
 import com.team2813.lib.util.LimelightValues;
 import com.team2813.lib.util.LimelightValues.LedState;
 
-public class Limelight {
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import java.util.Arrays;
+
+public class Limelight extends SubsystemBase {
 
     private final LimelightValues values = new LimelightValues();
 
@@ -41,5 +44,15 @@ public class Limelight {
     // Do the output how you want to. (but make it make sense)
     public Double[] getPosition() {
         return Arrays.copyOfRange(values.getFieldLocation(), 0, 2);
+    }
+
+    @Override
+    public void periodic() {
+        Double[] position = getPosition();
+        SmartDashboard.putNumber("tx", position[0]);
+        SmartDashboard.putNumber("ty", position[1]);
+        SmartDashboard.putNumber("tz", position[2]);
+        SmartDashboard.putBoolean("Valid apriltag", values.hasTargets());
+        SmartDashboard.putNumber("Id of primary AprilTag", values.primaryApriltag());
     }
 }

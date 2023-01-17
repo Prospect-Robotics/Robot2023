@@ -15,6 +15,7 @@ public class LimelightValues {
     private final DoubleValue horizonalOffset;
     private final DoubleValue verticalOffset;
     private final DoubleValue hasTargets;
+    private final DoubleValue primaryApriltag;
 
     public static enum LedState {
         /** Use the LED Mode set in the current pipeline. */
@@ -38,6 +39,7 @@ public class LimelightValues {
         ledMode = table.getEntry("ledMode");
         stream = table.getEntry("stream");
         fieldLocation = new DoubleArrayValue(table, "botpose");
+        primaryApriltag = new DoubleValue(table, "tid");
         horizonalOffset = new DoubleValue(table, "tx");
         verticalOffset = new DoubleValue(table, "ty");
         hasTargets = new DoubleValue(table, "tv");
@@ -76,6 +78,11 @@ public class LimelightValues {
     public boolean hasTargets() {
         return hasTargets.get() == 1;
     }
+
+   /** Id of the primary Apriltag */
+    public double primaryApriltag() {
+        return primaryApriltag.get();
+    } 
 
     public double getTx() {
        return horizonalOffset.get();
