@@ -1,10 +1,7 @@
 package com.team2813.lib.util;
 
-import java.util.Optional;
 import java.util.function.Supplier;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -12,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimelightValues {
     private final NetworkTableEntry ledMode;
     private final NetworkTableEntry stream;
+    private final NetworkTableEntry pipelineIndex;
 
     private final DoubleArrayValue fieldLocation;
     private final DoubleValue horizonalOffset;
@@ -40,6 +38,8 @@ public class LimelightValues {
     LimelightValues(NetworkTable table) {
         ledMode = table.getEntry("ledMode");
         stream = table.getEntry("stream");
+        pipelineIndex = table.getEntry("pipeline");
+
         fieldLocation = new DoubleArrayValue(table, "botpose");
         primaryApriltag = new DoubleValue(table, "tid");
         horizonalOffset = new DoubleValue(table, "tx");
@@ -104,6 +104,10 @@ public class LimelightValues {
 
     public NetworkTableEntry getStream() {
         return stream;
+    }
+
+    public NetworkTableEntry getPipelineIndex() {
+        return pipelineIndex;
     }
 
     /**

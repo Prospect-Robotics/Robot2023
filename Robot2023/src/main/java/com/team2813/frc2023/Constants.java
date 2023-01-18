@@ -82,4 +82,9 @@ public final class Constants
         put(7, new Pose2d(1.85, 2.75, new Rotation2d(Math.PI)));
         put(8, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
     }};
+
+    // Limelight Pipeline Indices
+    public static final int APRILTAG_RED = 0;
+    public static final int APRILTAG_BLUE = 1;
+    public static final int REFLECTIVE_TAPE = 2;
 }
