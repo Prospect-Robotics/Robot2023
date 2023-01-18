@@ -75,6 +75,11 @@ public final class Constants
 
     // AprilTag ID location goals
     public static final Map<Integer, Pose2d> APRILTAG_MAP = new HashMap<>() {{
-        // TODO: populate with tag IDs and Pose2d locations. Need to do Limelight AprilTag testing first.
+        put(1, new Pose2d(14.68, 1.06, new Rotation2d(0)));
+        put(2, new Pose2d(14.68, 2.75, new Rotation2d(0)));
+        put(3, new Pose2d(14.68, 4.43, new Rotation2d(0)));
+        put(6, new Pose2d(1.85, 1.06, new Rotation2d(Math.PI)));
+        put(7, new Pose2d(1.85, 2.75, new Rotation2d(Math.PI)));
+        put(8, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
     }};
 }
