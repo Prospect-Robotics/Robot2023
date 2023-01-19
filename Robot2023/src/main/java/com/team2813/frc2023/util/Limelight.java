@@ -60,6 +60,16 @@ public class Limelight extends SubsystemBase {
         }
     }
 
+    public Optional<Double> getHorizontalOffset() {
+        if (values.hasTargets()) return Optional.of(values.getTx());
+        else return Optional.empty();
+    }
+
+    public Optional<Double> getVerticalOffset() {
+        if (values.hasTargets()) return Optional.of(values.getTy());
+        else return Optional.empty();
+    }
+
     @Override
     public void periodic() {
         getPosition().ifPresent((Pose2d position) -> {

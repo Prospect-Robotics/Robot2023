@@ -82,8 +82,8 @@ public class LimelightValues {
     }
 
    /** Id of the primary Apriltag */
-    public double primaryApriltag() {
-        return primaryApriltag.get();
+    public int primaryApriltag() {
+        return primaryApriltag.get().intValue();
     } 
 
     public double getTx() {
