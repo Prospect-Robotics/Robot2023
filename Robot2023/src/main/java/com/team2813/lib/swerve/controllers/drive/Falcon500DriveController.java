@@ -46,8 +46,8 @@ public class Falcon500DriveController implements DriveController {
             motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 80;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -80;
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
