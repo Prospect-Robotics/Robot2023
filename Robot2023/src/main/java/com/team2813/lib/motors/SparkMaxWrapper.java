@@ -17,12 +17,9 @@ public class SparkMaxWrapper extends CANSparkMax implements Motor {
      * Create a new object to control a SPARK MAX motor Controller
      *
      * @param deviceId The device ID.
-     * @param type     The motor type connected to the controller. Brushless motor wires must be connected
-     *                 to their matching colors and the hall sensor must be plugged in. Brushed motors must be
-     *                 connected to the Red and Black terminals only.
      * @param inverted Whether the motor is inverted
      */
-    public SparkMaxWrapper(int deviceId, MotorType type, boolean inverted) {
+    public SparkMaxWrapper(int deviceId, boolean inverted) {
         super(deviceId, type);
         encoder = getEncoder();
         pidController = getPIDController();
