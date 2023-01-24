@@ -1,10 +1,10 @@
 package com.team2813.frc2023.subsystems;
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
-import com.team2813.frc2023.Robot;
-import com.team2813.lib.imu.Pigeon2ProWrapper;
+import com.team2813.lib.imu.Pigeon2Wrapper;
 import com.team2813.lib.swerve.controllers.SwerveModule;
 import com.team2813.lib.swerve.helpers.Mk4iSwerveModuleHelper;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,9 +37,6 @@ public class Drive extends SubsystemBase {
             new Translation2d(-TRACKWIDTH / 2, -WHEELBASE / 2)
     );
 
-    private final String canbus = "swerve";
-    private final boolean licensed = true;
-
     private SwerveDriveOdometry odometry;
 
     private final SwerveModule frontLeftModule;
@@ -47,16 +44,19 @@ public class Drive extends SubsystemBase {
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
-    private final Pigeon2ProWrapper pigeon = new Pigeon2ProWrapper(PIGEON_ID, canbus);
+    private final Pigeon2Wrapper pigeon = new Pigeon2Wrapper(PIGEON_ID);
 
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
     private SwerveModuleState[] moduleStates = new SwerveModuleState[4];
 
     public Drive() {
+        String canbus = "swerve";
+        boolean licensed = false;
+
         double frontLeftSteerOffset = -Math.toRadians(0);
-        double frontRightSteerOffset = -Math.toRadians(0);
-        double backLeftSteerOffset = -Math.toRadians(0);
-        double backRightSteerOffset = -Math.toRadians(0);
+        double frontRightSteerOffset = -Math.toRadians(255.14684375);
+        double backLeftSteerOffset = -Math.toRadians(356.572265625);
+        double backRightSteerOffset = -Math.toRadians(359.296875);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -108,7 +108,7 @@ public class Drive extends SubsystemBase {
                 licensed
         );
 
-        pigeon.configMountPose(0, 0, 0);
+        pigeon.configMountPose(Pigeon2.AxisDirection.NegativeY, Pigeon2.AxisDirection.PositiveZ);
     }
 
     public SwerveDriveKinematics getKinematics() {
