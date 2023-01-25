@@ -9,6 +9,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 public class LimelightValues {
     private final NetworkTableEntry ledMode;
     private final NetworkTableEntry stream;
+    private final NetworkTableEntry pipelineIndex;
 
     private final DoubleArrayValue fieldLocation;
     private final DoubleValue horizonalOffset;
@@ -37,6 +38,8 @@ public class LimelightValues {
     LimelightValues(NetworkTable table) {
         ledMode = table.getEntry("ledMode");
         stream = table.getEntry("stream");
+        pipelineIndex = table.getEntry("pipeline");
+
         fieldLocation = new DoubleArrayValue(table, "botpose");
         primaryApriltag = new DoubleValue(table, "tid");
         horizonalOffset = new DoubleValue(table, "tx");
@@ -79,8 +82,8 @@ public class LimelightValues {
     }
 
    /** Id of the primary Apriltag */
-    public double primaryApriltag() {
-        return primaryApriltag.get();
+    public int primaryApriltag() {
+        return primaryApriltag.get().intValue();
     } 
 
     public double getTx() {
@@ -101,6 +104,10 @@ public class LimelightValues {
 
     public NetworkTableEntry getStream() {
         return stream;
+    }
+
+    public NetworkTableEntry getPipelineIndex() {
+        return pipelineIndex;
     }
 
     /**

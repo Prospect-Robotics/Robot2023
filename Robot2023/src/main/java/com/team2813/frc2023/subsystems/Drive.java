@@ -190,6 +190,7 @@ public class Drive extends SubsystemBase {
             SmartDashboard.putString("Current Pose", odometry.getPoseMeters().toString());
         }
 
+        states = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY);
 
         frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians());

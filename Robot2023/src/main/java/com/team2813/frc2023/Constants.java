@@ -9,7 +9,8 @@ import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,13 @@ public final class Constants
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
+        public static final CommandPS4Controller DRIVER_CONTROLLER = new CommandPS4Controller(DRIVER_CONTROLLER_PORT);
+
+        public static final int OPERATOR_CONTROLLER_PORT = 1;
+        public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
+
+        // Driver controls
+        public static final Trigger AUTO_SPLINE_BUTTON = DRIVER_CONTROLLER.R1();
     }
 
     // CAN IDs
@@ -82,4 +90,8 @@ public final class Constants
         put(7, new Pose2d(1.85, 2.75, new Rotation2d(Math.PI)));
         put(8, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
     }};
+
+    // Limelight Pipeline Indices
+    public static final int APRILTAG_PIPELINE_INDEX = 0;
+    public static final int REFLECTIVE_TAPE_PIPELINE_INDEX = 1;
 }

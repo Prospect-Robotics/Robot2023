@@ -40,6 +40,10 @@ public class Limelight extends SubsystemBase {
         values.getStream().setNumber(stream);
     }
 
+    public void setPipeline(int pipelineIndex) {
+        values.getPipelineIndex().setNumber(pipelineIndex);
+    }
+
     /**
      * Gets the position on the playing field using build-in robot localization
      */
@@ -54,6 +58,16 @@ public class Limelight extends SubsystemBase {
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<Double> getHorizontalOffset() {
+        if (values.hasTargets()) return Optional.of(values.getTx());
+        else return Optional.empty();
+    }
+
+    public Optional<Double> getVerticalOffset() {
+        if (values.hasTargets()) return Optional.of(values.getTy());
+        else return Optional.empty();
     }
 
     @Override
