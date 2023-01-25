@@ -6,6 +6,7 @@
 package com.team2813.frc2023;
 
 import com.team2813.frc2023.util.Limelight;
+import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -24,7 +25,7 @@ public class Robot extends TimedRobot
 
     private Command autonomousCommand;
     
-    private RobotContainer robotContainer;
+    public static RobotContainer ROBOT_CONTAINER;
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -35,7 +36,10 @@ public class Robot extends TimedRobot
     {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
-        robotContainer = new RobotContainer();
+        ROBOT_CONTAINER = new RobotContainer();
+
+        ShuffleboardData.init();
+        ROBOT_CONTAINER.addAutoRoutines();
     }
     
     
@@ -72,7 +76,7 @@ public class Robot extends TimedRobot
     {
         limelight.setLights(true);
 
-        autonomousCommand = robotContainer.getAutonomousCommand();
+        autonomousCommand = ROBOT_CONTAINER.getAutonomousCommand();
         
         // schedule the autonomous command (example)
         if (autonomousCommand != null)

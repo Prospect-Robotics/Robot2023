@@ -10,6 +10,7 @@ import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
+import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -88,8 +89,14 @@ public class RobotContainer
      */
     public Command getAutonomousCommand()
     {
-        // An example command will be run in autonomous
-        return Autos.exampleAuto(exampleSubsystem);
+        AutoRoutine selectedRoutine = ShuffleboardData.routineChooser.getSelected();
+        return selectedRoutine.getCommand();
+    }
+
+    public void addAutoRoutines() {
+        for (AutoRoutine routine : AutoRoutine.values()) {
+            ShuffleboardData.routineChooser.addOption(routine.getName(), routine);
+        }
     }
 
     private static double deadband(double value, double deadband) {
