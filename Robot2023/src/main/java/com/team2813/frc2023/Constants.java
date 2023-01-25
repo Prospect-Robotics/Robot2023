@@ -18,6 +18,8 @@ public final class Constants
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
-        public static final int INTAKE_ID = 15;
     }
+
+    public static final int INTAKE_MASTER_ID = 15;
+    public static final int INTAKE_FOLLOWER_ID = 16;
 }
