@@ -6,10 +6,8 @@
 package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.AutoSplineCommand;
-import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
-import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,7 +41,6 @@ public class RobotContainer
     public static final Map<String, Command> EVENT_MAP = new HashMap<>();
 
     // The robot's subsystems and commands are defined here...
-    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Drive drive = new Drive();
     
     private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
