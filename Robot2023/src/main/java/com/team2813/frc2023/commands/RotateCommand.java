@@ -1,12 +1,12 @@
 package com.team2813.frc2023.commands;
 
 import com.team2813.frc2023.subsystems.Drive;
-import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import java.util.function.Consumer;
+import java.util.function.DoubleSupplier;
 
 /**
  * Command to rotate by a given number of degrees.
@@ -18,14 +18,10 @@ public class RotateCommand extends CommandBase {
 
     private final Drive driveSubsystem;
     private final Consumer<ChassisSpeeds> chassisSpeedsConsumer;
-    private final double degreesToRotateBy;
 
-    private static final ProfiledPIDController thetaController = new ProfiledPIDController(
-            1,
-            0,
-            0.0225,
-            new TrapezoidProfile.Constraints(Drive.MAX_ANGULAR_VELOCITY, Drive.MAX_ANGULAR_ACCELERATION)
-    );
+    private double degreesToRotateBy;
+    private DoubleSupplier degreeSupplier;
+    private static final PIDController thetaController = new PIDController(.000025, 0, 0);
 
     private double setpoint;
 
@@ -33,13 +29,23 @@ public class RotateCommand extends CommandBase {
         this.driveSubsystem = driveSubsystem;
         this.degreesToRotateBy = degreesToRotateBy;
 
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        chassisSpeedsConsumer = driveSubsystem::drive;
+        addRequirements(driveSubsystem);
+    }
+
+    public RotateCommand(DoubleSupplier degreeSupplier, Drive driveSubsystem) {
+        this.driveSubsystem = driveSubsystem;
+        this.degreeSupplier = degreeSupplier;
+
         chassisSpeedsConsumer = driveSubsystem::drive;
         addRequirements(driveSubsystem);
     }
 
     @Override
     public void initialize() {
-        thetaController.reset(driveSubsystem.getRotation().getRadians());
+        if (degreeSupplier != null) degreesToRotateBy = degreeSupplier.getAsDouble();
         setpoint = driveSubsystem.getRotation().getRadians() + Math.toRadians(degreesToRotateBy);
     }
 
@@ -54,7 +60,7 @@ public class RotateCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(setpoint - driveSubsystem.getRotation().getRadians()) <= Math.toRadians(2.5);
+        return Math.abs(setpoint - driveSubsystem.getRotation().getRadians()) <= Math.toRadians(1);
     }
 
     @Override
