@@ -11,6 +11,7 @@ import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -57,7 +58,8 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-
+        SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
+        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(true), drive));
     }
     
     
@@ -70,6 +72,10 @@ public class RobotContainer
     {
         // An example command will be run in autonomous
         return Autos.exampleAuto(exampleSubsystem);
+    }
+
+    public void onDisabled() {
+        drive.resetWheels();
     }
 
     private static double deadband(double value, double deadband) {

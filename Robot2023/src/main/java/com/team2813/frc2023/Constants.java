@@ -6,6 +6,8 @@
 package com.team2813.frc2023;
 
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -20,6 +22,13 @@ public final class Constants
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
+        public static final CommandPS4Controller DRIVER_CONTROLLER = new CommandPS4Controller(DRIVER_CONTROLLER_PORT);
+
+        public static final int OPERATOR_CONTROLLER_PORT = 1;
+        public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
+
+        // Driver controls
+        public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
     }
 
     // CAN IDs

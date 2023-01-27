@@ -49,14 +49,16 @@ public class Drive extends SubsystemBase {
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
     private SwerveModuleState[] moduleStates = new SwerveModuleState[4];
 
+    private double multiplier = 1;
+
     public Drive() {
         String canbus = "swerve";
-        boolean licensed = false;
+        boolean licensed = true;
 
-        double frontLeftSteerOffset = -Math.toRadians(0);
-        double frontRightSteerOffset = -Math.toRadians(255.14684375);
-        double backLeftSteerOffset = -Math.toRadians(356.572265625);
-        double backRightSteerOffset = -Math.toRadians(359.296875);
+        double frontLeftSteerOffset = -Math.toRadians(324.580078125);
+        double frontRightSteerOffset = -Math.toRadians(250.13671875);
+        double backLeftSteerOffset = -Math.toRadians(115.048828125);
+        double backRightSteerOffset = -Math.toRadians(359.033203125);
 
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
@@ -111,16 +113,16 @@ public class Drive extends SubsystemBase {
         pigeon.configMountPose(Pigeon2.AxisDirection.NegativeY, Pigeon2.AxisDirection.PositiveZ);
     }
 
-    public SwerveDriveKinematics getKinematics() {
-        return kinematics;
-    }
-
     public Rotation2d getRotation() {
         return Rotation2d.fromDegrees(pigeon.getHeading());
     }
 
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+
+    public void enableSlowMode(boolean enable) {
+        multiplier = enable ? 0.25 : 1;
     }
 
     public void drive(ChassisSpeeds demand) {
@@ -141,6 +143,13 @@ public class Drive extends SubsystemBase {
                 backRightModule.getPosition()
         };
         odometry = new SwerveDriveOdometry(kinematics, initialState.holonomicRotation, modulePositions);
+    }
+
+    public void resetWheels() {
+        frontLeftModule.set(0, 0);
+        frontRightModule.set(0, 0);
+        backLeftModule.set(0, 0);
+        backRightModule.set(0, 0);
     }
 
     @Override
@@ -164,9 +173,9 @@ public class Drive extends SubsystemBase {
         moduleStates = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, MAX_VELOCITY);
 
-        frontLeftModule.set(moduleStates[0].speedMetersPerSecond, moduleStates[0].angle.getRadians());
-        frontRightModule.set(moduleStates[1].speedMetersPerSecond, moduleStates[1].angle.getRadians());
-        backLeftModule.set(moduleStates[2].speedMetersPerSecond, moduleStates[2].angle.getRadians());
-        backRightModule.set(moduleStates[3].speedMetersPerSecond, moduleStates[3].angle.getRadians());
+        frontLeftModule.set(moduleStates[0].speedMetersPerSecond * multiplier, moduleStates[0].angle.getRadians());
+        frontRightModule.set(moduleStates[1].speedMetersPerSecond * multiplier, moduleStates[1].angle.getRadians());
+        backLeftModule.set(moduleStates[2].speedMetersPerSecond * multiplier, moduleStates[2].angle.getRadians());
+        backRightModule.set(moduleStates[3].speedMetersPerSecond * multiplier, moduleStates[3].angle.getRadians());
     }
 }
