@@ -17,7 +17,7 @@ import java.util.function.Consumer;
 public class FollowCommand extends PPSwerveControllerCommand {
 
     private static final PIDController xController = new PIDController(4, 0, 0);
-    private static final PIDController yController = new PIDController(3.75, 0, 0);
+    private static final PIDController yController = new PIDController(2, 0, 0);
     private static final PIDController thetaController = new PIDController(.000025, 0, 0);
 
     private final PathPlannerTrajectory trajectory;

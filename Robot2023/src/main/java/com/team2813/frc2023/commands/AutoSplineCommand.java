@@ -48,19 +48,47 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                         int apriltagID = limelight.getValues().primaryApriltag();
                         tagGoalPose = APRILTAG_MAP.get(apriltagID);
 
-                        apriltagTx = limelight.getValues().getTx();
-                        apriltagTxSign = (int) (Math.abs(apriltagTx) / apriltagTx);
+                        //if ((apriltagID == 4) || (apriltagID == 5)) {
+                        if (true) {
+                            PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+                                    new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
+                                    List.of(
+                                            PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
+                                            new PathPoint(
+                                                    tagGoalPose.getTranslation(),
+                                                    tagGoalPose.getRotation(),
+                                                    tagGoalPose.getRotation()
+                                            )
+                                    )
+                            );
 
-                        limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
+                            Command command = new ParallelRaceGroup(
+                                    new WaitUntilCommand(buttonLetGo),
+                                    new ParallelCommandGroup(
+                                            new FollowCommand(trajectory, driveSubsystem),
+                                            new InstantCommand(() -> limelight.setLights(false))
+                                    )
+                            );
+                            command.schedule();
+                        }
+                        else {
+                            apriltagTx = limelight.getValues().getTx();
+                            apriltagTxSign = (int) (Math.abs(apriltagTx) / apriltagTx);
 
-                        Command command = new ParallelRaceGroup(
-                                new WaitUntilCommand(buttonLetGo),
-                                new SequentialCommandGroup(
-                                        new DecideAndExecuteCommand(buttonLetGo, driveSubsystem),
-                                        new InstantCommand(() -> limelight.setLights(false))
-                                )
-                        );
-                        command.schedule();
+                            limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
+
+                            Command command = new ParallelRaceGroup(
+                                    new WaitUntilCommand(buttonLetGo),
+                                    new SequentialCommandGroup(
+                                            new DecideAndExecuteCommand(buttonLetGo, driveSubsystem),
+                                            new InstantCommand(() -> limelight.setLights(false))
+                                    )
+                            );
+                            command.schedule();
+                        }
+                    }
+                    else {
+                        limelight.setLights(false);
                     }
                 }, driveSubsystem)
         );
@@ -169,8 +197,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                         PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
                                         new PathPoint(
                                                 goalPose.getTranslation(),
-                                                DriverStation.getAlliance().equals(Alliance.Red) ? new Rotation2d(0) :
-                                                        new Rotation2d(Math.PI),
+                                                goalPose.getRotation(),
                                                 goalPose.getRotation()
                                         )
                                 )

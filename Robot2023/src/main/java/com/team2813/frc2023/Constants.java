@@ -35,6 +35,7 @@ public final class Constants
 
         // Driver controls
         public static final Trigger AUTO_SPLINE_BUTTON = DRIVER_CONTROLLER.R1();
+        public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
     }
 
     // CAN IDs
@@ -78,8 +79,8 @@ public final class Constants
     // Auto Constants
 
     // Path Constraints
-    public static final double AUTO_MAX_VEL = 2.25; // m/s
-    public static final double AUTO_MAX_ACCEL = 6; // m/s
+    public static final double AUTO_MAX_VEL = 0.75; // m/s
+    public static final double AUTO_MAX_ACCEL = 2; // m/s^2
 
     // AprilTag ID location goals
     public static final Map<Integer, Pose2d> APRILTAG_MAP = new HashMap<>() {{

@@ -9,8 +9,10 @@ import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.ShuffleboardData;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -56,6 +58,9 @@ public class RobotContainer
                 () -> -modifyAxis(driver.getRightX()) * Drive.MAX_ANGULAR_VELOCITY
         ));
 
+        // For spline testing purposes
+        drive.initAutonomous(new Pose2d());
+
         // Configure the trigger bindings
         configureBindings();
     }
@@ -76,6 +81,9 @@ public class RobotContainer
     private void configureBindings()
     {
         AUTO_SPLINE_BUTTON.whileTrue(new AutoSplineCommand(AUTO_SPLINE_BUTTON.negate(), drive));
+
+        SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
+        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
     }
     
     
