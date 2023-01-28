@@ -53,9 +53,9 @@ public class Drive extends SubsystemBase {
 
     public Drive() {
         String canbus = "swerve";
-        boolean licensed = true;
+        boolean licensed = false;
 
-        double frontLeftSteerOffset = -Math.toRadians(324.580078125);
+        double frontLeftSteerOffset = -Math.toRadians(146.25);
         double frontRightSteerOffset = -Math.toRadians(250.13671875);
         double backLeftSteerOffset = -Math.toRadians(115.048828125);
         double backRightSteerOffset = -Math.toRadians(359.033203125);
@@ -110,7 +110,7 @@ public class Drive extends SubsystemBase {
                 licensed
         );
 
-        pigeon.configMountPose(Pigeon2.AxisDirection.NegativeY, Pigeon2.AxisDirection.PositiveZ);
+        pigeon.configMountPose(Pigeon2.AxisDirection.PositiveY, Pigeon2.AxisDirection.PositiveZ);
     }
 
     public Rotation2d getRotation() {

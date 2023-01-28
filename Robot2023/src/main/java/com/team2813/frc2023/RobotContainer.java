@@ -59,7 +59,7 @@ public class RobotContainer
     private void configureBindings()
     {
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
-        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(true), drive));
+        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
     }
     
     
