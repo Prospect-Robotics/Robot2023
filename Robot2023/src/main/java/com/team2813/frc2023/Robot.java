@@ -39,7 +39,7 @@ public class Robot extends TimedRobot
         ROBOT_CONTAINER = new RobotContainer();
 
         ShuffleboardData.init();
-        ROBOT_CONTAINER.addAutoRoutines();
+        ROBOT_CONTAINER.populateMenus();
 
         limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
     }

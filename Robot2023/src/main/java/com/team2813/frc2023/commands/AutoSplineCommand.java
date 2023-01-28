@@ -7,6 +7,8 @@ import com.pathplanner.lib.PathPoint;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
+import com.team2813.frc2023.util.ShuffleboardData;
+import com.team2813.frc2023.util.SubstationOffsetType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -31,6 +33,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
 
     private static final Limelight limelight = Limelight.getInstance();
     private static final double NODE_OFFSET = Units.inchesToMeters(22);
+    private static final double SUBSTATION_OFFSET = Units.inchesToMeters(35.25);
 
     private static double apriltagTx;
     private static int apriltagTxSign;
@@ -48,16 +51,55 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                         int apriltagID = limelight.getValues().primaryApriltag();
                         tagGoalPose = APRILTAG_MAP.get(apriltagID);
 
-                        //if ((apriltagID == 4) || (apriltagID == 5)) {
-                        if (true) {
+                        if ((apriltagID == 4) || (apriltagID == 5)) {
+                            Pose2d goalPose = new Pose2d();
+                            SubstationOffsetType offsetDirection = ShuffleboardData.offsetChooser.getSelected();
+
+                            if (DriverStation.getAlliance().equals(Alliance.Red)) {
+                                switch (offsetDirection) {
+                                    case LEFT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() + SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                    case RIGHT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() - SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                }
+                            }
+                            else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
+                                switch (offsetDirection) {
+                                    case LEFT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() - SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                    case RIGHT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() + SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                }
+                            }
+
                             PathPlannerTrajectory trajectory = PathPlanner.generatePath(
                                     new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
                                     List.of(
                                             PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
                                             new PathPoint(
-                                                    tagGoalPose.getTranslation(),
-                                                    tagGoalPose.getRotation(),
-                                                    tagGoalPose.getRotation()
+                                                    goalPose.getTranslation(),
+                                                    goalPose.getRotation(),
+                                                    goalPose.getRotation()
                                             )
                                     )
                             );
@@ -110,7 +152,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                 nodeType = NodeType.CONE;
 
                                 int tapeTxSign = (int) (Math.abs(tapeTx) / tapeTx);
-                                if (DriverStation.getAlliance() == Alliance.Red) {
+                                if (DriverStation.getAlliance().equals(Alliance.Red)) {
                                     if (tapeTxSign == apriltagTxSign) {
                                         if (tapeTxSign > 0) {
                                             goalPose = new Pose2d(
@@ -144,7 +186,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                         }
                                     }
                                 }
-                                else if (DriverStation.getAlliance() == Alliance.Blue) {
+                                else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
                                     if (tapeTxSign == apriltagTxSign) {
                                         if (tapeTxSign > 0) {
                                             goalPose = new Pose2d(

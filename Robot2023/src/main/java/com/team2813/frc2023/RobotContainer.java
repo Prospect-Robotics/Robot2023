@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.ShuffleboardData;
+import com.team2813.frc2023.util.SubstationOffsetType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -98,10 +99,13 @@ public class RobotContainer
         return selectedRoutine.getCommand();
     }
 
-    public void addAutoRoutines() {
+    public void populateMenus() {
         for (AutoRoutine routine : AutoRoutine.values()) {
             ShuffleboardData.routineChooser.addOption(routine.getName(), routine);
         }
+
+        ShuffleboardData.offsetChooser.addOption("Left", SubstationOffsetType.LEFT);
+        ShuffleboardData.offsetChooser.addOption("Right", SubstationOffsetType.RIGHT);
     }
 
     private static double deadband(double value, double deadband) {
