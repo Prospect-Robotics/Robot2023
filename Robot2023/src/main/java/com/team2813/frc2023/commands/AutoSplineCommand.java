@@ -8,9 +8,7 @@ import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
-import com.team2813.frc2023.util.SubstationOffsetType;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -253,5 +251,9 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                     }, driveSubsystem)
             );
         }
+    }
+
+    public enum SubstationOffsetType {
+        LEFT, RIGHT
     }
 }

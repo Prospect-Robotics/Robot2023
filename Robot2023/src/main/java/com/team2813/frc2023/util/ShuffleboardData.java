@@ -1,6 +1,7 @@
 package com.team2813.frc2023.util;
 
 import com.team2813.frc2023.AutoRoutine;
+import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 

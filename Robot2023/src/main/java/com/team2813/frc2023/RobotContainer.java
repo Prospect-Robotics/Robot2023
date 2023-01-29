@@ -6,10 +6,10 @@
 package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.AutoSplineCommand;
+import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.ShuffleboardData;
-import com.team2813.frc2023.util.SubstationOffsetType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
