@@ -22,7 +22,6 @@ public class TalonFXProWrapper extends TalonFX {
     private final Map<String, StatusSignalValue<Object>> statusSignals = new HashMap<>();
     private final TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
     private final boolean canivore;
-    private double kT;
 
     private StatusSignalValue<Double> encoderPosition = getRotorPosition();
     private StatusSignalValue<Double> motorVelocity = getRotorVelocity();
@@ -126,10 +125,8 @@ public class TalonFXProWrapper extends TalonFX {
         supplyVoltage = supplyVoltage.refresh();
         double voltage = supplyVoltage.getValue();
 
-        /*
-        Calculate motor's kT constant, which varies with supply voltage
-         */
-        kT = 0.005112676 + (14150.89 - 0.005112676) / (1 + Math.pow(voltage / 0.0001558867, 1.234789));
+        // Calculate motor's kT constant, which varies with supply voltage
+        double kT = 0.005112676 + (14150.89 - 0.005112676) / (1 + Math.pow(voltage / 0.0001558867, 1.234789));
         double amps = torque / kT;
 
         setControl(new TorqueCurrentFOC(amps, maxAbsDutyCycle, 1, false));
@@ -225,7 +222,6 @@ public class TalonFXProWrapper extends TalonFX {
     public void configVelocitySignalUpdateFrequency(double frequencyHz) {
         ConfigUtils.ctreProConfig(() -> motorVelocity.setUpdateFrequency(frequencyHz));
     }
-
 
     public void registerStatusSignal(String key, StatusSignalValue<Object> statusSignal) {
         statusSignals.put(key, statusSignal);
