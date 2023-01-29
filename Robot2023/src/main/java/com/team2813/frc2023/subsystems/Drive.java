@@ -53,7 +53,7 @@ public class Drive extends SubsystemBase {
 
     public Drive() {
         String canbus = "swerve";
-        boolean licensed = false;
+        boolean licensed = true;
 
         double frontLeftSteerOffset = -Math.toRadians(146.25);
         double frontRightSteerOffset = -Math.toRadians(250.13671875);
@@ -143,13 +143,6 @@ public class Drive extends SubsystemBase {
                 backRightModule.getPosition()
         };
         odometry = new SwerveDriveOdometry(kinematics, initialState.holonomicRotation, modulePositions);
-    }
-
-    public void resetWheels() {
-        frontLeftModule.set(0, 0);
-        frontRightModule.set(0, 0);
-        backLeftModule.set(0, 0);
-        backRightModule.set(0, 0);
     }
 
     @Override

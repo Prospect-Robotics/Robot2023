@@ -74,10 +74,6 @@ public class RobotContainer
         return Autos.exampleAuto(exampleSubsystem);
     }
 
-    public void onDisabled() {
-        drive.resetWheels();
-    }
-
     private static double deadband(double value, double deadband) {
         if (Math.abs(value) > deadband) {
             if (value > 0) {
