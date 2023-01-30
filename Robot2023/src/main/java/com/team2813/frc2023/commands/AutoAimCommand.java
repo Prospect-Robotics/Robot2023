@@ -20,7 +20,6 @@ public class AutoAimCommand extends CommandBase {
     private final Drive driveSubsystem;
     private final Consumer<ChassisSpeeds> chassisSpeedsConsumer;
     private final NodeType nodeType;
-    private final double txGoal = 0; // TODO: experimentally determine on comp bot
 
     private static final PIDController yController = new PIDController(0, 0, 0); // TODO: tune
     private static final PIDController thetaController = new PIDController(0, 0, 0); // TODO: tune
@@ -29,11 +28,10 @@ public class AutoAimCommand extends CommandBase {
     private double timeStart;
     private double timeDelta;
     private double currentHeading;
-    private double txError;
-    private double angularError;
     private double txDeadline;
     private double angularDeadline;
     private boolean settingRequired = false;
+    private boolean finishedRotating = false;
 
     public AutoAimCommand(NodeType nodeType, Drive driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
@@ -47,21 +45,23 @@ public class AutoAimCommand extends CommandBase {
 
     @Override
     public void initialize() {
-        timeStart = Timer.getFPGATimestamp();
-
         if (nodeType == NodeType.CONE) {
-            limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
-            settingRequired = true;
+            if (limelight.getValues().getPipelineIndex() != REFLECTIVE_TAPE_PIPELINE_INDEX) {
+                limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
+                settingRequired = true;
+            }
         }
         if (!limelight.getValues().getLedState().equals(LedState.DEFAULT)) {
             limelight.setLights(true);
             settingRequired = true;
         }
 
-        txError = txGoal - limelight.getValues().getTx();
+        timeStart = Timer.getFPGATimestamp() + (settingRequired ? 0.125 : 0);
+
+        double absoluteTxError = Math.abs(limelight.getValues().getTx());
 
         currentHeading = driveSubsystem.getRotation().getRadians() % (2 * Math.PI);
-        angularError = 0 - currentHeading;
+        double absoluteAngularError = Math.abs(currentHeading);
     }
 
     @Override
@@ -98,5 +98,7 @@ public class AutoAimCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         chassisSpeedsConsumer.accept(new ChassisSpeeds());
+        if (limelight.getValues().getPipelineIndex() != APRILTAG_PIPELINE_INDEX) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+        limelight.setLights(false);
     }
 }

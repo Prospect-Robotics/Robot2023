@@ -41,7 +41,7 @@ public class Limelight extends SubsystemBase {
     }
 
     public void setPipeline(int pipelineIndex) {
-        values.getPipelineIndex().setNumber(pipelineIndex);
+        values.getPipelineIndexEntry().setNumber(pipelineIndex);
     }
 
     /**
