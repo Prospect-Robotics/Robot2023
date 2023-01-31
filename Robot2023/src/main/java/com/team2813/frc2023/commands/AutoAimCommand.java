@@ -3,8 +3,6 @@ package com.team2813.frc2023.commands;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
-import com.team2813.lib.util.LimelightValues.LedState;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -48,6 +46,10 @@ public class AutoAimCommand extends CommandBase {
         limelight = Limelight.getInstance();
 
         addRequirements(driveSubsystem);
+    }
+
+    public AutoAimCommand(Drive driveSubsystem) {
+        this(AutoSplineCommand.currentNodeType, driveSubsystem);
     }
 
     @Override

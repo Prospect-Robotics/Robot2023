@@ -10,6 +10,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import static com.team2813.frc2023.Constants.*;
+
 public class Limelight extends SubsystemBase {
 
     private final LimelightValues values = new LimelightValues();
@@ -68,6 +70,11 @@ public class Limelight extends SubsystemBase {
     public Optional<Double> getVerticalOffset() {
         if (values.hasTargets()) return Optional.of(values.getTy());
         else return Optional.empty();
+    }
+
+    public void reset() {
+        setPipeline(APRILTAG_PIPELINE_INDEX);
+        setLights(false);
     }
 
     @Override

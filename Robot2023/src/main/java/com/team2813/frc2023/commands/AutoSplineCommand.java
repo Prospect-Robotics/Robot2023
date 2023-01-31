@@ -37,6 +37,8 @@ public class AutoSplineCommand extends SequentialCommandGroup {
     private static int apriltagTxSign;
     private static Pose2d tagGoalPose;
 
+    public static NodeType currentNodeType;
+
     public AutoSplineCommand(BooleanSupplier buttonLetGo, Drive driveSubsystem) {
         super(
                 new InstantCommand(() -> limelight.setLights(true)),
@@ -141,13 +143,12 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                     new WaitCommand(0.125),
                     new InstantCommand(() -> {
                         Pose2d goalPose = new Pose2d();
-                        NodeType nodeType;
 
                         Optional<Double> horizontalOffsetOptional = limelight.getHorizontalOffset();
                         if (horizontalOffsetOptional.isPresent()) {
                             double tapeTx = horizontalOffsetOptional.get();
                             if (Math.abs(tapeTx) <= Math.abs(apriltagTx)) {
-                                nodeType = NodeType.CONE;
+                                currentNodeType = NodeType.CONE;
 
                                 int tapeTxSign = (int) (Math.abs(tapeTx) / tapeTx);
                                 if (DriverStation.getAlliance().equals(Alliance.Red)) {
@@ -220,16 +221,16 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                 }
                             }
                             else {
-                                nodeType = NodeType.CUBE;
+                                currentNodeType = NodeType.CUBE;
                                 goalPose = tagGoalPose;
                             }
                         }
                         else {
-                            nodeType = NodeType.CUBE;
+                            currentNodeType = NodeType.CUBE;
                             goalPose = tagGoalPose;
                         }
 
-                        if (nodeType == NodeType.CUBE) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+                        if (currentNodeType == NodeType.CUBE) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
 
                         PathPlannerTrajectory trajectory = PathPlanner.generatePath(
                                 new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
