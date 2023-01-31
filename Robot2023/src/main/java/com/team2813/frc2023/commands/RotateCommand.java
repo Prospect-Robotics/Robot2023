@@ -39,6 +39,8 @@ public class RotateCommand extends CommandBase {
         this.driveSubsystem = driveSubsystem;
         this.degreeSupplier = degreeSupplier;
 
+        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
         chassisSpeedsConsumer = driveSubsystem::drive;
         addRequirements(driveSubsystem);
     }
