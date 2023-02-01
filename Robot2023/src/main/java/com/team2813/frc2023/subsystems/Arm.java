@@ -1,18 +1,18 @@
 package com.team2813.frc2023.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
-import com.team2813.lib.motors.TalonFXProWrapper;
+import com.team2813.lib.motors.TalonFXWrapper;
 
 import static com.team2813.frc2023.Constants.*;
 
 public class Arm extends Subsystem1d {
 
     public Arm() {
-        super(new TalonFXProWrapper(ARM_ID, true));
+        super(new TalonFXWrapper(ARM_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0.4, 0, 0); //probably will need to change
-        motor.configMotionMagic(30000, 30000); // max vel in ticks/100ms
+        motor.configPID(0.4, 0, 0); // TODO: tune
+        motor.configMotionMagic(21000, 20000);
     }
 
     public double getMotorVelocity(){

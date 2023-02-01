@@ -20,5 +20,5 @@ public final class Constants
         public static final int DRIVER_CONTROLLER_PORT = 0;
     }
 
-    public static int ARM_ID = 16;
+    public static int ARM_MOTOR_ID = 16;
 }
