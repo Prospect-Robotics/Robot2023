@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
+import static com.team2813.frc2023.Constants.*;
+
 
 
 /**
@@ -22,6 +24,8 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     
     private RobotContainer robotContainer;
+
+    public static final Lightshow LIGHTSHOW = new Lightshow(CANIFIER_ID);
     
     
     /**
