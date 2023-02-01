@@ -2,14 +2,14 @@ package com.team2813.frc2023.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2813.lib.motors.ControlMode;
-import com.team2813.lib.motors.SparkMaxWrapper;
+import com.team2813.lib.motors.TalonFXProWrapper;
 
 import static com.team2813.frc2023.Constants.*;
 
 public class Arm extends Subsystem1d {
 
     public Arm() {
-        super(new SparkMaxWrapper(ARM_ID, MotorType.kBrushless, true));
+        super(new TalonFXProWrapper(ARM_ID, true));
 
         motor.configPID(0.4, 0, 0); //probably will need to change
         motor.configMotionMagic(30000, 30000); // max vel in ticks/100ms
@@ -23,7 +23,7 @@ public class Arm extends Subsystem1d {
         return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05; //probably change value
     }
 
-    public void startLoweringClimber() {
+    public void startLoweringArm() {
         motor.set(ControlMode.DUTY_CYCLE, -0.98); //probably change value
     }
 
