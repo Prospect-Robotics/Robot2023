@@ -3,7 +3,6 @@ package com.team2813.frc2023.commands;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -22,21 +21,18 @@ public class AutoAimCommand extends CommandBase {
     private final NodeType nodeType;
 
     private static final ProfiledPIDController yController = new ProfiledPIDController(
+            0.25,
             0,
-            0,
-            0,
-            new TrapezoidProfile.Constraints(Drive.MAX_ANGULAR_VELOCITY * 0.25, Drive.MAX_ANGULAR_VELOCITY * 0.25)
+            0.00125,
+            new TrapezoidProfile.Constraints(
+                    Drive.MAX_VELOCITY * 0.0078125,
+                    Drive.MAX_VELOCITY * 0.00390625)
     ); // TODO: tune
-    private static final PIDController thetaController = new PIDController(0, 0, 0); // TODO: tune
 
     private double timeStart;
     private double timeDelta;
-    private double currentHeading;
-    private double angularSetpoint;
     private double txDeadline;
-    private double angularDeadline;
     private boolean settingRequired = false;
-    private boolean finishedRotating = false;
 
     public AutoAimCommand(NodeType nodeType, Drive driveSubsystem) {
         this.driveSubsystem = driveSubsystem;
@@ -69,15 +65,6 @@ public class AutoAimCommand extends CommandBase {
 //        timeStart = Timer.getFPGATimestamp() + (settingRequired ? 0.125 : 0);
 //
 //        double absoluteTxError = Math.abs(limelight.getValues().getTx());
-
-        double heading = driveSubsystem.getRotation().getRadians();
-        int headingSign = (int) (Math.abs(heading) / heading);
-        double headingQuotient = Math.abs(heading / Math.toRadians(360));
-        int headingMultiplier = (int) headingQuotient;
-        double normalizedHeadingQuotient = Math.abs(headingQuotient - headingMultiplier);
-        angularSetpoint = (normalizedHeadingQuotient > 0.5 ? (headingMultiplier + 1) : headingMultiplier) * headingSign * Math.toRadians(360);
-
-        double absoluteAngularErrorDeg = Math.toDegrees(Math.abs(angularSetpoint - driveSubsystem.getRotation().getRadians()));
     }
 
     @Override
