@@ -27,7 +27,10 @@ public Command BlinkLight;
     }
 
     public void setLight(Light light) {
-        BlinkLight.cancel();
+        if (BlinkLight != null){
+            BlinkLight.cancel();
+        }
+
         if(light.flash){
             BlinkLight =  new BlinkLightsCommand(light, 1.0); 
         }
