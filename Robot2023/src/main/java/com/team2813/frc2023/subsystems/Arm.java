@@ -6,7 +6,7 @@ import com.team2813.lib.motors.TalonFXWrapper;
 
 import static com.team2813.frc2023.Constants.*;
 
-public class Arm extends Subsystem1d {
+public class Arm extends Subsystem1d<Arm.ExtensionLength> {
 
     public Arm() {
         super(new TalonFXWrapper(ARM_MOTOR_ID, TalonFXInvertType.Clockwise));
@@ -23,7 +23,7 @@ public class Arm extends Subsystem1d {
         return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05; //probably change value
     }
 
-    public void startLoweringArm() {
+    public void startRetractingArm() {
         motor.set(ControlMode.DUTY_CYCLE, -0.98); //probably change value
     }
 
