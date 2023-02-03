@@ -121,10 +121,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
 
                             Command command = new ParallelRaceGroup(
                                     new WaitUntilCommand(buttonLetGo),
-                                    new SequentialCommandGroup(
-                                            new DecideAndExecuteCommand(buttonLetGo, driveSubsystem),
-                                            new InstantCommand(() -> limelight.setLights(false))
-                                    )
+                                    new DecideAndExecuteCommand(buttonLetGo, driveSubsystem)
                             );
                             command.schedule();
                         }
