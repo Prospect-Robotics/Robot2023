@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.AutoAimCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
+import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
@@ -33,6 +34,11 @@ import static com.team2813.frc2023.Constants.OperatorConstants.*;
  */
 public class RobotContainer
 {
+    // The robot's subsystems and commands are defined here...
+    private final Drive drive = new Drive();
+    
+    private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
+
     /*
     String key is the name of the event marker in an auto routine,
     Command value is the command associated with that event marker.
@@ -44,12 +50,6 @@ public class RobotContainer
     that TrajectoryAutoBuilder.java uses to use commands like that.
      */
     public static final Map<String, Command> EVENT_MAP = new HashMap<>();
-
-    // The robot's subsystems and commands are defined here...
-    private final Drive drive = new Drive();
-    
-    private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
-    
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()

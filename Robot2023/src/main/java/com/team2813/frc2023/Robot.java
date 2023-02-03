@@ -5,6 +5,7 @@
 
 package com.team2813.frc2023;
 
+import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     
     public static RobotContainer ROBOT_CONTAINER;
+    public static TrajectoryAutoBuilder AUTO_FACTORY;
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -37,6 +39,10 @@ public class Robot extends TimedRobot
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         ROBOT_CONTAINER = new RobotContainer();
+
+        // Instantiate the auto factory, which will return commands to follow trajectories while
+        // also doing other actions.
+        AUTO_FACTORY = new TrajectoryAutoBuilder(ROBOT_CONTAINER.getDrive());
 
         ShuffleboardData.init();
         ROBOT_CONTAINER.populateMenus();

@@ -3,7 +3,8 @@ package com.team2813.frc2023;
 import com.team2813.frc2023.commands.RotateCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import static com.team2813.frc2023.Robot.ROBOT_CONTAINER;
+import static com.team2813.frc2023.Robot.*;
+
 public enum AutoRoutine {
 
     ROTATE_90("Rotate 90", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
