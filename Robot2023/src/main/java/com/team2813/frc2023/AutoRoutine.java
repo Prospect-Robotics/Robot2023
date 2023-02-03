@@ -7,7 +7,12 @@ import static com.team2813.frc2023.Robot.*;
 
 public enum AutoRoutine {
 
-    ROTATE_90("Rotate 90", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
+    L1_1CO_1CU("L1-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L1 - 1Co - 1Cu")),
+    L1_1CO_CLIMB("L1-1Co-Climb", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Climb")),
+    L2_1CO_INTAKE1("L2-1Co-Intake1", AUTO_FACTORY.buildPathGroupAuto("L2 - 1Co - Intake1")),
+    L3_1CO_1CU("L3-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L3 - 1Co - 1Cu")),
+    L3_1CO_CLIMB("L3-1Co-Climb", AUTO_FACTORY.buildTrajectoryAuto("L3 - 1Co - Climb")),
+    ROTATE_TEST("Rotate Test", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
     //BLAH("Yes", AUTO_FACTORY.buildTrajectoryAuto("someName"));
 
     private final String name;
