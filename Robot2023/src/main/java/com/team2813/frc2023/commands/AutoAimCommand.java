@@ -21,12 +21,12 @@ public class AutoAimCommand extends CommandBase {
     private final NodeType nodeType;
 
     private static final ProfiledPIDController yController = new ProfiledPIDController(
-            0.25,
+            0.01,
             0,
-            0.00125,
+            0,
             new TrapezoidProfile.Constraints(
-                    Drive.MAX_VELOCITY * 0.0078125,
-                    Drive.MAX_VELOCITY * 0.00390625)
+                    Drive.MAX_VELOCITY * 0.25,
+                    Drive.MAX_VELOCITY * 0.25)
     ); // TODO: tune
 
     private double timeStart;
