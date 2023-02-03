@@ -106,8 +106,12 @@ public class LimelightValues {
         return stream;
     }
 
-    public NetworkTableEntry getPipelineIndex() {
+    public NetworkTableEntry getPipelineIndexEntry() {
         return pipelineIndex;
+    }
+
+    public int getPipelineIndex() {
+        return (int) pipelineIndex.getInteger(-1);
     }
 
     /**

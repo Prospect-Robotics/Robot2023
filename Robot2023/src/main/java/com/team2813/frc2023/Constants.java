@@ -35,6 +35,7 @@ public final class Constants
 
         // Driver controls
         public static final Trigger AUTO_SPLINE_BUTTON = DRIVER_CONTROLLER.R1();
+        public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
     }
 
     // CAN IDs
@@ -79,16 +80,18 @@ public final class Constants
 
     // Path Constraints
     public static final double AUTO_MAX_VEL = 2.25; // m/s
-    public static final double AUTO_MAX_ACCEL = 6; // m/s
+    public static final double AUTO_MAX_ACCEL = 6; // m/s^2
 
     // AprilTag ID location goals
     public static final Map<Integer, Pose2d> APRILTAG_MAP = new HashMap<>() {{
         put(1, new Pose2d(14.68, 1.06, new Rotation2d(0)));
         put(2, new Pose2d(14.68, 2.75, new Rotation2d(0)));
         put(3, new Pose2d(14.68, 4.43, new Rotation2d(0)));
-        put(6, new Pose2d(1.85, 1.06, new Rotation2d(Math.PI)));
+        put(4, new Pose2d(15.64, 6.72, new Rotation2d(0)));
+        put(5, new Pose2d(0.9, 6.72, new Rotation2d(Math.PI)));
+        put(6, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
         put(7, new Pose2d(1.85, 2.75, new Rotation2d(Math.PI)));
-        put(8, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
+        put(8, new Pose2d(1.85, 1.06, new Rotation2d(Math.PI)));
     }};
 
     // Limelight Pipeline Indices

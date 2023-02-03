@@ -5,13 +5,14 @@
 
 package com.team2813.frc2023;
 
+import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-
+import static com.team2813.frc2023.Constants.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -26,6 +27,7 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     
     public static RobotContainer ROBOT_CONTAINER;
+    public static TrajectoryAutoBuilder AUTO_FACTORY;
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -38,8 +40,14 @@ public class Robot extends TimedRobot
         // autonomous chooser on the dashboard.
         ROBOT_CONTAINER = new RobotContainer();
 
+        // Instantiate the auto factory, which will return commands to follow trajectories while
+        // also doing other actions.
+        AUTO_FACTORY = new TrajectoryAutoBuilder(ROBOT_CONTAINER.getDrive());
+
         ShuffleboardData.init();
-        ROBOT_CONTAINER.addAutoRoutines();
+        ROBOT_CONTAINER.populateMenus();
+
+        limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
     }
     
     
@@ -63,7 +71,9 @@ public class Robot extends TimedRobot
     
     /** This method is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        limelight.setLights(false);
+    }
     
     
     @Override
@@ -94,7 +104,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
-        limelight.setLights(false);
+        limelight.setLights(true);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

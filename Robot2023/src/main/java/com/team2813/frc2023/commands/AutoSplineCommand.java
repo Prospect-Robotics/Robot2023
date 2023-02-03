@@ -7,8 +7,8 @@ import com.pathplanner.lib.PathPoint;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
+import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -31,10 +31,13 @@ public class AutoSplineCommand extends SequentialCommandGroup {
 
     private static final Limelight limelight = Limelight.getInstance();
     private static final double NODE_OFFSET = Units.inchesToMeters(22);
+    private static final double SUBSTATION_OFFSET = Units.inchesToMeters(35.25);
 
     private static double apriltagTx;
     private static int apriltagTxSign;
     private static Pose2d tagGoalPose;
+
+    public static NodeType currentNodeType;
 
     public AutoSplineCommand(BooleanSupplier buttonLetGo, Drive driveSubsystem) {
         super(
@@ -48,19 +51,83 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                         int apriltagID = limelight.getValues().primaryApriltag();
                         tagGoalPose = APRILTAG_MAP.get(apriltagID);
 
-                        apriltagTx = limelight.getValues().getTx();
-                        apriltagTxSign = (int) (Math.abs(apriltagTx) / apriltagTx);
+                        if ((apriltagID == 4) || (apriltagID == 5)) {
+                            Pose2d goalPose = new Pose2d();
+                            SubstationOffsetType offsetDirection = ShuffleboardData.offsetChooser.getSelected();
 
-                        limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
+                            if (DriverStation.getAlliance().equals(Alliance.Red)) {
+                                switch (offsetDirection) {
+                                    case LEFT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() + SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                    case RIGHT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() - SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                }
+                            }
+                            else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
+                                switch (offsetDirection) {
+                                    case LEFT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() - SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                    case RIGHT:
+                                        goalPose = new Pose2d(
+                                                tagGoalPose.getX(),
+                                                tagGoalPose.getY() + SUBSTATION_OFFSET,
+                                                tagGoalPose.getRotation()
+                                        );
+                                        break;
+                                }
+                            }
 
-                        Command command = new ParallelRaceGroup(
-                                new WaitUntilCommand(buttonLetGo),
-                                new SequentialCommandGroup(
-                                        new DecideAndExecuteCommand(buttonLetGo, driveSubsystem),
-                                        new InstantCommand(() -> limelight.setLights(false))
-                                )
-                        );
-                        command.schedule();
+                            PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+                                    new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
+                                    List.of(
+                                            PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
+                                            new PathPoint(
+                                                    goalPose.getTranslation(),
+                                                    goalPose.getRotation(),
+                                                    goalPose.getRotation()
+                                            )
+                                    )
+                            );
+
+                            Command command = new ParallelRaceGroup(
+                                    new WaitUntilCommand(buttonLetGo),
+                                    new ParallelCommandGroup(
+                                            new FollowCommand(trajectory, driveSubsystem),
+                                            new InstantCommand(() -> limelight.setLights(false))
+                                    )
+                            );
+                            command.schedule();
+                        }
+                        else {
+                            apriltagTx = limelight.getValues().getTx();
+                            apriltagTxSign = (int) (Math.abs(apriltagTx) / apriltagTx);
+
+                            limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
+
+                            Command command = new ParallelRaceGroup(
+                                    new WaitUntilCommand(buttonLetGo),
+                                    new DecideAndExecuteCommand(buttonLetGo, driveSubsystem)
+                            );
+                            command.schedule();
+                        }
+                    }
+                    else {
+                        limelight.setLights(false);
                     }
                 }, driveSubsystem)
         );
@@ -73,16 +140,15 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                     new WaitCommand(0.125),
                     new InstantCommand(() -> {
                         Pose2d goalPose = new Pose2d();
-                        NodeType nodeType;
 
                         Optional<Double> horizontalOffsetOptional = limelight.getHorizontalOffset();
                         if (horizontalOffsetOptional.isPresent()) {
                             double tapeTx = horizontalOffsetOptional.get();
                             if (Math.abs(tapeTx) <= Math.abs(apriltagTx)) {
-                                nodeType = NodeType.CONE;
+                                currentNodeType = NodeType.CONE;
 
                                 int tapeTxSign = (int) (Math.abs(tapeTx) / tapeTx);
-                                if (DriverStation.getAlliance() == Alliance.Red) {
+                                if (DriverStation.getAlliance().equals(Alliance.Red)) {
                                     if (tapeTxSign == apriltagTxSign) {
                                         if (tapeTxSign > 0) {
                                             goalPose = new Pose2d(
@@ -116,7 +182,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                         }
                                     }
                                 }
-                                else if (DriverStation.getAlliance() == Alliance.Blue) {
+                                else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
                                     if (tapeTxSign == apriltagTxSign) {
                                         if (tapeTxSign > 0) {
                                             goalPose = new Pose2d(
@@ -152,16 +218,16 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                 }
                             }
                             else {
-                                nodeType = NodeType.CUBE;
+                                currentNodeType = NodeType.CUBE;
                                 goalPose = tagGoalPose;
                             }
                         }
                         else {
-                            nodeType = NodeType.CUBE;
+                            currentNodeType = NodeType.CUBE;
                             goalPose = tagGoalPose;
                         }
 
-                        if (nodeType == NodeType.CUBE) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+                        if (currentNodeType == NodeType.CUBE) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
 
                         PathPlannerTrajectory trajectory = PathPlanner.generatePath(
                                 new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
@@ -169,8 +235,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                         PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
                                         new PathPoint(
                                                 goalPose.getTranslation(),
-                                                DriverStation.getAlliance().equals(Alliance.Red) ? new Rotation2d(0) :
-                                                        new Rotation2d(Math.PI),
+                                                goalPose.getRotation(),
                                                 goalPose.getRotation()
                                         )
                                 )
@@ -184,5 +249,9 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                     }, driveSubsystem)
             );
         }
+    }
+
+    public enum SubstationOffsetType {
+        LEFT, RIGHT
     }
 }

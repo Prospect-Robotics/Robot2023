@@ -5,12 +5,18 @@
 
 package com.team2813.frc2023;
 
+import com.team2813.frc2023.commands.AutoAimCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand;
+import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
+import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.subsystems.Drive;
+import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -28,6 +34,11 @@ import static com.team2813.frc2023.Constants.OperatorConstants.*;
  */
 public class RobotContainer
 {
+    // The robot's subsystems and commands are defined here...
+    private final Drive drive = new Drive();
+    
+    private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
+
     /*
     String key is the name of the event marker in an auto routine,
     Command value is the command associated with that event marker.
@@ -39,12 +50,6 @@ public class RobotContainer
     that TrajectoryAutoBuilder.java uses to use commands like that.
      */
     public static final Map<String, Command> EVENT_MAP = new HashMap<>();
-
-    // The robot's subsystems and commands are defined here...
-    private final Drive drive = new Drive();
-    
-    private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
-    
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -55,6 +60,9 @@ public class RobotContainer
                 () -> -modifyAxis(driver.getLeftX()) * Drive.MAX_VELOCITY,
                 () -> -modifyAxis(driver.getRightX()) * Drive.MAX_ANGULAR_VELOCITY
         ));
+
+        // For spline testing purposes
+        drive.initAutonomous(new Pose2d());
 
         // Configure the trigger bindings
         configureBindings();
@@ -75,7 +83,11 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        AUTO_SPLINE_BUTTON.whileTrue(new AutoSplineCommand(AUTO_SPLINE_BUTTON.negate(), drive));
+//        AUTO_SPLINE_BUTTON.whileTrue(new AutoSplineCommand(AUTO_SPLINE_BUTTON.negate(), drive));
+        AUTO_SPLINE_BUTTON.whileTrue(new AutoAimCommand(NodeType.CUBE, drive));
+
+        SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
+        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
     }
     
     
@@ -90,10 +102,13 @@ public class RobotContainer
         return selectedRoutine.getCommand();
     }
 
-    public void addAutoRoutines() {
+    public void populateMenus() {
         for (AutoRoutine routine : AutoRoutine.values()) {
             ShuffleboardData.routineChooser.addOption(routine.getName(), routine);
         }
+
+        ShuffleboardData.offsetChooser.addOption("Left", SubstationOffsetType.LEFT);
+        ShuffleboardData.offsetChooser.addOption("Right", SubstationOffsetType.RIGHT);
     }
 
     private static double deadband(double value, double deadband) {

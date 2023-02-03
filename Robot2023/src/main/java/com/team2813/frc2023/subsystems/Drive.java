@@ -25,7 +25,6 @@ public class Drive extends SubsystemBase {
             SdsModuleConfigurations.MK4_L2.getDriveReduction() *
             WHEEL_CIRCUMFERENCE; // m/s
     public static final double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / Math.hypot(TRACKWIDTH / 2, WHEELBASE / 2); // radians per second
-    public static final double MAX_ANGULAR_ACCELERATION = Math.PI;
 
     private final double kP = 0.125;
     private final double kI = 0;
@@ -54,6 +53,8 @@ public class Drive extends SubsystemBase {
 
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
     private SwerveModuleState[] states = new SwerveModuleState[4];
+
+    private double multiplier = 1;
 
     public Drive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -121,10 +122,6 @@ public class Drive extends SubsystemBase {
         pigeon.configMountPose(Pigeon2.AxisDirection.PositiveY, Pigeon2.AxisDirection.PositiveZ);
     }
 
-    public SwerveDriveKinematics getKinematics() {
-        return kinematics;
-    }
-
     public Rotation2d getRotation() {
         return Rotation2d.fromDegrees(pigeon.getHeading());
     }
@@ -140,6 +137,10 @@ public class Drive extends SubsystemBase {
                 backLeftModule.getState(),
                 backRightModule.getState()
         );
+    }
+
+    public void enableSlowMode(boolean enable) {
+        multiplier = enable ? 0.25 : 1;
     }
 
     public void drive(ChassisSpeeds demand) {
@@ -193,9 +194,9 @@ public class Drive extends SubsystemBase {
         states = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY);
 
-        frontLeftModule.set(states[0].speedMetersPerSecond, states[0].angle.getRadians());
-        frontRightModule.set(states[1].speedMetersPerSecond, states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond, states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond, states[3].angle.getRadians());
+        frontLeftModule.set(states[0].speedMetersPerSecond * multiplier, states[0].angle.getRadians());
+        frontRightModule.set(states[1].speedMetersPerSecond * multiplier, states[1].angle.getRadians());
+        backLeftModule.set(states[2].speedMetersPerSecond * multiplier, states[2].angle.getRadians());
+        backRightModule.set(states[3].speedMetersPerSecond * multiplier, states[3].angle.getRadians());
     }
 }
