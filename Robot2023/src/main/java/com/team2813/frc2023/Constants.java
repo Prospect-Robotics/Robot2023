@@ -89,9 +89,9 @@ public final class Constants
         put(3, new Pose2d(14.68, 4.43, new Rotation2d(0)));
         put(4, new Pose2d(15.64, 6.72, new Rotation2d(0)));
         put(5, new Pose2d(0.9, 6.72, new Rotation2d(Math.PI)));
-        put(6, new Pose2d(1.85, 1.06, new Rotation2d(Math.PI)));
+        put(6, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
         put(7, new Pose2d(1.85, 2.75, new Rotation2d(Math.PI)));
-        put(8, new Pose2d(1.85, 4.43, new Rotation2d(Math.PI)));
+        put(8, new Pose2d(1.85, 1.06, new Rotation2d(Math.PI)));
     }};
 
     // Limelight Pipeline Indices
