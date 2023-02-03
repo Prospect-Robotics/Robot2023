@@ -8,6 +8,7 @@ import static com.team2813.frc2023.Robot.*;
 public enum AutoRoutine {
 
     ROTATE_90("Rotate 90", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
+    //BLAH("Yes", AUTO_FACTORY.buildTrajectoryAuto("someName"));
 
     private final String name;
     private final Command command;
