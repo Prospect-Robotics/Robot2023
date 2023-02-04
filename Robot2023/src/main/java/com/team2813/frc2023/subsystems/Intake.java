@@ -11,7 +11,7 @@ import static com.team2813.frc2023.Constants.*;
 
 public class Intake extends SubsystemBase {
     // Neo 550 and Falcon motors are brushless, kBrushless enum value - refer to MotorType class 
-    private final SparkMaxWrapper motor = new SparkMaxWrapper(INTAKE_MASTER_ID, MotorType.kBrushless, true);
+    private final SparkMaxWrapper motor = new SparkMaxWrapper(INTAKE_MASTER_ID, MotorType.kBrushless, false);
     private final SolenoidGroup piston = new SolenoidGroup(PCM_ID, PneumaticsModuleType.CTREPCM, INTAKE_PISTON_CHANNEL);
 
     public Intake () {

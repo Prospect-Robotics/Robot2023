@@ -7,14 +7,16 @@ package com.team2813.frc2023;
 
 import com.team2813.frc2023.Constants.OperatorConstants;
 import com.team2813.frc2023.commands.Autos;
-import com.team2813.frc2023.commands.ExampleCommand;
+import com.team2813.frc2023.commands.DefaultIntakeCommand;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
+import com.team2813.frc2023.subsystems.Intake;
 import com.team2813.frc2023.util.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-
+import static com.team2813.frc2023.Constants.OperatorConstants.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,16 +28,17 @@ public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    private final Intake intake = new Intake();
     private final Limelight limelight = Limelight.getInstance();
     
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final XboxController operator = new XboxController(OPERATOR_CONTROLLER_PORT);
     
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
+        intake.setDefaultCommand(new DefaultIntakeCommand(operator::getLeftTriggerAxis, intake));
+
         // Configure the trigger bindings
         configureBindings();
     }
@@ -52,13 +55,7 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        new Trigger(exampleSubsystem::exampleCondition)
-                .onTrue(new ExampleCommand(exampleSubsystem));
-        
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+
     }
     
     
