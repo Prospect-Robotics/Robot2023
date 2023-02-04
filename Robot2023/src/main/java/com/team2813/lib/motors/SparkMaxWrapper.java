@@ -19,7 +19,7 @@ public class SparkMaxWrapper extends CANSparkMax implements Motor {
      * @param deviceId The device ID.
      * @param inverted Whether the motor is inverted
      */
-    public SparkMaxWrapper(int deviceId, boolean inverted, MotorType type) {
+    public SparkMaxWrapper(int deviceId, MotorType type, boolean inverted) {
         super(deviceId, type);
         encoder = getEncoder();
         pidController = getPIDController();
