@@ -11,6 +11,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -51,10 +54,13 @@ public class Drive extends SubsystemBase {
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
+    private final DoubleLogEntry pigeonHeadingLogger;
+
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
     private SwerveModuleState[] states = new SwerveModuleState[4];
 
     private double multiplier = 1;
+    private boolean loggingEnabled = false;
 
     public Drive() {
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
@@ -120,6 +126,9 @@ public class Drive extends SubsystemBase {
         );
 
         pigeon.configMountPose(Pigeon2.AxisDirection.PositiveY, Pigeon2.AxisDirection.PositiveZ);
+
+        DataLogManager.start();
+        pigeonHeadingLogger = new DoubleLogEntry(DataLogManager.getLog(), "/pigeonHeading");
     }
 
     public Rotation2d getRotation() {
@@ -174,6 +183,10 @@ public class Drive extends SubsystemBase {
         odometry.resetPosition(getRotation(), modulePositions, newPose);
     }
 
+    public void enableLogging(boolean enable) {
+        loggingEnabled = enable;
+    }
+
     @Override
     public void periodic() {
         pigeon.periodicResetCheck();
@@ -190,6 +203,8 @@ public class Drive extends SubsystemBase {
 
             SmartDashboard.putString("Current Pose", odometry.getPoseMeters().toString());
         }
+
+        if (loggingEnabled) pigeonHeadingLogger.append(pigeon.getPitch());
 
         states = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY);
