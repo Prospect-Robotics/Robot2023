@@ -44,10 +44,6 @@ public class AutoAimCommand extends CommandBase {
         addRequirements(driveSubsystem);
     }
 
-    public AutoAimCommand(Drive driveSubsystem) {
-        this(AutoSplineCommand.currentNodeType, driveSubsystem);
-    }
-
     @Override
     public void initialize() {
         timeStart = Timer.getFPGATimestamp();

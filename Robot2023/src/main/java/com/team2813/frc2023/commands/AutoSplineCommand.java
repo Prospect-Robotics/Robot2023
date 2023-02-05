@@ -33,13 +33,10 @@ public class AutoSplineCommand extends SequentialCommandGroup {
     private static final double NODE_OFFSET = Units.inchesToMeters(22);
     private static final double SUBSTATION_OFFSET = Units.inchesToMeters(35.25);
 
-    private static double apriltagTx;
-    private static int apriltagTxSign;
     private static Pose2d tagGoalPose;
+    private static double apriltagTx;
 
-    public static NodeType currentNodeType;
-
-    public AutoSplineCommand(BooleanSupplier buttonLetGo, Drive driveSubsystem) {
+    public AutoSplineCommand(BooleanSupplier spliningDisabled, NodeType nodeType, Drive driveSubsystem) {
         super(
                 new InstantCommand(() -> limelight.setLights(true)),
                 new WaitCommand(0.125),
@@ -92,38 +89,23 @@ public class AutoSplineCommand extends SequentialCommandGroup {
                                 }
                             }
 
-                            PathPlannerTrajectory trajectory = PathPlanner.generatePath(
-                                    new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
-                                    List.of(
-                                            PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
-                                            new PathPoint(
-                                                    goalPose.getTranslation(),
-                                                    goalPose.getRotation(),
-                                                    goalPose.getRotation()
-                                            )
-                                    )
-                            );
-
-                            Command command = new ParallelRaceGroup(
-                                    new WaitUntilCommand(buttonLetGo),
-                                    new ParallelCommandGroup(
-                                            new FollowCommand(trajectory, driveSubsystem),
-                                            new InstantCommand(() -> limelight.setLights(false))
-                                    )
-                            );
-                            command.schedule();
+                            generateAndFollowSpline(spliningDisabled, goalPose, driveSubsystem);
                         }
                         else {
-                            apriltagTx = limelight.getValues().getTx();
-                            apriltagTxSign = (int) (Math.abs(apriltagTx) / apriltagTx);
+                            switch (nodeType) {
+                                case CUBE:
+                                    generateAndFollowSpline(spliningDisabled, tagGoalPose, driveSubsystem);
+                                    break;
+                                case CONE:
+                                    apriltagTx = limelight.getValues().getTx();
+                                    limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
 
-                            limelight.setPipeline(REFLECTIVE_TAPE_PIPELINE_INDEX);
-
-                            Command command = new ParallelRaceGroup(
-                                    new WaitUntilCommand(buttonLetGo),
-                                    new DecideAndExecuteCommand(buttonLetGo, driveSubsystem)
-                            );
-                            command.schedule();
+                                    Command command = new ParallelRaceGroup(
+                                            new WaitUntilCommand(spliningDisabled),
+                                            new DecideAndExecuteCommand(spliningDisabled, driveSubsystem)
+                                    );
+                                    command.schedule();
+                            }
                         }
                     }
                     else {
@@ -135,120 +117,74 @@ public class AutoSplineCommand extends SequentialCommandGroup {
 
     private static class DecideAndExecuteCommand extends SequentialCommandGroup {
 
-        private DecideAndExecuteCommand(BooleanSupplier buttonLetGo, Drive driveSubsystem) {
+        private DecideAndExecuteCommand(BooleanSupplier spliningDisabled, Drive driveSubsystem) {
             super(
                     new WaitCommand(0.125),
                     new InstantCommand(() -> {
+                        double tapeTx = limelight.getValues().getTx();
                         Pose2d goalPose = new Pose2d();
 
-                        Optional<Double> horizontalOffsetOptional = limelight.getHorizontalOffset();
-                        if (horizontalOffsetOptional.isPresent()) {
-                            double tapeTx = horizontalOffsetOptional.get();
-                            if (Math.abs(tapeTx) <= Math.abs(apriltagTx)) {
-                                currentNodeType = NodeType.CONE;
-
-                                int tapeTxSign = (int) (Math.abs(tapeTx) / tapeTx);
-                                if (DriverStation.getAlliance().equals(Alliance.Red)) {
-                                    if (tapeTxSign == apriltagTxSign) {
-                                        if (tapeTxSign > 0) {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() + NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                        else {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() - NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                    }
-                                    else {
-                                        if (tapeTxSign > 0) {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() - NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                        else {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() + NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                    }
-                                }
-                                else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
-                                    if (tapeTxSign == apriltagTxSign) {
-                                        if (tapeTxSign > 0) {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() - NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                        else {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() + NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                    }
-                                    else {
-                                        if (tapeTxSign > 0) {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() + NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                        else {
-                                            goalPose = new Pose2d(
-                                                    tagGoalPose.getX(),
-                                                    tagGoalPose.getY() - NODE_OFFSET,
-                                                    tagGoalPose.getRotation()
-                                            );
-                                        }
-                                    }
-                                }
+                        if (DriverStation.getAlliance().equals(Alliance.Red)) {
+                            if (tapeTx > apriltagTx) {
+                                goalPose = new Pose2d(
+                                        tagGoalPose.getX(),
+                                        tagGoalPose.getY() + NODE_OFFSET,
+                                        tagGoalPose.getRotation()
+                                );
                             }
                             else {
-                                currentNodeType = NodeType.CUBE;
-                                goalPose = tagGoalPose;
+                                goalPose = new Pose2d(
+                                        tagGoalPose.getX(),
+                                        tagGoalPose.getY() - NODE_OFFSET,
+                                        tagGoalPose.getRotation()
+                                );
                             }
                         }
-                        else {
-                            currentNodeType = NodeType.CUBE;
-                            goalPose = tagGoalPose;
+                        else if (DriverStation.getAlliance().equals(Alliance.Blue)) {
+                            if (tapeTx > apriltagTx) {
+                                goalPose = new Pose2d(
+                                        tagGoalPose.getX(),
+                                        tagGoalPose.getY() - NODE_OFFSET,
+                                        tagGoalPose.getRotation()
+                                );
+                            }
+                            else {
+                                goalPose = new Pose2d(
+                                        tagGoalPose.getX(),
+                                        tagGoalPose.getY() + NODE_OFFSET,
+                                        tagGoalPose.getRotation()
+                                );
+                            }
                         }
 
-                        if (currentNodeType == NodeType.CUBE) limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
-
-                        PathPlannerTrajectory trajectory = PathPlanner.generatePath(
-                                new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
-                                List.of(
-                                        PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
-                                        new PathPoint(
-                                                goalPose.getTranslation(),
-                                                goalPose.getRotation(),
-                                                goalPose.getRotation()
-                                        )
-                                )
-                        );
-
-                        Command command = new ParallelRaceGroup(
-                                new WaitUntilCommand(buttonLetGo),
-                                new FollowCommand(trajectory, driveSubsystem)
-                        );
-                        command.schedule();
-                    }, driveSubsystem)
+                        generateAndFollowSpline(spliningDisabled, goalPose, driveSubsystem);
+                    })
             );
         }
+    }
+
+    private static void generateAndFollowSpline(BooleanSupplier spliningDisabled, Pose2d goalPose, Drive driveSubsystem) {
+        PathPlannerTrajectory trajectory = PathPlanner.generatePath(
+                new PathConstraints(AUTO_MAX_VEL, AUTO_MAX_ACCEL),
+                List.of(
+                        PathPoint.fromCurrentHolonomicState(driveSubsystem.getPose(), driveSubsystem.getChassisSpeeds()),
+                        new PathPoint(
+                                goalPose.getTranslation(),
+                                goalPose.getRotation(),
+                                goalPose.getRotation()
+                        )
+                )
+        );
+
+        Command command = new ParallelRaceGroup(
+                new WaitUntilCommand(spliningDisabled),
+                new ParallelCommandGroup(
+                        new FollowCommand(trajectory, driveSubsystem),
+                        new InstantCommand(() -> limelight.setLights(false)),
+                        new InstantCommand(() -> limelight.setPipeline(APRILTAG_PIPELINE_INDEX))
+                )
+        );
+        command.schedule();
     }
 
     public enum SubstationOffsetType {
