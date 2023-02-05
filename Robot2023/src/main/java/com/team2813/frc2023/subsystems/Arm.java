@@ -15,6 +15,10 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
         motor.configMotionMagic(21000, 20000);
     }
 
+    public double getMotorPosition() {
+        return motor.getEncoderPosition();
+    }
+
     public double getMotorVelocity(){
         return motor.getVelocity();
     }
@@ -40,16 +44,6 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
         @Override
         public double getPos() {
             return position;
-        }
-
-        @Override
-        public Position getMin() {
-            return INTAKE;
-        }
-
-        @Override
-        public Position getMax() {
-            return TOP;
         }
 
         final double position;

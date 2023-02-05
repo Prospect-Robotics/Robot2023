@@ -30,17 +30,23 @@ public final class Constants
         // Operator controls
         public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
+
         public static final Trigger MID_NODE_POSITION = OPERATOR_CONTROLLER.circle();                                                                                       ;
         public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.cross();
+
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
-
-
-
     }
 
+    // CAN IDs
+
+    // Intake
     public static final int INTAKE_MASTER_ID = 15;
     public static final int INTAKE_FOLLOWER_ID = 16;
-    public static final int PCM_ID = 17;
 
+    // Arm
+    public static final int ARM_MOTOR_ID = 18;
+
+    // Pneumatics
+    public static final int PCM_ID = 17;
     public static final int INTAKE_PISTON_CHANNEL = 0;
 }
