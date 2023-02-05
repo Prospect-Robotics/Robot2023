@@ -85,9 +85,13 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        //AUTO_SPLINE_BUTTON.whileTrue(new AutoSplineCommand(AUTO_SPLINE_BUTTON.negate(), drive));
-        //AUTO_SPLINE_BUTTON.whileTrue(new AutoAimCommand(NodeType.CUBE, drive));
         AUTO_SPLINE_BUTTON.toggleOnTrue(new LogCommand(drive));
+
+        Trigger apriltagSplineTrigger = new Trigger(() -> driver.getLeftTriggerAxis() == 1);
+        apriltagSplineTrigger.whileTrue(new AutoSplineCommand(apriltagSplineTrigger.negate(), NodeType.CUBE, drive));
+
+        Trigger reflectiveSplineTrigger = new Trigger(() -> driver.getRightTriggerAxis() == 1);
+        reflectiveSplineTrigger.whileTrue(new AutoSplineCommand(reflectiveSplineTrigger.negate(), NodeType.CONE, drive));
 
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
