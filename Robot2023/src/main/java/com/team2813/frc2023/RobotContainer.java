@@ -11,6 +11,9 @@ import com.team2813.frc2023.commands.ExampleCommand;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -53,14 +56,7 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        new Trigger(exampleSubsystem::exampleCondition)
-                .onTrue(new ExampleCommand(exampleSubsystem));
-        
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-        // cancelling on release.
 
-        while()
     }
     
     
