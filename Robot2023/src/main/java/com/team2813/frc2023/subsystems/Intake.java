@@ -19,11 +19,11 @@ public class Intake extends SubsystemBase {
     }
 
     public void open() {
-        piston.retract();
+        piston.extend(); // actually retracts the piston
     }
 
     public void close() {
-        piston.extend();
+        piston.retract(); // actually extends the piston
     }
 
     public void intake () {

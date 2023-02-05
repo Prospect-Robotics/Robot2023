@@ -5,9 +5,7 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.Constants.OperatorConstants;
 import com.team2813.frc2023.commands.Autos;
-import com.team2813.frc2023.commands.DefaultIntakeCommand;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Intake;
 import com.team2813.frc2023.util.Limelight;
@@ -30,15 +28,12 @@ public class RobotContainer
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Intake intake = new Intake();
     private final Limelight limelight = Limelight.getInstance();
-    
-    private final XboxController operator = new XboxController(OPERATOR_CONTROLLER_PORT);
+
     
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
-        intake.setDefaultCommand(new DefaultIntakeCommand(operator::getLeftTriggerAxis, intake));
-
         // Configure the trigger bindings
         configureBindings();
     }
