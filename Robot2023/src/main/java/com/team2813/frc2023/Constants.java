@@ -18,6 +18,7 @@ public final class Constants
     public static class OperatorConstants
     {
         public static final int DRIVER_CONTROLLER_PORT = 0;
+//        public static final int AUTO_BALANCE
     }
 
     public static int ARM_MOTOR_ID = 16;
