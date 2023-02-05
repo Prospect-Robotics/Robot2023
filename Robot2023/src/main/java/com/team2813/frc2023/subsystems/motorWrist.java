@@ -1,17 +1,17 @@
 package com.team2813.frc2023.subsystems;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2813.lib.motors.SparkMaxWrapper;
 import com.team2813.lib.motors.ControlMode;
 
 import static com.team2813.frc2023.Constants.*;
-//TODO: Find import for MotorType
 
 
 public class MotorWrist extends Subsystem1d<MotorWrist.Rotations> {
     public MotorWrist() {
         super(new SparkMaxWrapper(MOTOR_WRIST_ID, MotorType.kBrushless, true)); //TODO: Find ot if its inverted or not
         
-        motor.configPID(0, 0, 0) // TODO: Tune PID
+        motor.configPID(0, 0, 0); // TODO: Tune PID
     }
 
     public double getMotorVelocity() {
@@ -19,7 +19,7 @@ public class MotorWrist extends Subsystem1d<MotorWrist.Rotations> {
     }
 
     public void startZeroingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, ??) // TODO: Find value to put as 2nd parameter
+        motor.set(ControlMode.DUTY_CYCLE, -0.98); // TODO: Test for value to put as 2nd parameter
     }
 
     public void brake() {
@@ -36,16 +36,6 @@ public class MotorWrist extends Subsystem1d<MotorWrist.Rotations> {
         @Override
         public double getPos() {
             return position;
-        }
-
-        @Override
-        public Position getMin() {
-            return RESET; //might vary (depends on smallest position)
-        }
-
-        @Override
-        public Position getMax() {
-            return INTAKE; //might vary (depends on largest position)
         }
 
         final double position;
