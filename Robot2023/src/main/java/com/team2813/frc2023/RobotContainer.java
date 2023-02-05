@@ -41,7 +41,7 @@ public class RobotContainer
     
     private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
 
-    /*
+    /**
     String key is the name of the event marker in an auto routine,
     Command value is the command associated with that event marker.
 
@@ -49,7 +49,8 @@ public class RobotContainer
     Note: this is just the default event map that is meant to have easy-to-
     predict commands (such as intake, place-cube-high, etc.), not commands such
     as rotating a specific number of degrees. You'll have to customize the event map
-    that TrajectoryAutoBuilder.java uses to use commands like that.
+    that TrajectoryAutoBuilder.java uses to use commands like that (use
+     {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public static final Map<String, Command> EVENT_MAP = new HashMap<>();
     
