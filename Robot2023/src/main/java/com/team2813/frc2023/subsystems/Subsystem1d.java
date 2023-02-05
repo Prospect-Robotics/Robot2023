@@ -56,13 +56,9 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
 
     protected interface Position {
         /**
-         * @return encoder ticks of given position
+         * @return encoder rotations of given position
          */
         double getPos();
-
-        Position getMin();
-
-        Position getMax();
     }
 
     public void setPosition(double encoderRotations) {
