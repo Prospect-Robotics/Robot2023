@@ -56,6 +56,21 @@ public class RobotContainer
      */
     private void configureBindings()
     {
+//        INTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
+//                new InstantCommand(intake::open, intake),
+//                new WaitCommand(0.4),
+//                new InstantCommand(intake::intake, intake)
+//        ));
+//        INTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
+//
+//        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
+//                new InstantCommand(intake::open, intake),
+//                new WaitCommand(1),
+//                new InstantCommand(intake::outtake, intake)
+//        ));
+//        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
+
+
 
     }
     

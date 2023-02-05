@@ -26,6 +26,7 @@ public final class Constants
 
         public static final int OPERATOR_CONTROLLER_PORT = 1;
         public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
+        
 
         // Operator controls
         public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
@@ -34,13 +35,11 @@ public final class Constants
         public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.cross();
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
 
+        public static final int INTAKE_MASTER_ID = 15;
+        public static final int INTAKE_FOLLOWER_ID = 16;
+        public static final int PCM_ID = 17;
 
+        public static final int INTAKE_PISTON_CHANNEL = 0;
 
     }
-
-    public static final int INTAKE_MASTER_ID = 15;
-    public static final int INTAKE_FOLLOWER_ID = 16;
-    public static final int PCM_ID = 17;
-
-    public static final int INTAKE_PISTON_CHANNEL = 0;
 }
