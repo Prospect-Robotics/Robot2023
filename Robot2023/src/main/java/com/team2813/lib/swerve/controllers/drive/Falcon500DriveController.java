@@ -167,8 +167,21 @@ public class Falcon500DriveController implements DriveController {
     }
 
     @Override
+    public boolean hasPidConstants() {
+        return hasPidConstants;
+    }
+
+    @Override
     public Falcon500DriveController withFeedforward(SimpleMotorFeedforward feedforward) {
         this.feedforward = feedforward;
+
+        if (licensed) {
+            motorConfiguration.Slot0.kS = feedforward.ks;
+            motorConfiguration.Slot0.kV = feedforward.kv;
+
+            ConfigUtils.ctreProConfig(() -> licensedMotor.getConfigurator().apply(motorConfiguration.Slot0));
+        }
+
         return this;
     }
 
@@ -182,18 +195,12 @@ public class Falcon500DriveController implements DriveController {
      */
     @Override
     public void setReferenceVelocity(double velocity) {
-        if (hasPidConstants) {
+        if (hasPidConstants()) {
             double velocityRawUnits = velocity / sensorVelocityCoefficient;
 
             if (hasFeedForward()) {
                 if (licensed) {
-                    licensedMotor.setControl(new VelocityVoltage(
-                            velocityRawUnits,
-                            true,
-                            feedforward.calculate(velocity),
-                            0,
-                            false
-                    ));
+                    licensedMotor.setControl(new VelocityVoltage(velocityRawUnits));
                 }
                 else {
                     unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits, DemandType.ArbitraryFeedForward, feedforward.calculate(velocity));
