@@ -2,6 +2,7 @@ package com.team2813.frc2023.subsystems;
 
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.team2813.lib.motors.SparkMaxWrapper;
+import com.team2813.frc2023.subsystems.Subsystem1d.Position;
 import com.team2813.lib.motors.ControlMode;
 
 import static com.team2813.frc2023.Constants.*;
