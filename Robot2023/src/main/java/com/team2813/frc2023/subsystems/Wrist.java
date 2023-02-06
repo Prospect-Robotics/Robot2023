@@ -7,10 +7,10 @@ import com.team2813.lib.motors.ControlMode;
 import static com.team2813.frc2023.Constants.*;
 
 
-public class MotorWrist extends Subsystem1d<MotorWrist.Rotations> {
-    public MotorWrist() {
+public class Wrist extends Subsystem1d<Wrist.Rotations> {
+    public Wrist() {
         super(new SparkMaxWrapper(MOTOR_WRIST_ID, MotorType.kBrushless, true)); //TODO: Find ot if its inverted or not
-        
+
         motor.configPID(0, 0, 0); // TODO: Tune PID
     }
 
