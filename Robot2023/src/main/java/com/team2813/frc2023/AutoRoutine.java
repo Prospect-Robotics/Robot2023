@@ -14,14 +14,9 @@ public enum AutoRoutine {
     L3_1CO_1CU("L3-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L3 - 1Co - 1Cu")),
     L3_1CO_CLIMB("L3-1Co-Climb", AUTO_FACTORY.buildTrajectoryAuto("L3 - 1Co - Climb")),
     L1_1C_GET_AWAY("L1-1C-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1C - Get out of the way")),
+    L3_MOBILITY("L3-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L3 - Mobility")),
     ROTATE_TEST("Rotate Test", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
-    //BLAH("Yes", AUTO_FACTORY.buildTrajectoryAuto("someName"));
-//    ROTATE_90("Rotate 90", new RotateCommand(90, ROBOT_CONTAINER.getDrive())),
-
-
-
-
-
+    
     private final String name;
     private final Command command;
 
