@@ -1,6 +1,7 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.team2813.frc2023.subsystems.Subsystem1d.Position;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
 
