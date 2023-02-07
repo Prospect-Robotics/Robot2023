@@ -7,9 +7,12 @@ package com.team2813.frc2023;
 
 import com.team2813.frc2023.Constants.OperatorConstants;
 import com.team2813.frc2023.commands.Autos;
+import com.team2813.frc2023.commands.DefaultArmCommand;
 import com.team2813.frc2023.commands.ExampleCommand;
+import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.util.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -31,15 +34,19 @@ public class RobotContainer
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
+    private final Arm arm = new Arm();
     
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
     
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
+        arm.setDefaultCommand(new DefaultArmCommand(
+                () -> -operatorController.getRightY(),
+                arm
+        ));
+
         // Configure the trigger bindings
         configureBindings();
     }
@@ -69,9 +76,6 @@ public class RobotContainer
 //                new InstantCommand(intake::outtake, intake)
 //        ));
 //        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
-
-
-
     }
     
     

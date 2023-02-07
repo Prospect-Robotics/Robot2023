@@ -59,10 +59,6 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
          * @return encoder rotations of given position
          */
         double getPos();
-
-        Position getMin();
-
-        Position getMax();
     }
 
     public void setPosition(double encoderRotations) {

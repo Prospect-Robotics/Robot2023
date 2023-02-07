@@ -1,6 +1,7 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.team2813.frc2023.subsystems.Subsystem1d.Position;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
 
@@ -13,6 +14,10 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
 
         motor.configPID(0.4, 0, 0); // TODO: tune
         motor.configMotionMagic(21000, 20000);
+    }
+
+    public double getMotorPosition() {
+        return motor.getEncoderPosition();
     }
 
     public double getMotorVelocity(){
@@ -40,16 +45,6 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
         @Override
         public double getPos() {
             return position;
-        }
-
-        @Override
-        public Position getMin() {
-            return INTAKE;
-        }
-
-        @Override
-        public Position getMax() {
-            return TOP;
         }
 
         final double position;
