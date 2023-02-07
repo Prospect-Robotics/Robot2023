@@ -24,7 +24,8 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
                 driveSubsystem::getPose,
                 driveSubsystem::initAutonomous,
                 EVENT_MAP,
-                DrivetrainType.HOLONOMIC
+                DrivetrainType.HOLONOMIC,
+                true
         );
 
         this.driveSubsystem = driveSubsystem;

@@ -5,19 +5,16 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.commands.AutoAimCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.commands.LogCommand;
-import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;

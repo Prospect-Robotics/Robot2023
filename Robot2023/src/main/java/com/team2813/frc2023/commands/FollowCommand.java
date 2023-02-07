@@ -1,13 +1,10 @@
 package com.team2813.frc2023.commands;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.function.Consumer;
 
@@ -31,20 +28,12 @@ public class FollowCommand extends PPSwerveControllerCommand {
                 yController,
                 thetaController,
                 driveSubsystem::drive,
+                true,
                 driveSubsystem
         );
 
         chassisSpeedsConsumer = driveSubsystem::drive;
         this.trajectory = trajectory;
-    }
-    
-    @Override
-    public void initialize() {
-        super.initialize();
-
-        PathPlannerState goalState = trajectory.getEndState();
-        Pose2d goalPose = new Pose2d(goalState.poseMeters.getTranslation(), goalState.holonomicRotation);
-        SmartDashboard.putString("Goal Pose", goalPose.toString());
     }
 
     @Override

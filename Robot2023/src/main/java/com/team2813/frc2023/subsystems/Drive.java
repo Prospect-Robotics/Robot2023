@@ -170,7 +170,7 @@ public class Drive extends SubsystemBase {
                 backLeftModule.getPosition(),
                 backRightModule.getPosition()
         };
-        odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions);
+        odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions, initialPose);
     }
 
     public void resetOdometry(Pose2d newPose) {
