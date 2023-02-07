@@ -62,7 +62,9 @@ public class Robot extends TimedRobot
     
     /** This method is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {}
+    public void disabledInit() {
+        LIGHTSHOW.setLight(Lightshow.Light.DISABLED);
+    }
     
     
     @Override
@@ -80,6 +82,7 @@ public class Robot extends TimedRobot
         {
             autonomousCommand.schedule();
         }
+        LIGHTSHOW.setLight(Lightshow.Light.AUTONOMOUS);
     }
     
     
@@ -99,6 +102,7 @@ public class Robot extends TimedRobot
         {
             autonomousCommand.cancel();
         }
+        LIGHTSHOW.setLight(Lightshow.Light.ENABLED);
     }
     
     

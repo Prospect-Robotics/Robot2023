@@ -3,7 +3,6 @@ package com.team2813.frc2023.util;
 import com.ctre.phoenix.CANifier;
 import com.team2813.frc2023.commands.BlinkLightsCommand;
 
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /*
@@ -30,7 +29,7 @@ public class Lightshow extends SubsystemBase {
 
     public void setLight(Light light) {
         if(light.flash){
-            flashLight = new BlinkLightsCommand(light, 1 );
+            flashLight = new BlinkLightsCommand(light, light.period);
             flashLight.schedule();
         }
         else {
@@ -41,12 +40,12 @@ public class Lightshow extends SubsystemBase {
     
 
     public enum Light {
-        DEFAULT(255, 255, 255,false), //white
-        ENABLED(0, 255, 0,false), //green
-        DISABLED(255, 0, 0,false), //red
-        AUTONOMOUS(255, 0, 255,true), //purple
-        AUTO_BALANCE(0, 0, 128,true), //navy blue
-        PICKUP(255, 111, 0,false); //orange
+        DEFAULT(255, 255, 255,false, null), //white
+        ENABLED(0, 255, 0,false, null), //green
+        DISABLED(255, 0, 0,false, null), //red
+        AUTONOMOUS(255, 0, 255,true, 0.75), //flashing purple
+        AUTO_BALANCE(0, 0, 128,true, 0.5), //flashing navy blue
+        PICKUP(255, 111, 0,false, null); //orange
 
 
         final int r;
@@ -54,12 +53,14 @@ public class Lightshow extends SubsystemBase {
         final int b;
         final boolean flash;
 
-        Light(int r, int g, int b,  boolean flash) {
-            this.flash = flash;
+        final double period;
+
+        Light(int r, int g, int b, boolean flash, Double period) {
             this.r = r;
             this.g = g;
             this.b = b;
-
+            this.flash = flash;
+            this.period = period;
         }
     }
 }
