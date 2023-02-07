@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.team2813.frc2023.Constants.*;
 
+import static com.team2813.frc2023.Constants.*;
+
 public class Spatula extends SubsystemBase {
 
     private final SparkMaxWrapper motor = new SparkMaxWrapper(INTAKE_MASTER_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true);
