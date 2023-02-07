@@ -4,15 +4,17 @@ import com.ctre.phoenix.CANifier;
 import com.team2813.frc2023.commands.BlinkLightsCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 /*
 ChannelA is green
 ChannelB is red
 ChannelC is blue
 */
-public class Lightshow {
-public boolean flashing = false; 
-public Command BlinkLight; 
+public class Lightshow extends SubsystemBase {
+    private BlinkLightsCommand flashLight;
     private final CANifier canifier;
+
  
     public Lightshow(int canifierID) {
         canifier = new CANifier(canifierID);
@@ -27,17 +29,14 @@ public Command BlinkLight;
     }
 
     public void setLight(Light light) {
-        if (BlinkLight != null){
-            BlinkLight.cancel();
-        }
-
         if(light.flash){
-            BlinkLight =  new BlinkLightsCommand(light, 1.0); 
+            flashLight = new BlinkLightsCommand(light, 1 );
+            flashLight.schedule();
         }
-        else{
-            setLight(light.r , light.g, light.b);
+        else {
+            if (flashLight != null) flashLight.cancel();
+            setLight(light.r, light.g, light.b);
         }
-        
     }
     
 
@@ -46,7 +45,7 @@ public Command BlinkLight;
         ENABLED(0, 255, 0,false), //green
         DISABLED(255, 0, 0,false), //red
         AUTONOMOUS(255, 0, 255,true), //purple
-        AutoBalance(0, 0, 128,true), //navy blue
+        AUTO_BALANCE(0, 0, 128,true), //navy blue
         PICKUP(255, 111, 0,false); //orange
 
 
