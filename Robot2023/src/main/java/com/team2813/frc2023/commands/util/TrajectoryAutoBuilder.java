@@ -39,7 +39,7 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
     /**
      * Use this to get a command to customize the event map.
      * This should be the first command in your auto if
-     * you did have custom events.
+     * you have custom events.
      * @param addOnEventMap event map of custom events (Commands) and event markers (Strings)
      * @return a command that customizes the event map
      */
@@ -63,6 +63,7 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
         return buildPathGroupAuto(pathGroupName, false);
     }
 
+    // Use this if your trajectory has midway stop points
     public CommandBase buildPathGroupAuto(String pathGroupName, boolean reversed) {
         return super.fullAuto(PathPlanner.loadPathGroup(pathGroupName, AUTO_MAX_VEL, AUTO_MAX_ACCEL, reversed));
     }
