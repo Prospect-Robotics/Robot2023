@@ -9,8 +9,10 @@ import com.team2813.frc2023.Constants.OperatorConstants;
 import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultArmCommand;
 import com.team2813.frc2023.commands.ExampleCommand;
+import com.team2813.frc2023.commands.ZeroArmCommand;
 import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
+import com.team2813.frc2023.subsystems.Arm.ExtensionLength;
 import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -63,6 +65,7 @@ public class RobotContainer
      */
     private void configureBindings()
     {
+        RESET_ARM.whileTrue(new ZeroArmCommand(arm));
 //        INTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
 //                new InstantCommand(intake::open, intake),
 //                new WaitCommand(0.4),
@@ -75,7 +78,7 @@ public class RobotContainer
 //                new WaitCommand(1),
 //                new InstantCommand(intake::outtake, intake)
 //        ));
-//        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
+//        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake)
     }
     
     

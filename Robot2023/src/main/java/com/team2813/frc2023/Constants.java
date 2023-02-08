@@ -36,6 +36,7 @@ public final class Constants
         public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.cross();
 
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
+        public static final Trigger RESET_ARM = OPERATOR_CONTROLLER.square();
 
     }
 
