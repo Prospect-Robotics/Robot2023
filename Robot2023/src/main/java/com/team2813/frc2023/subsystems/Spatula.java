@@ -1,12 +1,8 @@
 package com.team2813.frc2023.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.team2813.lib.motors.SparkMaxWrapper;
 import com.team2813.lib.solenoid.SolenoidGroup;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import static com.team2813.frc2023.Constants.*;
 
 import static com.team2813.frc2023.Constants.*;
 
