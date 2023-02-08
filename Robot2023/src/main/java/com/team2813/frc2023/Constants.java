@@ -37,12 +37,6 @@ public final class Constants
 
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
 
-        public static final int INTAKE_MASTER_ID = 15;
-        public static final int INTAKE_FOLLOWER_ID = 16;
-        public static final int PCM_ID = 17;
-
-        public static final int INTAKE_PISTON_CHANNEL = 0;
-
     }
 
 
