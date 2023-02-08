@@ -44,10 +44,7 @@ public class RobotContainer
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
-        arm.setDefaultCommand(new DefaultArmCommand(
-                () -> -operatorController.getRightY(),
-                arm
-        ));
+        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
 
         // Configure the trigger bindings
         configureBindings();
@@ -65,20 +62,7 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        RESET_ARM.whileTrue(new ZeroArmCommand(arm));
-//        INTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
-//                new InstantCommand(intake::open, intake),
-//                new WaitCommand(0.4),
-//                new InstantCommand(intake::intake, intake)
-//        ));
-//        INTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
-//
-//        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
-//                new InstantCommand(intake::open, intake),
-//                new WaitCommand(1),
-//                new InstantCommand(intake::outtake, intake)
-//        ));
-//        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake)
+        RESET_ARM.onTrue(new ZeroArmCommand(arm));
     }
     
     
