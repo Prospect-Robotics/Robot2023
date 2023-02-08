@@ -6,6 +6,7 @@
 package com.team2813.frc2023;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
@@ -29,6 +30,9 @@ public final class Constants
         // Operator controls
         public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
+
+        //Driver controls
+        public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
     }
 
     public static final int INTAKE_MASTER_ID = 15;

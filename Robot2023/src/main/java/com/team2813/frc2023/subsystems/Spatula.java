@@ -15,11 +15,11 @@ public class Spatula extends SubsystemBase {
     private final SparkMaxWrapper motor = new SparkMaxWrapper(INTAKE_MASTER_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true);
     private final SolenoidGroup piston = new SolenoidGroup(PCM_ID, PneumaticsModuleType.CTREPCM, INTAKE_PISTON_CHANNEL);
     public void extend() {
-        piston.extend(); // actually retracts the piston
+        piston.extend();
     }
 
     public void retract() {
-        piston.retract(); // actually extends the piston
+        piston.retract();
     }
 
 }
