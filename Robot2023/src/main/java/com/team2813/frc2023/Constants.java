@@ -40,4 +40,6 @@ public final class Constants
     public static final int PCM_ID = 17;
 
     public static final int INTAKE_PISTON_CHANNEL = 0;
+    public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
+    public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 }
