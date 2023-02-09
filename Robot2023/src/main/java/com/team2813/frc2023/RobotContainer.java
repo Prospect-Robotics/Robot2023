@@ -55,11 +55,10 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.TOP)));
-    
         RESET_ARM.onTrue(new ZeroArmCommand(arm));
-        MID_NODE_POSITION.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.MIDDLE)));
-        INTAKE_POSITION.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.INTAKE)));
+        MID_NODE_BUTTON.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.MIDDLE)));
+        INTAKE_POSITION_BUTTON.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.INTAKE)));
+        TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.TOP)));
     }
     
     

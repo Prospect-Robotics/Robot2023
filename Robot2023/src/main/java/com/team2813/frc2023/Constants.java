@@ -30,9 +30,9 @@ public final class Constants
         public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
 
-        public static final Trigger MID_NODE_POSITION = OPERATOR_CONTROLLER.circle();                                                                                       ;
-        public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.triangle();
-        public static final Trigger INTAKE_POSITION = OPERATOR_CONTROLLER.cross();
+        public static final Trigger MID_NODE_BUTTON = OPERATOR_CONTROLLER.circle();                                                                                       ;
+        public static final Trigger TOP_NODE_BUTTON = OPERATOR_CONTROLLER.triangle();
+        public static final Trigger INTAKE_POSITION_BUTTON = OPERATOR_CONTROLLER.cross();
 
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
         public static final Trigger RESET_ARM = OPERATOR_CONTROLLER.square();
@@ -42,6 +42,7 @@ public final class Constants
     public static final int INTAKE_MASTER_ID = 15;
     public static final int INTAKE_FOLLOWER_ID = 16;
     public static final int PCM_ID = 17;
+    public static final int ARM_MOTOR_ID = 18;
 
     public static final int INTAKE_PISTON_CHANNEL = 0;
 }
