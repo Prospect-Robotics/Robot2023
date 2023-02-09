@@ -29,9 +29,10 @@ public final class Constants
 
         // Driver controls
         public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
+        public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
     }
 
-    // CAN IDs
+    // IDs
 
     // Swerve Modules
 
@@ -56,8 +57,13 @@ public final class Constants
     public static final int BACK_RIGHT_ENCODER_ID = 13;
 
     // Other Drive Stuff
-
     public static final int PIGEON_ID = 14;
+
+    // Pneumatics
+    public static final int PCM_ID = 17;
+
+    public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
+    public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 
     // Physical Constants
 
