@@ -63,6 +63,8 @@ public class RobotContainer
     private void configureBindings()
     {
         RESET_ARM.onTrue(new ZeroArmCommand(arm));
+        MID_NODE_POSITION.onTrue(new InstantCommand(() -> arm.setPosition(ExtensionLength.MIDDLE)));
+        INTAKE_POSITION.onTrue(new InstantCommand(() -> arm.setPosition(ExtensionLength.INTAKE)));
     }
     
     
