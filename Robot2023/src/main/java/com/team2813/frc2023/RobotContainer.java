@@ -55,6 +55,9 @@ public class RobotContainer
     {
         TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(ExtensionLength.TOP)));
     
+        RESET_ARM.onTrue(new ZeroArmCommand(arm));
+        MID_NODE_POSITION.onTrue(new InstantCommand(() -> arm.setPosition(ExtensionLength.MIDDLE)));
+        INTAKE_POSITION.onTrue(new InstantCommand(() -> arm.setPosition(ExtensionLength.INTAKE)));
     }
     
     
