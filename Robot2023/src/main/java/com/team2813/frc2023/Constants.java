@@ -33,7 +33,8 @@ public final class Constants
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
 
         public static final Trigger MID_NODE_POSITION = OPERATOR_CONTROLLER.circle();                                                                                       ;
-        public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.cross();
+        public static final Trigger TOP_NODE_POSITION = OPERATOR_CONTROLLER.triangle();
+        public static final Trigger INTAKE_POSITION = OPERATOR_CONTROLLER.cross();
 
         public static final Trigger RESET_WRIST = OPERATOR_CONTROLLER.share();
         public static final Trigger RESET_ARM = OPERATOR_CONTROLLER.square();
