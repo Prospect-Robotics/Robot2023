@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.Map;
 
 import static com.team2813.frc2023.Constants.*;
-import static com.team2813.frc2023.RobotContainer.EVENT_MAP;
+import static com.team2813.frc2023.Robot.ROBOT_CONTAINER;
 
 public class TrajectoryAutoBuilder extends BaseAutoBuilder {
 
@@ -23,7 +23,7 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
         super(
                 driveSubsystem::getPose,
                 driveSubsystem::initAutonomous,
-                EVENT_MAP,
+                ROBOT_CONTAINER.EVENT_MAP,
                 DrivetrainType.HOLONOMIC,
                 true
         );

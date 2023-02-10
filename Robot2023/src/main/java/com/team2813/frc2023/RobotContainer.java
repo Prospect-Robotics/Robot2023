@@ -53,7 +53,10 @@ public class RobotContainer
     that TrajectoryAutoBuilder.java uses to use commands like that (use
      {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
-    public static final Map<String, Command> EVENT_MAP = new HashMap<>();
+    public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
+       put("spatula-up", new InstantCommand(spatula::retract));
+       put("spatula-down", new InstantCommand(spatula::extend));
+    }};
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -74,6 +77,10 @@ public class RobotContainer
 
     Drive getDrive() {
         return drive;
+    }
+
+    Spatula getSpatula() {
+        return spatula;
     }
     
     /**
