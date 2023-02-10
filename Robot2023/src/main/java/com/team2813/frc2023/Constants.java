@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.HashMap;
 import java.util.Map;
-
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -36,6 +35,7 @@ public final class Constants
         // Driver controls
         public static final Trigger AUTO_SPLINE_BUTTON = DRIVER_CONTROLLER.R1();
         public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
+        public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
     }
 
     // CAN IDs
@@ -63,8 +63,13 @@ public final class Constants
     public static final int BACK_RIGHT_ENCODER_ID = 12;
 
     // Other Drive Stuff
-
     public static final int PIGEON_ID = 13;
+
+    // Pneumatics
+    public static final int PCM_ID = 17;
+
+    public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
+    public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 
     // Steer offsets
     public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(160.576171875);

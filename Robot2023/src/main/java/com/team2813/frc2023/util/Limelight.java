@@ -10,8 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import static com.team2813.frc2023.Constants.*;
-
 public class Limelight extends SubsystemBase {
 
     private final LimelightValues values = new LimelightValues();

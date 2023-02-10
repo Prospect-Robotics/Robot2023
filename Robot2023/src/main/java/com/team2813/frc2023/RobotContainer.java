@@ -10,12 +10,15 @@ import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.commands.LogCommand;
 import com.team2813.frc2023.subsystems.Drive;
+import com.team2813.frc2023.subsystems.Spatula;
+import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -23,7 +26,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.team2813.frc2023.Constants.OperatorConstants.*;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -35,7 +37,9 @@ public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
     private final Drive drive = new Drive();
-    
+    private final Spatula spatula = new Spatula();
+    private final Limelight limelight = Limelight.getInstance();
+
     private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
 
     /**
@@ -93,6 +97,8 @@ public class RobotContainer
 
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
+
+        SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
     }
     
     

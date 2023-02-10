@@ -9,8 +9,12 @@ import com.team2813.lib.util.ConfigUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Wrapper class for unlicensed Talon FX motor controllers
+ */
 public class TalonFXWrapper extends TalonFX implements Motor {
     private final List<TalonFX> followers = new ArrayList<>();
+    private final boolean canivore;
 
     /**
      * Constructor
@@ -21,6 +25,7 @@ public class TalonFXWrapper extends TalonFX implements Motor {
      */
     public TalonFXWrapper(int deviceNumber, String canbus, TalonFXInvertType invertType) {
         super(deviceNumber, canbus);
+        canivore = true;
 
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
         motorConfiguration.voltageCompSaturation = 12;
@@ -38,6 +43,7 @@ public class TalonFXWrapper extends TalonFX implements Motor {
      */
     public TalonFXWrapper(int deviceNumber, TalonFXInvertType invertType) {
         super(deviceNumber);
+        canivore = false;
 
         TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
         motorConfiguration.voltageCompSaturation = 12;
@@ -48,11 +54,15 @@ public class TalonFXWrapper extends TalonFX implements Motor {
         setInverted(invertType);
     }
 
+    /**
+     * If control mode is duty cycle, demand should a value between -1 and 1 (fractional power)
+     * If control mode is velocity, demand should be desired motor velocity in RPM
+     * If control mode is motion magic, demand should be a desired motor position in rotations
+     */
     @Override
     public void set(ControlMode controlMode, double demand) {
         set(controlMode, demand, 0);
     }
-
     @Override
     public void set(ControlMode controlMode, double demand, double feedForward) {
         switch (controlMode){
@@ -68,19 +78,32 @@ public class TalonFXWrapper extends TalonFX implements Motor {
         set(controlMode.getTalonMode(), demand, DemandType.ArbitraryFeedForward, feedForward);
     }
 
+    /**
+     * @return motor encoder position in rotations
+     */
     @Override
     public double getEncoderPosition() {
         return Units2813.ticksToMotorRevs(getSelectedSensorPosition(), 2048);
     }
 
+    /**
+     * @param position desired position in motor rotations
+     */
     @Override
     public void setEncoderPosition(double position) {
-        setSelectedSensorPosition(position);
+        setSelectedSensorPosition(Units2813.motorRevsToTicks(position, 2048));
     }
 
+    /**
+     * @return motor velocity in RPM
+     */
     @Override
-    public double getVelocity() { // returns in RPM
-        return Units2813.ticksToMotorRevs(getSelectedSensorVelocity(), 2048) * 10 * 60; // from ticks/100ms to rpm
+    public double getVelocity() {
+        return Units2813.ticksToMotorRevs(getSelectedSensorVelocity(), 2048) * 10 * 60;
+    }
+
+    public boolean isOnCANivore() {
+        return canivore;
     }
 
     @Override
@@ -106,6 +129,10 @@ public class TalonFXWrapper extends TalonFX implements Motor {
         configPIDF(0, p, i, d, 0);
     }
 
+    /**
+     * @param maxVelocity max velocity in ticks/100ms
+     * @param maxAcceleration max acceleration in ticks/100ms/s
+     */
     @Override
     public void configMotionMagic(double maxVelocity, double maxAcceleration) {
         ConfigUtils.ctreConfig(() -> configMotionCruiseVelocity(maxVelocity));

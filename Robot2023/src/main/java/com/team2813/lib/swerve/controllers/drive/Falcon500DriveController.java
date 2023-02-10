@@ -3,6 +3,12 @@ package com.team2813.lib.swerve.controllers.drive;
 import com.ctre.phoenix.motorcontrol.*;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
+import com.ctre.phoenixpro.StatusSignalValue;
+import com.ctre.phoenixpro.controls.DutyCycleOut;
+import com.ctre.phoenixpro.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenixpro.controls.VelocityVoltage;
+import com.ctre.phoenixpro.signals.InvertedValue;
+import com.ctre.phoenixpro.signals.NeutralModeValue;
 import com.swervedrivespecialties.swervelib.Mk4ModuleConfiguration;
 import com.swervedrivespecialties.swervelib.ModuleConfiguration;
 import com.team2813.lib.util.ConfigUtils;
@@ -10,72 +16,153 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 public class Falcon500DriveController implements DriveController {
-    private final TalonFX motor;
     private final double sensorPositionCoefficient;
     private final double sensorVelocityCoefficient;
+    private final boolean licensed;
+    private final double maxVelocity;
+
+    private TalonFX unlicensedMotor;
+    private com.ctre.phoenixpro.hardware.TalonFX licensedMotor;
 
     private SimpleMotorFeedforward feedforward;
+    private com.ctre.phoenixpro.configs.TalonFXConfiguration motorConfiguration;
+    private StatusSignalValue<Double> motorPosition;
+    private StatusSignalValue<Double> motorVelocity;
+    private StatusSignalValue<Double> motorTemp;
+    private boolean hasPidConstants = false;
 
-    public Falcon500DriveController(int id, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration) {
-        TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+    public Falcon500DriveController(int id, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration, boolean isLicensed) {
+        licensed = isLicensed;
+        maxVelocity = 6380.0 / 60.0 * moduleConfiguration.getDriveReduction() * moduleConfiguration.getWheelDiameter() * Math.PI;
 
-        sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
-        sensorVelocityCoefficient = sensorPositionCoefficient * 10;
+        if (isLicensed) {
+            motorConfiguration = new com.ctre.phoenixpro.configs.TalonFXConfiguration();
 
-        motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
+            sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
+            sensorVelocityCoefficient = sensorPositionCoefficient;
 
-        motorConfiguration.supplyCurrLimit.currentLimit = mk4Configuration.getDriveCurrentLimit();
-        motorConfiguration.supplyCurrLimit.enable = true;
+            motorConfiguration.Voltage.PeakForwardVoltage = mk4Configuration.getNominalVoltage();
+            motorConfiguration.Voltage.PeakReverseVoltage = -mk4Configuration.getNominalVoltage();
 
-        motor = new TalonFX(id);
-        ConfigUtils.ctreConfig(() -> motor.configAllSettings(motorConfiguration));
+            motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
+            motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        motor.enableVoltageCompensation(true);
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
-        motor.setNeutralMode(NeutralMode.Brake);
+            motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
-        motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
-        motor.setSensorPhase(true);
+            licensedMotor = new com.ctre.phoenixpro.hardware.TalonFX(id);
+            ConfigUtils.ctreProConfig(() -> licensedMotor.getConfigurator().apply(motorConfiguration));
 
-        ConfigUtils.ctreConfig(
-                () -> motor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 250, 250)
-        );
+            motorPosition = licensedMotor.getRotorPosition();
+            ConfigUtils.ctreProConfig(() -> motorPosition.setUpdateFrequency(4, 0.25));
+
+            motorVelocity = licensedMotor.getRotorVelocity();
+            ConfigUtils.ctreProConfig(() -> motorVelocity.setUpdateFrequency(4, 0.25));
+
+            motorTemp = licensedMotor.getDeviceTemp();
+            ConfigUtils.ctreProConfig(() -> motorTemp.setUpdateFrequency(4, 0.25));
+        }
+        else {
+            TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+
+            sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
+            sensorVelocityCoefficient = sensorPositionCoefficient * 10;
+
+            motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
+
+            motorConfiguration.supplyCurrLimit.currentLimit = mk4Configuration.getDriveCurrentLimit();
+            motorConfiguration.supplyCurrLimit.enable = true;
+
+            unlicensedMotor = new TalonFX(id);
+            ConfigUtils.ctreConfig(() -> unlicensedMotor.configAllSettings(motorConfiguration));
+
+            unlicensedMotor.enableVoltageCompensation(true);
+
+            unlicensedMotor.setNeutralMode(NeutralMode.Brake);
+
+            unlicensedMotor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
+            unlicensedMotor.setSensorPhase(true);
+
+            ConfigUtils.ctreConfig(
+                    () -> unlicensedMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 250, 250)
+            );
+            ConfigUtils.ctreConfig(
+                    () -> unlicensedMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 125, 250)
+            );
+        }
     }
 
-    public Falcon500DriveController(int id, String canbus, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration) {
-        TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+    public Falcon500DriveController(int id, String canbus, ModuleConfiguration moduleConfiguration, Mk4ModuleConfiguration mk4Configuration, boolean isLicensed) {
+        licensed = isLicensed;
+        maxVelocity = 6380.0 / 60.0 * moduleConfiguration.getDriveReduction() * moduleConfiguration.getWheelDiameter() * Math.PI;
 
-        sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
-        sensorVelocityCoefficient = sensorPositionCoefficient * 10;
+        if (isLicensed) {
+            motorConfiguration = new com.ctre.phoenixpro.configs.TalonFXConfiguration();
 
-        motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
+            sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
+            sensorVelocityCoefficient = sensorPositionCoefficient;
 
-        motorConfiguration.supplyCurrLimit.currentLimit = mk4Configuration.getDriveCurrentLimit();
-        motorConfiguration.supplyCurrLimit.enable = true;
+            motorConfiguration.Voltage.PeakForwardVoltage = mk4Configuration.getNominalVoltage();
+            motorConfiguration.Voltage.PeakReverseVoltage = -mk4Configuration.getNominalVoltage();
 
-        motor = new TalonFX(id, canbus);
-        ConfigUtils.ctreConfig(() -> motor.configAllSettings(motorConfiguration));
+            motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
+            motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-        motor.enableVoltageCompensation(true);
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
-        motor.setNeutralMode(NeutralMode.Brake);
+            motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+            motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
 
-        motor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
-        motor.setSensorPhase(true);
+            licensedMotor = new com.ctre.phoenixpro.hardware.TalonFX(id, canbus);
+            ConfigUtils.ctreProConfig(() -> licensedMotor.getConfigurator().apply(motorConfiguration));
 
-        ConfigUtils.ctreConfig(
-                () -> motor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 250, 250)
-        );
-        ConfigUtils.ctreConfig(
-                () -> motor.setStatusFramePeriod(StatusFrameEnhanced.Status_4_AinTempVbat, 125, 250)
-        );
+            motorPosition = licensedMotor.getRotorPosition();
+            motorVelocity = licensedMotor.getRotorVelocity();
+            motorTemp = licensedMotor.getDeviceTemp();
+        }
+        else {
+            TalonFXConfiguration motorConfiguration = new TalonFXConfiguration();
+
+            sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / 2048;
+            sensorVelocityCoefficient = sensorPositionCoefficient * 10;
+
+            motorConfiguration.voltageCompSaturation = mk4Configuration.getNominalVoltage();
+
+            motorConfiguration.supplyCurrLimit.currentLimit = mk4Configuration.getDriveCurrentLimit();
+            motorConfiguration.supplyCurrLimit.enable = true;
+
+            unlicensedMotor = new TalonFX(id, canbus);
+            ConfigUtils.ctreConfig(() -> unlicensedMotor.configAllSettings(motorConfiguration));
+
+            unlicensedMotor.enableVoltageCompensation(true);
+
+            unlicensedMotor.setNeutralMode(NeutralMode.Brake);
+
+            unlicensedMotor.setInverted(moduleConfiguration.isDriveInverted() ? TalonFXInvertType.Clockwise : TalonFXInvertType.CounterClockwise);
+            unlicensedMotor.setSensorPhase(true);
+        }
     }
 
     @Override
     public Falcon500DriveController withPidConstants(double proportional, double integral, double derivative) {
-        ConfigUtils.ctreConfig(() -> motor.config_kP(0, proportional));
-        ConfigUtils.ctreConfig(() -> motor.config_kI(0, integral));
-        ConfigUtils.ctreConfig(() -> motor.config_kD(0, derivative));
+        hasPidConstants = true;
+
+        if (licensed) {
+            motorConfiguration.Slot0.kP = proportional;
+            motorConfiguration.Slot0.kI = integral;
+            motorConfiguration.Slot0.kD = derivative;
+
+            ConfigUtils.ctreProConfig(() -> licensedMotor.getConfigurator().apply(motorConfiguration.Slot0));
+        }
+        else {
+            ConfigUtils.ctreConfig(() -> unlicensedMotor.config_kP(0, proportional));
+            ConfigUtils.ctreConfig(() -> unlicensedMotor.config_kI(0, integral));
+            ConfigUtils.ctreConfig(() -> unlicensedMotor.config_kD(0, derivative));
+        }
 
         return this;
     }
@@ -91,37 +178,81 @@ public class Falcon500DriveController implements DriveController {
         return feedforward != null;
     }
 
-    // velocity in m/s
+    /**
+     * @param velocity desired velocity in m/s
+     */
     @Override
     public void setReferenceVelocity(double velocity) {
-        double velocityRawUnits = velocity / sensorVelocityCoefficient; // convert from m/s to ticks/100ms
+        if (hasPidConstants) {
+            double velocityRawUnits = velocity / sensorVelocityCoefficient;
 
-        if (hasFeedForward()) {
-            motor.set(TalonFXControlMode.Velocity, velocityRawUnits, DemandType.ArbitraryFeedForward, feedforward.calculate(velocity));
+            if (hasFeedForward()) {
+                if (licensed) {
+                    licensedMotor.setControl(new VelocityVoltage(
+                            velocityRawUnits,
+                            true,
+                            feedforward.calculate(velocity),
+                            0,
+                            false
+                    ));
+                }
+                else {
+                    unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits, DemandType.ArbitraryFeedForward, feedforward.calculate(velocity));
+                }
+            }
+            else {
+                if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                else unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits);
+            }
         }
         else {
-            motor.set(TalonFXControlMode.Velocity, velocityRawUnits);
+            double dutyCycle = velocity / maxVelocity;
+
+            if (licensed) licensedMotor.setControl(new DutyCycleOut(dutyCycle));
+            else unlicensedMotor.set(TalonFXControlMode.PercentOutput, dutyCycle);
         }
     }
 
     @Override
     public double getDistanceDriven() {
-        return motor.getSelectedSensorPosition() * sensorPositionCoefficient;
+        if (licensed) {
+            motorPosition = motorPosition.refresh();
+            return motorPosition.getValue() * sensorPositionCoefficient;
+        }
+        else {
+            return unlicensedMotor.getSelectedSensorPosition() * sensorPositionCoefficient;
+        }
     }
 
     @Override
     public double getStateVelocity() {
-        return motor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+        if (licensed) {
+            motorVelocity = motorVelocity.refresh();
+            return motorVelocity.getValue() * sensorVelocityCoefficient;
+        }
+        else {
+            return unlicensedMotor.getSelectedSensorVelocity() * sensorVelocityCoefficient;
+        }
     }
 
     @Override
     public void resetEncoder() {
-        motor.setSelectedSensorPosition(0);
+        if (licensed) licensedMotor.setRotorPosition(0);
+        else unlicensedMotor.setSelectedSensorPosition(0);
     }
 
     @Override
     public void addDashboardEntries(ShuffleboardContainer container) {
         DriveController.super.addDashboardEntries(container);
-        container.addNumber("Drive Motor Temp (degrees Celsius)", motor::getTemperature);
+
+        if (licensed) {
+            container.addNumber("Drive Motor Temp (degrees Celsius)", () -> {
+                motorTemp.refresh();
+                return motorTemp.getValue();
+            });
+        }
+        else {
+            container.addNumber("Drive Motor Temp (degrees Celsius)", unlicensedMotor::getTemperature);
+        }
     }
 }
