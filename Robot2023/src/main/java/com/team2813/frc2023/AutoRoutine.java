@@ -16,7 +16,7 @@ public enum AutoRoutine {
     L1_3CO_KNOCK2("L1-3Co-Knock2", AUTO_FACTORY.buildPathGroupAuto("L1 - 3Co - Knock 2")),
     L1_1C_GET_AWAY("L1-1C-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1C - Get out of the way")),
     L3_MOBILITY("L3-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L3 - Mobility")),
-    L1_MOBILITY_GET_AWAY("L1-Mobility-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L3 - Mobility - Get out of the way")),
+    L1_MOBILITY_GET_AWAY("L1-Mobility-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility - Get out of the way")),
     ROTATE_TEST("Rotate Test", new RotateCommand(90, ROBOT_CONTAINER.getDrive()));
     
     private final String name;
