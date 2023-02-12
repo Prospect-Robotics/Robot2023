@@ -60,6 +60,10 @@ public class Drive extends SubsystemBase {
         double backLeftSteerOffset = -Math.toRadians(115.048828125);
         double backRightSteerOffset = -Math.toRadians(359.033203125);
 
+        double kP = 1.8;
+        double kI = 0;
+        double kD = 0;
+
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
         frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
@@ -70,6 +74,9 @@ public class Drive extends SubsystemBase {
                 FRONT_LEFT_DRIVE_ID,
                 FRONT_LEFT_STEER_ID,
                 FRONT_LEFT_ENCODER_ID,
+                kP,
+                kI,
+                kD,
                 frontLeftSteerOffset,
                 licensed
         );
@@ -82,6 +89,9 @@ public class Drive extends SubsystemBase {
                 FRONT_RIGHT_DRIVE_ID,
                 FRONT_RIGHT_STEER_ID,
                 FRONT_RIGHT_ENCODER_ID,
+                kP,
+                kI,
+                kD,
                 frontRightSteerOffset,
                 licensed
         );
@@ -94,6 +104,9 @@ public class Drive extends SubsystemBase {
                 BACK_LEFT_DRIVE_ID,
                 BACK_LEFT_STEER_ID,
                 BACK_LEFT_ENCODER_ID,
+                kP,
+                kI,
+                kD,
                 backLeftSteerOffset,
                 licensed
         );
@@ -106,6 +119,9 @@ public class Drive extends SubsystemBase {
                 BACK_RIGHT_DRIVE_ID,
                 BACK_RIGHT_STEER_ID,
                 BACK_RIGHT_ENCODER_ID,
+                kP,
+                kI,
+                kD,
                 backRightSteerOffset,
                 licensed
         );

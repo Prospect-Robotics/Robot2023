@@ -207,7 +207,21 @@ public class Falcon500DriveController implements DriveController {
                 }
             }
             else {
-                if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                // Uncomment this if you are copying this class for a future robot
+                //if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+
+                // Robot-specific, do not copy! Unless...
+                // the robot moves a bit after stopping while running PID
+                // (and you've verified that the motors are not set to coast)
+                if (licensed) {
+                    motorVelocity = motorVelocity.refresh();
+                    if ((velocityRawUnits == 0) && (motorVelocity.getValue() <= 1)) {
+                        licensedMotor.setControl(new DutyCycleOut(0));
+                    }
+                    else {
+                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                    }
+                }
                 else unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits);
             }
         }
