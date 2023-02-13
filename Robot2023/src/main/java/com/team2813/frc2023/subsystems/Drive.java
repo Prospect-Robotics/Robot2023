@@ -136,6 +136,15 @@ public class Drive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    public ChassisSpeeds getChassisSpeeds() {
+        return kinematics.toChassisSpeeds(
+                frontLeftModule.getState(),
+                frontRightModule.getState(),
+                backLeftModule.getState(),
+                backRightModule.getState()
+        );
+    }
+
     public void enableSlowMode(boolean enable) {
         multiplier = enable ? 0.25 : 1;
     }
@@ -144,12 +153,13 @@ public class Drive extends SubsystemBase {
         chassisSpeedDemand = demand;
     }
 
-    public void initAutonomous(PathPlannerTrajectory.PathPlannerState initialState) {
+    public void initAutonomous(Pose2d initialPose) {
+        frontLeftModule.resetDriveEncoder();
         frontRightModule.resetDriveEncoder();
         backLeftModule.resetDriveEncoder();
         backRightModule.resetDriveEncoder();
 
-        pigeon.setHeading(initialState.holonomicRotation.getDegrees());
+        pigeon.setHeading(initialPose.getRotation().getDegrees());
 
         SwerveModulePosition[] modulePositions = {
                 frontLeftModule.getPosition(),
@@ -157,7 +167,18 @@ public class Drive extends SubsystemBase {
                 backLeftModule.getPosition(),
                 backRightModule.getPosition()
         };
-        odometry = new SwerveDriveOdometry(kinematics, initialState.holonomicRotation, modulePositions);
+        odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions, initialPose);
+    }
+
+    public void resetOdometry(Pose2d currentPose) {
+        SwerveModulePosition[] modulePositions = {
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                backLeftModule.getPosition(),
+                backRightModule.getPosition()
+        };
+
+        odometry.resetPosition(Rotation2d.fromDegrees(pigeon.getHeading()), modulePositions, currentPose);
     }
 
     @Override
