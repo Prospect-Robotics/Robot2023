@@ -5,12 +5,13 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.Constants.OperatorConstants;
 import com.team2813.frc2023.commands.Autos;
-import com.team2813.frc2023.commands.ExampleCommand;
+import com.team2813.frc2023.commands.DefaultDriveCommand;
+import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Spatula;
 import com.team2813.frc2023.util.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -28,19 +29,24 @@ import static com.team2813.frc2023.Constants.OperatorConstants.*;
 public class RobotContainer
 {
     // The robot's subsystems and commands are defined here...
+    private final Drive drive = new Drive();
+    private final Spatula spatula = new Spatula();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
-
-    private final Spatula spatula = new Spatula();
     
-    // Replace with CommandPS4Controller or CommandJoystick if needed
-    private final CommandXboxController driverController =
-            new CommandXboxController(OperatorConstants.DRIVER_CONTROLLER_PORT);
+    private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
     
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
+        drive.setDefaultCommand(new DefaultDriveCommand(
+                () -> -modifyAxis(driverController.getLeftY()) * Drive.MAX_VELOCITY,
+                () -> -modifyAxis(driverController.getLeftX()) * Drive.MAX_VELOCITY,
+                () -> -modifyAxis(driverController.getRightX()) * Drive.MAX_ANGULAR_VELOCITY,
+                drive
+        ));
+
         // Configure the trigger bindings
         configureBindings();
     }
@@ -57,16 +63,10 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-        new Trigger(exampleSubsystem::exampleCondition)
-                .onTrue(new ExampleCommand(exampleSubsystem));
-        
-        // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-        // cancelling on release.
-        driverController.b().whileTrue(exampleSubsystem.exampleMethodCommand());
+        SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
+        SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
 
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
-
     }
     
     
@@ -79,5 +79,23 @@ public class RobotContainer
     {
         // An example command will be run in autonomous
         return Autos.exampleAuto(exampleSubsystem);
+    }
+
+    private static double deadband(double value, double deadband) {
+        if (Math.abs(value) > deadband) {
+            if (value > 0) {
+                return (value - deadband) / (1 - deadband);
+            } else {
+                return (value + deadband) / (1 - deadband);
+            }
+        } else {
+            return 0;
+        }
+    }
+
+    private static double modifyAxis(double value) {
+        value = deadband(value, 0.1);
+        value = Math.copySign(value * value, value);
+        return value;
     }
 }

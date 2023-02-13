@@ -9,6 +9,7 @@ import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 import com.ctre.phoenixpro.StatusSignalValue;
 import com.ctre.phoenixpro.configs.CANcoderConfiguration;
+import com.ctre.phoenixpro.controls.PositionDutyCycle;
 import com.ctre.phoenixpro.controls.PositionVoltage;
 import com.ctre.phoenixpro.hardware.CANcoder;
 import com.ctre.phoenixpro.signals.*;
@@ -69,9 +70,6 @@ public class Falcon500SteerController implements SteerController {
 
             motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getSteerCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
             motorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
             motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isSteerInverted() ? InvertedValue.CounterClockwise_Positive : InvertedValue.Clockwise_Positive;
@@ -201,7 +199,7 @@ public class Falcon500SteerController implements SteerController {
         }
 
         if (licensed) {
-            licensedMotor.setControl(new PositionVoltage(adjustedReferenceAngleRadians / sensorPositionCoefficient));
+            licensedMotor.setControl(new PositionDutyCycle(adjustedReferenceAngleRadians / sensorPositionCoefficient));
         }
         else {
             unlicensedMotor.set(controlMode, adjustedReferenceAngleRadians / sensorPositionCoefficient);

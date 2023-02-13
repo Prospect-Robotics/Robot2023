@@ -46,7 +46,7 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     }
 
     public void zeroSensors() {
-        if (talonFXPro != null) talonFXPro.setRotorPosition(0);
+        if (talonFXPro != null) talonFXPro.setEncoderPosition(0);
         else motor.setEncoderPosition(0);
     }
 

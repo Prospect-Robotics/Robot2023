@@ -23,8 +23,8 @@ public class Pigeon2ProWrapper extends Pigeon2 {
     /**
      * Constructor
      * @param deviceNumber [0,62]
-     * @param canbus Name of the CANbus; can be a SocketCAN interface (on Linux),
-     *               or a CANivore device name or serial number
+     * @param canbus       Name of the CANbus; can be a SocketCAN interface (on Linux),
+     *                     or a CANivore device name or serial number
      */
     public Pigeon2ProWrapper(int deviceNumber, String canbus) {
         super(deviceNumber, canbus);
@@ -79,7 +79,7 @@ public class Pigeon2ProWrapper extends Pigeon2 {
 
     /**
      * Configures the update frequency of a registered status signal
-     * @param key the key you registered the status signal with
+     * @param key         the key you registered the status signal with
      * @param frequencyHz the number of times you want the signal to update in a second
      */
     public void configStatusSignalUpdateFrequency(String key, double frequencyHz) {
@@ -102,6 +102,19 @@ public class Pigeon2ProWrapper extends Pigeon2 {
     }
 
     /**
+     * @param yaw   mount pose yaw (degrees)
+     * @param pitch mount pose pitch (degrees)
+     * @param roll  mount pose roll (degrees)
+     */
+    public void configMountPose(double yaw, double pitch, double roll) {
+        pigeonConfig.MountPose.MountPoseYaw = yaw;
+        pigeonConfig.MountPose.MountPosePitch = pitch;
+        pigeonConfig.MountPose.MountPoseRoll = roll;
+
+        ConfigUtils.ctreProConfig(() -> getConfigurator().apply(pigeonConfig.MountPose));
+    }
+
+    /**
      * Checks if a reset has occurred and restores non-persistent settings if so.
      * Implement periodically (e.g. in a subsystem's periodic() method)
      */
@@ -115,15 +128,13 @@ public class Pigeon2ProWrapper extends Pigeon2 {
                 ConfigUtils.ctreProConfig(() -> yaw.setUpdateFrequency(50));
                 ConfigUtils.ctreProConfig(() -> pitch.setUpdateFrequency(50));
 
-                statusSignalUpdateFreqs.forEach(new BiConsumer<StatusSignalValue<Object>, Double>() {
-                    @Override
-                    public void accept(StatusSignalValue<Object> objectStatusSignalValue, Double aDouble) {
-                        ConfigUtils.ctreProConfig(() -> objectStatusSignalValue.setUpdateFrequency(aDouble));
-                    }
-                });
-            }
+                statusSignalUpdateFreqs.forEach(
+                        (StatusSignalValue<Object> statusSignal, Double updateFreq) ->
+                                ConfigUtils.ctreProConfig(() -> statusSignal.setUpdateFrequency(updateFreq))
+                );
 
-            setHeading(currentHeading);
+                setHeading(currentHeading);
+            }
         }
     }
 }
