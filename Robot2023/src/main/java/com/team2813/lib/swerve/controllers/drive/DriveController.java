@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 public interface DriveController {
     public DriveController withPidConstants(double proportional, double integral, double derivative);
+    public boolean hasPidConstants();
     public DriveController withFeedforward(SimpleMotorFeedforward feedforward);
     public boolean hasFeedForward();
 

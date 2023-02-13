@@ -5,7 +5,6 @@
 
 package com.team2813.frc2023;
 
-import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
@@ -33,37 +32,36 @@ public final class Constants
         public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
 
         // Driver controls
-        public static final Trigger AUTO_SPLINE_BUTTON = DRIVER_CONTROLLER.R1();
         public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
         public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
     }
 
-    // CAN IDs
+    // IDs
 
     // Swerve Modules
 
     // Front Left
-    public static final int FRONT_LEFT_DRIVE_ID = 1;
-    public static final int FRONT_LEFT_STEER_ID = 2;
-    public static final int FRONT_LEFT_ENCODER_ID = 3;
+    public static final int FRONT_LEFT_DRIVE_ID = 2;
+    public static final int FRONT_LEFT_STEER_ID = 3;
+    public static final int FRONT_LEFT_ENCODER_ID = 4;
 
     // Front Right
-    public static final int FRONT_RIGHT_DRIVE_ID = 4;
-    public static final int FRONT_RIGHT_STEER_ID = 5;
-    public static final int FRONT_RIGHT_ENCODER_ID = 6;
+    public static final int FRONT_RIGHT_DRIVE_ID = 5;
+    public static final int FRONT_RIGHT_STEER_ID = 6;
+    public static final int FRONT_RIGHT_ENCODER_ID = 7;
 
     // Back Left
-    public static final int BACK_LEFT_DRIVE_ID = 7;
-    public static final int BACK_LEFT_STEER_ID = 8;
-    public static final int BACK_LEFT_ENCODER_ID = 9;
+    public static final int BACK_LEFT_DRIVE_ID = 8;
+    public static final int BACK_LEFT_STEER_ID = 9;
+    public static final int BACK_LEFT_ENCODER_ID = 10;
 
     // Back Right
-    public static final int BACK_RIGHT_DRIVE_ID = 10;
-    public static final int BACK_RIGHT_STEER_ID = 11;
-    public static final int BACK_RIGHT_ENCODER_ID = 12;
+    public static final int BACK_RIGHT_DRIVE_ID = 11;
+    public static final int BACK_RIGHT_STEER_ID = 12;
+    public static final int BACK_RIGHT_ENCODER_ID = 13;
 
     // Other Drive Stuff
-    public static final int PIGEON_ID = 13;
+    public static final int PIGEON_ID = 14;
 
     // Pneumatics
     public static final int PCM_ID = 17;
@@ -71,15 +69,10 @@ public final class Constants
     public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
     public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 
-    // Steer offsets
-    public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(160.576171875);
-    public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(284.150390625);
-    public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(150.46875);
-    public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(252.7734375);
+    // Physical Constants
 
-    public static final double TRACKWIDTH = Units.inchesToMeters(19.5); // meters
-    public static final double WHEELBASE = Units.inchesToMeters(21.5); // meters
-    public static final double WHEEL_CIRCUMFERENCE = SdsModuleConfigurations.MK4_L2.getWheelDiameter() * Math.PI; // meters
+    public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
+    public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
 
     // Auto Constants
 

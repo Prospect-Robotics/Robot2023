@@ -52,6 +52,11 @@ public class NeoDriveController implements DriveController {
     }
 
     @Override
+    public boolean hasPidConstants() {
+        return hasPidConstants;
+    }
+
+    @Override
     public NeoDriveController withFeedforward(SimpleMotorFeedforward feedforward) {
         this.feedforward = feedforward;
         return this;
@@ -67,7 +72,7 @@ public class NeoDriveController implements DriveController {
      */
     @Override
     public void setReferenceVelocity(double velocity) {
-        if (hasPidConstants) {
+        if (hasPidConstants()) {
             if (hasFeedForward()) {
                 pidController.setReference(velocity, CANSparkMax.ControlType.kVelocity, 0, feedforward.calculate(velocity));
             }

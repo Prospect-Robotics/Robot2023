@@ -8,7 +8,6 @@ package com.team2813.frc2023;
 import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
-import com.team2813.frc2023.commands.LogCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.Spatula;
 import com.team2813.frc2023.util.Limelight;
@@ -33,8 +32,7 @@ import static com.team2813.frc2023.Constants.OperatorConstants.*;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
-public class RobotContainer
-{
+public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive = new Drive();
     private final Spatula spatula = new Spatula();
@@ -43,29 +41,32 @@ public class RobotContainer
     private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
 
     /**
-    String key is the name of the event marker in an auto routine,
-    Command value is the command associated with that event marker.
-
-    Refer to this when creating event markers in Path Planner.
-    Note: this is just the default event map that is meant to have easy-to-
-    predict commands (such as intake, place-cube-high, etc.), not commands such
-    as rotating a specific number of degrees. You'll have to customize the event map
-    that TrajectoryAutoBuilder.java uses to use commands like that (use
-     {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
+     * String key is the name of the event marker in an auto routine,
+     * Command value is the command associated with that event marker.
+     * <p>
+     * Refer to this when creating event markers in Path Planner.
+     * Note: this is just the default event map that is meant to have easy-to-
+     * predict commands (such as intake, place-cube-high, etc.), not commands such
+     * as rotating a specific number of degrees. You'll have to customize the event map
+     * that TrajectoryAutoBuilder.java uses to use commands like that (use
+     * {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
-       put("spatula-up", new InstantCommand(spatula::retract));
-       put("spatula-down", new InstantCommand(spatula::extend));
+        put("spatula-up", new InstantCommand(spatula::retract));
+        put("spatula-down", new InstantCommand(spatula::extend));
     }};
-    
-    /** The container for the robot. Contains subsystems, OI devices, and commands. */
-    public RobotContainer()
-    {
+
+    private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
+
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
         drive.setDefaultCommand(new DefaultDriveCommand(
-                drive,
-                () -> -modifyAxis(driver.getLeftY()) * Drive.MAX_VELOCITY,
-                () -> -modifyAxis(driver.getLeftX()) * Drive.MAX_VELOCITY,
-                () -> -modifyAxis(driver.getRightX()) * Drive.MAX_ANGULAR_VELOCITY
+                () -> -modifyAxis(driverController.getLeftY()) * Drive.MAX_VELOCITY,
+                () -> -modifyAxis(driverController.getLeftX()) * Drive.MAX_VELOCITY,
+                () -> -modifyAxis(driverController.getRightX()) * Drive.MAX_ANGULAR_VELOCITY,
+                drive
         ));
 
         // For spline testing purposes
@@ -82,7 +83,7 @@ public class RobotContainer
     Spatula getSpatula() {
         return spatula;
     }
-    
+
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
      * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -92,10 +93,7 @@ public class RobotContainer
      * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
      * joysticks}.
      */
-    private void configureBindings()
-    {
-        AUTO_SPLINE_BUTTON.toggleOnTrue(new LogCommand(drive));
-
+    private void configureBindings() {
         Trigger apriltagSplineTrigger = new Trigger(() -> driver.getLeftTriggerAxis() == 1);
         apriltagSplineTrigger.whileTrue(new AutoSplineCommand(apriltagSplineTrigger.negate(), NodeType.CUBE, drive));
 
@@ -107,15 +105,14 @@ public class RobotContainer
 
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
     }
-    
-    
+
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand()
-    {
+    public Command getAutonomousCommand() {
         AutoRoutine selectedRoutine = ShuffleboardData.routineChooser.getSelected();
         return selectedRoutine.getCommand();
     }

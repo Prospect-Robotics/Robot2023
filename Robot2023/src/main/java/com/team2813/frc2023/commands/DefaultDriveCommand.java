@@ -7,36 +7,31 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.DoubleSupplier;
 
 public class DefaultDriveCommand extends CommandBase {
-    private final Drive drive;
+    private final Drive driveSubsystem;
 
     private final DoubleSupplier translationXSupplier;
     private final DoubleSupplier translationYSupplier;
     private final DoubleSupplier rotationSupplier;
 
-    public DefaultDriveCommand(Drive drive,
-                               DoubleSupplier translationXSupplier,
+    public DefaultDriveCommand(DoubleSupplier translationXSupplier,
                                DoubleSupplier translationYSupplier,
-                               DoubleSupplier rotationSupplier) {
-        this.drive = drive;
+                               DoubleSupplier rotationSupplier,
+                               Drive driveSubsystem) {
         this.translationXSupplier = translationXSupplier;
         this.translationYSupplier = translationYSupplier;
         this.rotationSupplier = rotationSupplier;
+        this.driveSubsystem = driveSubsystem;
 
-        addRequirements(drive);
+        addRequirements(driveSubsystem);
     }
 
     @Override
     public void execute() {
-        drive.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
+        driveSubsystem.drive(ChassisSpeeds.fromFieldRelativeSpeeds(
                 translationXSupplier.getAsDouble(),
                 translationYSupplier.getAsDouble(),
                 rotationSupplier.getAsDouble(),
-                drive.getRotation()
+                driveSubsystem.getRotation()
         ));
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        drive.drive(new ChassisSpeeds(0, 0, 0));
     }
 }

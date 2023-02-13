@@ -1,19 +1,16 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
-import com.swervedrivespecialties.swervelib.Mk4SwerveModuleHelper.GearRatio;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
 import com.team2813.lib.imu.Pigeon2Wrapper;
-import com.team2813.lib.swerve.helpers.Mk4SwerveModuleHelper;
 import com.team2813.lib.swerve.controllers.SwerveModule;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import com.team2813.lib.swerve.helpers.Mk4iSwerveModuleHelper;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -25,14 +22,9 @@ import static com.team2813.frc2023.Constants.*;
 public class Drive extends SubsystemBase {
 
     public static final double MAX_VELOCITY = 6380.0 / 60.0 *
-            SdsModuleConfigurations.MK4_L2.getDriveReduction() *
-            WHEEL_CIRCUMFERENCE; // m/s
+            SdsModuleConfigurations.MK4I_L2.getDriveReduction() *
+            SdsModuleConfigurations.MK4I_L2.getWheelDiameter() * Math.PI; // m/s
     public static final double MAX_ANGULAR_VELOCITY = MAX_VELOCITY / Math.hypot(TRACKWIDTH / 2, WHEELBASE / 2); // radians per second
-
-    private final double kP = 0.125;
-    private final double kI = 0;
-    private final double kD = 0;
-    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(0.59869, 0.050736, 0.0021331);
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
             // Front Left
@@ -47,88 +39,93 @@ public class Drive extends SubsystemBase {
 
     private SwerveDriveOdometry odometry;
 
-    private final Pigeon2Wrapper pigeon = new Pigeon2Wrapper(PIGEON_ID, "swerve");
-
     private final SwerveModule frontLeftModule;
     private final SwerveModule frontRightModule;
     private final SwerveModule backLeftModule;
     private final SwerveModule backRightModule;
 
-    private final DoubleLogEntry pigeonHeadingLogger;
+    private final Pigeon2Wrapper pigeon = new Pigeon2Wrapper(PIGEON_ID);
 
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
-    private SwerveModuleState[] states = new SwerveModuleState[4];
 
     private double multiplier = 1;
-    private boolean loggingEnabled = false;
 
     public Drive() {
+        String canbus = "swerve";
+        boolean licensed = true;
+
+        double frontLeftSteerOffset = -Math.toRadians(146.25);
+        double frontRightSteerOffset = -Math.toRadians(250.13671875);
+        double backLeftSteerOffset = -Math.toRadians(115.048828125);
+        double backRightSteerOffset = -Math.toRadians(359.033203125);
+
+        double kP = 1.8;
+        double kI = 0;
+        double kD = 0;
+
         ShuffleboardTab tab = Shuffleboard.getTab("Drivetrain");
 
-        frontLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+        frontLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
                 tab.getLayout("Front Left Module", BuiltInLayouts.kList)
                         .withSize(2, 4).withPosition(0, 0),
                 GearRatio.L2,
-                "swerve",
+                canbus,
                 FRONT_LEFT_DRIVE_ID,
                 FRONT_LEFT_STEER_ID,
                 FRONT_LEFT_ENCODER_ID,
                 kP,
                 kI,
                 kD,
-                feedforward,
-                FRONT_LEFT_STEER_OFFSET
+                frontLeftSteerOffset,
+                licensed
         );
 
-        frontRightModule = Mk4SwerveModuleHelper.createFalcon500(
+        frontRightModule = Mk4iSwerveModuleHelper.createFalcon500(
                 tab.getLayout("Front Right Module", BuiltInLayouts.kList)
                         .withSize(2, 4).withPosition(2, 0),
                 GearRatio.L2,
-                "swerve",
+                canbus,
                 FRONT_RIGHT_DRIVE_ID,
                 FRONT_RIGHT_STEER_ID,
                 FRONT_RIGHT_ENCODER_ID,
                 kP,
                 kI,
                 kD,
-                feedforward,
-                FRONT_RIGHT_STEER_OFFSET
+                frontRightSteerOffset,
+                licensed
         );
 
-        backLeftModule = Mk4SwerveModuleHelper.createFalcon500(
+        backLeftModule = Mk4iSwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Left Module", BuiltInLayouts.kList)
                         .withSize(2, 4).withPosition(4, 0),
                 GearRatio.L2,
-                "swerve",
+                canbus,
                 BACK_LEFT_DRIVE_ID,
                 BACK_LEFT_STEER_ID,
                 BACK_LEFT_ENCODER_ID,
                 kP,
                 kI,
                 kD,
-                feedforward,
-                BACK_LEFT_STEER_OFFSET
+                backLeftSteerOffset,
+                licensed
         );
 
-        backRightModule = Mk4SwerveModuleHelper.createFalcon500(
+        backRightModule = Mk4iSwerveModuleHelper.createFalcon500(
                 tab.getLayout("Back Right Module", BuiltInLayouts.kList)
                         .withSize(2, 4).withPosition(6, 0),
                 GearRatio.L2,
-                "swerve",
+                canbus,
                 BACK_RIGHT_DRIVE_ID,
                 BACK_RIGHT_STEER_ID,
                 BACK_RIGHT_ENCODER_ID,
                 kP,
                 kI,
                 kD,
-                feedforward,
-                BACK_RIGHT_STEER_OFFSET
+                backRightSteerOffset,
+                licensed
         );
 
         pigeon.configMountPose(Pigeon2.AxisDirection.PositiveY, Pigeon2.AxisDirection.PositiveZ);
-
-        DataLogManager.start();
-        pigeonHeadingLogger = new DoubleLogEntry(DataLogManager.getLog(), "/pigeonHeading");
     }
 
     public Rotation2d getRotation() {
@@ -139,15 +136,6 @@ public class Drive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
-    public ChassisSpeeds getChassisSpeeds() {
-        return kinematics.toChassisSpeeds(
-                frontLeftModule.getState(),
-                frontRightModule.getState(),
-                backLeftModule.getState(),
-                backRightModule.getState()
-        );
-    }
-
     public void enableSlowMode(boolean enable) {
         multiplier = enable ? 0.25 : 1;
     }
@@ -156,13 +144,12 @@ public class Drive extends SubsystemBase {
         chassisSpeedDemand = demand;
     }
 
-    public void initAutonomous(Pose2d initialPose) {
-        frontLeftModule.resetDriveEncoder();
+    public void initAutonomous(PathPlannerTrajectory.PathPlannerState initialState) {
         frontRightModule.resetDriveEncoder();
         backLeftModule.resetDriveEncoder();
         backRightModule.resetDriveEncoder();
 
-        pigeon.setHeading(initialPose.getRotation().getDegrees());
+        pigeon.setHeading(initialState.holonomicRotation.getDegrees());
 
         SwerveModulePosition[] modulePositions = {
                 frontLeftModule.getPosition(),
@@ -170,21 +157,7 @@ public class Drive extends SubsystemBase {
                 backLeftModule.getPosition(),
                 backRightModule.getPosition()
         };
-        odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions, initialPose);
-    }
-
-    public void resetOdometry(Pose2d newPose) {
-        SwerveModulePosition[] modulePositions = {
-                frontLeftModule.getPosition(),
-                frontRightModule.getPosition(),
-                backLeftModule.getPosition(),
-                backRightModule.getPosition()
-        };
-        odometry.resetPosition(getRotation(), modulePositions, newPose);
-    }
-
-    public void enableLogging(boolean enable) {
-        loggingEnabled = enable;
+        odometry = new SwerveDriveOdometry(kinematics, initialState.holonomicRotation, modulePositions);
     }
 
     @Override
@@ -199,19 +172,18 @@ public class Drive extends SubsystemBase {
                     backLeftModule.getPosition(),
                     backRightModule.getPosition()
             };
+
             odometry.update(getRotation(), modulePositions);
 
             SmartDashboard.putString("Current Pose", odometry.getPoseMeters().toString());
         }
 
-        if (loggingEnabled) pigeonHeadingLogger.append(pigeon.getPitch());
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeedDemand);
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, MAX_VELOCITY);
 
-        states = kinematics.toSwerveModuleStates(chassisSpeedDemand);
-        SwerveDriveKinematics.desaturateWheelSpeeds(states, MAX_VELOCITY);
-
-        frontLeftModule.set(states[0].speedMetersPerSecond * multiplier, states[0].angle.getRadians());
-        frontRightModule.set(states[1].speedMetersPerSecond * multiplier, states[1].angle.getRadians());
-        backLeftModule.set(states[2].speedMetersPerSecond * multiplier, states[2].angle.getRadians());
-        backRightModule.set(states[3].speedMetersPerSecond * multiplier, states[3].angle.getRadians());
+        frontLeftModule.set(moduleStates[0].speedMetersPerSecond * multiplier, moduleStates[0].angle.getRadians());
+        frontRightModule.set(moduleStates[1].speedMetersPerSecond * multiplier, moduleStates[1].angle.getRadians());
+        backLeftModule.set(moduleStates[2].speedMetersPerSecond * multiplier, moduleStates[2].angle.getRadians());
+        backRightModule.set(moduleStates[3].speedMetersPerSecond * multiplier, moduleStates[3].angle.getRadians());
     }
 }

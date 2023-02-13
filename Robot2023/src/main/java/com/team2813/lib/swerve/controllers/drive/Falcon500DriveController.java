@@ -16,13 +16,12 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardContainer;
 
 public class Falcon500DriveController implements DriveController {
+    private TalonFX unlicensedMotor;
+    private com.ctre.phoenixpro.hardware.TalonFX licensedMotor;
     private final double sensorPositionCoefficient;
     private final double sensorVelocityCoefficient;
     private final boolean licensed;
     private final double maxVelocity;
-
-    private TalonFX unlicensedMotor;
-    private com.ctre.phoenixpro.hardware.TalonFX licensedMotor;
 
     private SimpleMotorFeedforward feedforward;
     private com.ctre.phoenixpro.configs.TalonFXConfiguration motorConfiguration;
@@ -47,8 +46,8 @@ public class Falcon500DriveController implements DriveController {
             motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 80;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -80;
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -111,8 +110,8 @@ public class Falcon500DriveController implements DriveController {
             motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 40;
-            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+            motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 80;
+            motorConfiguration.TorqueCurrent.PeakReverseTorqueCurrent = -80;
 
             motorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
             motorConfiguration.MotorOutput.Inverted = moduleConfiguration.isDriveInverted() ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -168,8 +167,21 @@ public class Falcon500DriveController implements DriveController {
     }
 
     @Override
+    public boolean hasPidConstants() {
+        return hasPidConstants;
+    }
+
+    @Override
     public Falcon500DriveController withFeedforward(SimpleMotorFeedforward feedforward) {
         this.feedforward = feedforward;
+
+        if (licensed) {
+            motorConfiguration.Slot0.kS = feedforward.ks;
+            motorConfiguration.Slot0.kV = feedforward.kv;
+
+            ConfigUtils.ctreProConfig(() -> licensedMotor.getConfigurator().apply(motorConfiguration.Slot0));
+        }
+
         return this;
     }
 
@@ -183,25 +195,33 @@ public class Falcon500DriveController implements DriveController {
      */
     @Override
     public void setReferenceVelocity(double velocity) {
-        if (hasPidConstants) {
+        if (hasPidConstants()) {
             double velocityRawUnits = velocity / sensorVelocityCoefficient;
 
             if (hasFeedForward()) {
                 if (licensed) {
-                    licensedMotor.setControl(new VelocityVoltage(
-                            velocityRawUnits,
-                            true,
-                            feedforward.calculate(velocity),
-                            0,
-                            false
-                    ));
+                    licensedMotor.setControl(new VelocityVoltage(velocityRawUnits));
                 }
                 else {
                     unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits, DemandType.ArbitraryFeedForward, feedforward.calculate(velocity));
                 }
             }
             else {
-                if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                // Uncomment this if you are copying this class for a future robot
+                //if (licensed) licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+
+                // Robot-specific, do not copy! Unless...
+                // the robot moves a bit after stopping while running PID
+                // (and you've verified that the motors are not set to coast)
+                if (licensed) {
+                    motorVelocity = motorVelocity.refresh();
+                    if ((velocityRawUnits == 0) && (motorVelocity.getValue() <= 1)) {
+                        licensedMotor.setControl(new DutyCycleOut(0));
+                    }
+                    else {
+                        licensedMotor.setControl(new VelocityTorqueCurrentFOC(velocityRawUnits));
+                    }
+                }
                 else unlicensedMotor.set(TalonFXControlMode.Velocity, velocityRawUnits);
             }
         }
@@ -247,7 +267,7 @@ public class Falcon500DriveController implements DriveController {
 
         if (licensed) {
             container.addNumber("Drive Motor Temp (degrees Celsius)", () -> {
-                motorTemp.refresh();
+                motorTemp = motorTemp.refresh();
                 return motorTemp.getValue();
             });
         }
