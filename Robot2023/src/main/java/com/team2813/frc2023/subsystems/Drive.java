@@ -47,7 +47,6 @@ public class Drive extends SubsystemBase {
     private final Pigeon2Wrapper pigeon = new Pigeon2Wrapper(PIGEON_ID);
 
     private ChassisSpeeds chassisSpeedDemand = new ChassisSpeeds(0, 0, 0);
-    private SwerveModuleState[] moduleStates = new SwerveModuleState[4];
 
     private double multiplier = 1;
 
@@ -179,7 +178,7 @@ public class Drive extends SubsystemBase {
             SmartDashboard.putString("Current Pose", odometry.getPoseMeters().toString());
         }
 
-        moduleStates = kinematics.toSwerveModuleStates(chassisSpeedDemand);
+        SwerveModuleState[] moduleStates = kinematics.toSwerveModuleStates(chassisSpeedDemand);
         SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, MAX_VELOCITY);
 
         frontLeftModule.set(moduleStates[0].speedMetersPerSecond * multiplier, moduleStates[0].angle.getRadians());
