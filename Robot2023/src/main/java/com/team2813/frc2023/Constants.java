@@ -77,8 +77,8 @@ public final class Constants
     // Auto Constants
 
     // Path Constraints
-    public static final double AUTO_MAX_VEL = 2.25; // m/s
-    public static final double AUTO_MAX_ACCEL = 6; // m/s^2
+    public static final double AUTO_MAX_VEL = 4; // m/s
+    public static final double AUTO_MAX_ACCEL = 5; // m/s^2
 
     // AprilTag ID location goals
     public static final Map<Integer, Pose2d> APRILTAG_MAP = new HashMap<>() {{

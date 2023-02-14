@@ -21,7 +21,7 @@ public class RotateCommand extends CommandBase {
 
     private double degreesToRotateBy;
     private DoubleSupplier degreeSupplier;
-    private static final PIDController thetaController = new PIDController(.000025, 0, 0);
+    private static final PIDController thetaController = new PIDController(0, 0, 0);
 
     private double setpoint;
 
