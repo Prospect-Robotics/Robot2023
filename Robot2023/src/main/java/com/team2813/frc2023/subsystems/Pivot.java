@@ -15,6 +15,10 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         motor.configPID(0, 0, 0);
     }
 
+    public double getMotorPosition() {
+        return motor.getEncoderPosition();
+    }
+
     public double getMotorVelocity(){
         return motor.getVelocity();
     }
