@@ -41,6 +41,7 @@ public final class Constants
     public static final int FRONT_LEFT_STEER_ID = 3;
     public static final int FRONT_LEFT_ENCODER_ID = 4;
 
+
     // Front Right
     public static final int FRONT_RIGHT_DRIVE_ID = 5;
     public static final int FRONT_RIGHT_STEER_ID = 6;
@@ -69,4 +70,6 @@ public final class Constants
 
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
     public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
+
+    public static final int MOTOR_WRIST_ID = 18;
 }
