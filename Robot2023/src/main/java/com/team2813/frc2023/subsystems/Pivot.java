@@ -16,7 +16,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         STARTING_CONFIGURATION(0),
         HIGH(50),
         MID(57),
-        INTAKE(63),
+        INTAKE(63);
 
         @Override
         public double getPos() {
