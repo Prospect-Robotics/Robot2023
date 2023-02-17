@@ -16,8 +16,32 @@ package com.team2813.frc2023;
 public final class Constants {
     public static class OperatorConstants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
-    }
+        public static final CommandPS4Controller DRIVER_CONTROLLER = new CommandPS4Controller(DRIVER_CONTROLLER_PORT);
+        public static final CommandPS4Controller AUTO_BALANCE_BUTTON = new JoystickButton(DRIVER_CONTROLLER, 1);
 
-    public static int MOTOR_WRIST_ID = 17;
+        public static final int OPERATOR_CONTROLLER_PORT = 1;
+        public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
+        public static final CommandPS4Controller TOP_NODE_BUTTON = new JoystickButton(OPERATOR_CONTROLLER, 1);
+        public static final CommandPS4Controller MID_NODE_BUTTON = new JoystickButton(OPERATOR_CONTROLLER, 2);
+        public static final CommandPS4Controller ZERO_ENCODER_BUTTON = new JoystickButton(OPERATOR_CONTROLLER, 3);
+        public static final CommandPS4Controller TRIANGLE_INTAKE_BUTTON = new JoystickButton(OPERATOR_CONTROLLER, 4);
+        public static final CommandPS4Controller RESET_WRIST_BUTTON = new JoystickButton(OPERATOR_CONTROLLER, 7);
+
+
+        //Driver controls
+        public static final Trigger SPATULA_TOGGLE_BUTTON = DRIVER_CONTROLLER.R1();
+        public static final Trigger SLOW_MODE_BUTTON = DRIVER_CONTROLLER.L1();
+
+        // Operator controls
+        public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
+        public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
+
+
+        
+
+        
+        
+    }
+        public static int MOTOR_WRIST_ID = 17;
 
 }
