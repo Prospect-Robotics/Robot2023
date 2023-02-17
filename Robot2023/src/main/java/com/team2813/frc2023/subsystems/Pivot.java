@@ -1,6 +1,7 @@
 package com.team2813.frc2023.subsystems;
 
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2813.lib.motors.SparkMaxWrapper;
 import static com.team2813.frc2023.Constants.*;
@@ -12,6 +13,13 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
 
         motor.configPID(0, 0, 0);
     }
+
+    public void pivotHigh() {
+        setPosition(Rotations.HIGH);
+    }
+
+
+
     public enum Rotations implements Position {
         STARTING_CONFIGURATION(0),
         HIGH(50),

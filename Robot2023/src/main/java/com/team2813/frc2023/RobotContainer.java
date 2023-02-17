@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
+import com.team2813.frc2023.subsystems.Pivot;
 import com.team2813.frc2023.subsystems.Spatula;
 import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
@@ -65,7 +66,6 @@ public class RobotContainer
     {
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
-
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
     }
     
