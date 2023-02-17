@@ -25,7 +25,7 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     public Subsystem1d(TalonFXWrapper motor) {
         this.motor = motor;
 
-        if (motor.isOnCANivore()) {
+        if (!motor.isOnCANivore()) {
             motor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 125);
         }
 
@@ -36,7 +36,7 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     public Subsystem1d(TalonFXProWrapper motor) {
         talonFXPro = motor;
 
-        if (motor.isOnCANivore()) {
+        if (!motor.isOnCANivore()) {
             motor.configPositionSignalUpdateFrequency(4);
             motor.configVelocitySignalUpdateFrequency(4);
         }
