@@ -1,24 +1,35 @@
 package com.team2813.frc2023.subsystems;
 
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.team2813.lib.motors.SparkMaxWrapper;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.team2813.lib.motors.ControlMode;
+import com.team2813.lib.motors.TalonFXWrapper;
+
 import static com.team2813.frc2023.Constants.*;
 
 public class Pivot extends Subsystem1d<Pivot.Rotations> {
 
     public Pivot() {
-        super(new SparkMaxWrapper(MOTOR_WRIST_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true)); //TODO: Find ot if its inverted or not
+        super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise)); //TODO: Find ot if its inverted or not
 
         motor.configPID(0, 0, 0);
     }
 
-    public void pivotHigh() {
-        setPosition(Rotations.HIGH);
+    public double getMotorVelocity(){
+        return motor.getVelocity();
     }
 
+    public boolean positionReached() {
+        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05;
+    }
 
+    public void startZeroingPivot() {
+        motor.set(ControlMode.DUTY_CYCLE, -0.98);
+    }
+
+    public void brake() {
+        motor.set(ControlMode.DUTY_CYCLE, 0);
+    }
 
     public enum Rotations implements Position {
         STARTING_CONFIGURATION(0),
