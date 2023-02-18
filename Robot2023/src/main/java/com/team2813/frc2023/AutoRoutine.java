@@ -17,7 +17,7 @@ public enum AutoRoutine {
     L3_MOBILITY("L3-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L3 - Mobility")),
     L1_MOBILITY_GET_AWAY("L1-Mobility-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility - Get out of the way")),
     ROTATE_TEST("Rotate Test", new RotateCommand(90, ROBOT_CONTAINER.getDrive())),
-    L1_Mobility("L1-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility"));
+    L1_MOBILITY("L1-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility"));
     
     private final String name;
     private final Command command;
