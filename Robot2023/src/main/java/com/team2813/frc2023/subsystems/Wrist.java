@@ -20,7 +20,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         return motor.getVelocity();
     }
 
-    public void startZeroingWrist() {
+    public void startStowingWrist() {
         motor.set(ControlMode.DUTY_CYCLE, 0); // TODO: Test for value to put as 2nd parameter
     }
 
