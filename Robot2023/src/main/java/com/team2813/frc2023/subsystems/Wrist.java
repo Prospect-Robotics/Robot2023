@@ -30,8 +30,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public enum Rotations implements Position {
         INTAKE(5.99),
-        CUBE_OUTAKE(13.32),
-        CONE_OUTAKE(13.32 );
+        CUBE_OUTAKE(13.32);
         // TODO: EXACT VALUES TBD (calculations might be off)
 
         @Override
