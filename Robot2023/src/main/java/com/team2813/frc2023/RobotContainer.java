@@ -7,6 +7,7 @@ package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
+import com.team2813.frc2023.commands.DefaultPivotCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Pivot;
@@ -32,11 +33,12 @@ public class RobotContainer
     // The robot's subsystems and commands are defined here...
     private final Drive drive = new Drive();
     private final Spatula spatula = new Spatula();
+    private final Pivot pivot = new Pivot();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
     
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
-    
+    private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -47,6 +49,8 @@ public class RobotContainer
                 () -> -modifyAxis(driverController.getRightX()) * Drive.MAX_ANGULAR_VELOCITY,
                 drive
         ));
+
+        pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
 
         // Configure the trigger bindings
         configureBindings();
