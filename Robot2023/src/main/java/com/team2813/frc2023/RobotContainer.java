@@ -14,6 +14,7 @@ import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Arm.ExtensionLength;
 import com.team2813.frc2023.util.Limelight;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -31,14 +32,15 @@ public class RobotContainer
     // The robot's subsystems and commands are defined here...
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
-    private final Arm arm = new Arm(); 
+    private final Arm arm = new Arm();
 
-
-    
+    private XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
     {
+        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
+
         // Configure the trigger bindings
         configureBindings();
     }
