@@ -24,21 +24,21 @@
     },
     {
       "anchorPoint": {
-        "x": 6.42547164097887,
-        "y": 0.950920051306295
+        "x": 6.6612243801410695,
+        "y": 0.9249526191360088
       },
       "prevControl": {
-        "x": 6.42547164097887,
-        "y": 0.47546002565314843
+        "x": 6.6612243801410695,
+        "y": 0.4494925934828623
       },
       "nextControl": {
-        "x": 6.42547164097887,
-        "y": 0.47546002565314843
+        "x": 6.6612243801410695,
+        "y": 0.4494925934828623
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -74,21 +74,21 @@
     },
     {
       "anchorPoint": {
-        "x": 6.43,
-        "y": 2.15
+        "x": 6.680494226373069,
+        "y": 2.1582227779840184
       },
       "prevControl": {
-        "x": 6.43,
-        "y": 0.4761375943911128
+        "x": 6.680494226373069,
+        "y": 0.4843603723751313
       },
       "nextControl": {
-        "x": 6.43,
-        "y": 0.4761375943911128
+        "x": 6.680494226373069,
+        "y": 0.4843603723751313
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -124,21 +124,21 @@
     },
     {
       "anchorPoint": {
-        "x": 6.43,
-        "y": 3.4
+        "x": 6.670859303257069,
+        "y": 3.372223090600028
       },
       "prevControl": {
-        "x": 6.43,
-        "y": 0.49018038005805753
+        "x": 6.670859303257069,
+        "y": 0.4624034706580855
       },
       "nextControl": {
-        "x": 6.43,
-        "y": 0.49018038005805753
+        "x": 6.670859303257069,
+        "y": 0.4624034706580855
       },
       "holonomicAngle": 0,
       "isReversal": true,
       "velOverride": null,
-      "isLocked": true,
+      "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
@@ -195,5 +195,42 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 0.8,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 3.0,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 2.9,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "event"
+      ]
+    },
+    {
+      "position": 4.95,
+      "names": [
+        "event"
+      ]
+    }
+  ]
 }
