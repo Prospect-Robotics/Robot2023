@@ -13,6 +13,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         super(new SparkMaxWrapper(MOTOR_WRIST_ID, MotorType.kBrushless, true)); //TODO: Find ot if its inverted or not
 
         motor.configPID(0, 0, 0); // TODO: Tune PID
+        motor.configMotionMagic(11000, 10000);
     }
 
     public double getMotorVelocity() {
@@ -30,8 +31,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public enum Rotations implements Position {
         INTAKE(5.99),
         CUBE_OUTAKE(13.32),
-        CONE_OUTAKE(13.32 ),
-        RESET(0);
+        CONE_OUTAKE(13.32 );
         // TODO: EXACT VALUES TBD (calculations might be off)
 
         @Override
