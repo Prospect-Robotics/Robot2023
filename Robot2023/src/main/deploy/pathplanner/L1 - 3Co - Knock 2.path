@@ -365,7 +365,7 @@
     {
       "position": 7.0,
       "names": [
-        "event"
+        "spatula-down"
       ]
     },
     {
@@ -377,7 +377,7 @@
     {
       "position": 9.0,
       "names": [
-        "event"
+        "spatula-up"
       ]
     }
   ]
