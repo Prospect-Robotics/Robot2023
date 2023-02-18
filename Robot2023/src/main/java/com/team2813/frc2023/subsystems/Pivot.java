@@ -13,6 +13,9 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise)); //TODO: Find ot if its inverted or not
 
         motor.configPID(0, 0, 0);
+        motor.configMotionMagic(21000, 20000);
+
+        motor.setEncoderPosition(Rotations.STARTING_CONFIGURATION.position);
     }
 
     public double getMotorPosition() {
@@ -36,10 +39,9 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(0),
-        HIGH(50),
-        MID(57),
-        INTAKE(63);
+        STARTING_CONFIGURATION(63),
+        HIGH(13),
+        MID(6);
 
         @Override
         public double getPos() {
