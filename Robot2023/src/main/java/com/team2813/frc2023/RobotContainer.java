@@ -71,6 +71,9 @@ public class RobotContainer
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
+
+        STOW_BUTTON.onTrue(new InstantCommand(pivot::startZeroingPivot));
+        STOW_BUTTON.onFalse(new InstantCommand(pivot::brake));
     }
     
     
