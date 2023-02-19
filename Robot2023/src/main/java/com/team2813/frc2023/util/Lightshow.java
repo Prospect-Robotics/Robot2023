@@ -37,10 +37,15 @@ public class Lightshow extends SubsystemBase {
             setLight(light.r, light.g, light.b);
         }
     }
+
+    public void setDefaultLight(Light light){
+        flashLight = new BlinkLightsCommand(light.period);
+        flashLight.schedule();
+    }
     
 
     public enum Light {
-        DEFAULT(255, 255, 255,false, null), //white
+        DEFAULT(0, 0, 0,true, 0.5), //white
         ENABLED(0, 255, 0,false, null), //green
         DISABLED(255, 0, 0,false, null), //red
         AUTONOMOUS(255, 0, 255,true, 0.75), //flashing purple

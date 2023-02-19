@@ -19,4 +19,21 @@ public class BlinkLightsCommand extends RepeatCommand {
                 new WaitCommand(period)
         ));
     }
+
+    //Rainbow Lights
+    public BlinkLightsCommand(double period) {
+        super(new SequentialCommandGroup(
+                new InstantCommand(() -> LIGHTSHOW.setLight(255, 0, 0)),
+                new WaitCommand(period),
+                new InstantCommand(() -> LIGHTSHOW.setLight(255,127,0)),
+                new WaitCommand(period),
+                new InstantCommand(() -> LIGHTSHOW.setLight(255,255,0)),
+                new WaitCommand(period),
+                new InstantCommand(() -> LIGHTSHOW.setLight(0,255,0)),
+                new WaitCommand(period),
+                new InstantCommand(() -> LIGHTSHOW.setLight(0,0,255)),
+                new WaitCommand(period),
+                new InstantCommand(() -> LIGHTSHOW.setLight(148,0,211))
+        ));
+    }
 }
