@@ -52,8 +52,7 @@ public class RobotContainer {
      * {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
-        put("spatula-up", new InstantCommand(spatula::retract));
-        put("spatula-down", new InstantCommand(spatula::extend));
+        
     }};
 
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
