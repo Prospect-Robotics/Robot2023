@@ -32,7 +32,9 @@ public final class Constants
         public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
 
         // Operator controls
-        public static final Trigger STOW_BUTTON = OPERATOR_CONTROLLER.square();
+        public static final Trigger STOW_BUTTON = OPERATOR_CONTROLLER.circle(); // actually maps to square
+        public static final Trigger TOP_NODE_BUTTON = OPERATOR_CONTROLLER.square(); // actually maps to cross
+        public static final Trigger MID_NODE_BUTTON = OPERATOR_CONTROLLER.cross(); // actually maps to circle
     }
 
     // IDs

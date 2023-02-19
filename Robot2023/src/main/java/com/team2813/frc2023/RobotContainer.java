@@ -8,6 +8,8 @@ package com.team2813.frc2023;
 import com.team2813.frc2023.commands.Autos;
 import com.team2813.frc2023.commands.DefaultDriveCommand;
 import com.team2813.frc2023.commands.DefaultPivotCommand;
+import com.team2813.frc2023.commands.ZeroPivotCommand;
+import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Pivot;
@@ -72,8 +74,9 @@ public class RobotContainer
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
 
-        STOW_BUTTON.onTrue(new InstantCommand(pivot::startZeroingPivot));
-        STOW_BUTTON.onFalse(new InstantCommand(pivot::brake));
+        STOW_BUTTON.onTrue(new ZeroPivotCommand(pivot));
+        TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot));
+        MID_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot));
     }
     
     

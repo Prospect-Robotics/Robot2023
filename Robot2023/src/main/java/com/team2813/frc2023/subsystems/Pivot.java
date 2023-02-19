@@ -2,8 +2,10 @@ package com.team2813.frc2023.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.team2813.frc2023.Constants;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
 
@@ -12,8 +14,11 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     public Pivot() {
         super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise)); //TODO: Find ot if its inverted or not
 
-        motor.configPID(0, 0, 0);
-        motor.configMotionMagic(21000, 20000);
+        double maxVelocity = 21_000;
+        double maxAcceleration = 16_000;
+
+        motor.configPID(0.25, 0, 0);
+        motor.configMotionMagic(maxVelocity * 0.75, maxAcceleration);
 
         motor.setEncoderPosition(Rotations.STARTING_CONFIGURATION.position);
     }
@@ -31,7 +36,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public void startZeroingPivot() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.1);
+        motor.set(ControlMode.DUTY_CYCLE, -0.75);
     }
 
     public void brake() {
@@ -55,5 +60,8 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         }
     }
 
-
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Pivot Position", getMotorPosition());
+    }
 }
