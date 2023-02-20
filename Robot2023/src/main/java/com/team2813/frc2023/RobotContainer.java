@@ -38,8 +38,6 @@ public class RobotContainer {
     private final Spatula spatula = new Spatula();
     private final Limelight limelight = Limelight.getInstance();
 
-    private final XboxController driver = new XboxController(DRIVER_CONTROLLER_PORT);
-
     /**
      * String key is the name of the event marker in an auto routine,
      * Command value is the command associated with that event marker.
@@ -93,10 +91,10 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        Trigger apriltagSplineTrigger = new Trigger(() -> driver.getLeftTriggerAxis() == 1);
+        Trigger apriltagSplineTrigger = new Trigger(() -> driverController.getLeftTriggerAxis() == 1);
         apriltagSplineTrigger.whileTrue(new AutoSplineCommand(apriltagSplineTrigger.negate(), NodeType.CUBE, drive));
 
-        Trigger reflectiveSplineTrigger = new Trigger(() -> driver.getRightTriggerAxis() == 1);
+        Trigger reflectiveSplineTrigger = new Trigger(() -> driverController.getRightTriggerAxis() == 1);
         reflectiveSplineTrigger.whileTrue(new AutoSplineCommand(reflectiveSplineTrigger.negate(), NodeType.CONE, drive));
 
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
