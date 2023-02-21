@@ -12,13 +12,10 @@ import static com.team2813.frc2023.Constants.*;
 public class Pivot extends Subsystem1d<Pivot.Rotations> {
 
     public Pivot() {
-        super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise)); //TODO: Find ot if its inverted or not
+        super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        double maxVelocity = 21_000;
-        double maxAcceleration = 16_000;
-
-        motor.configPID(0.25, 0, 0);
-        motor.configMotionMagic(maxVelocity * 0.75, maxAcceleration);
+        motor.configPID(0.5625, 0, 0);
+        motor.configMotionMagic(21000, 21000);
 
         motor.setEncoderPosition(Rotations.STARTING_CONFIGURATION.position);
     }
@@ -36,7 +33,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public void startZeroingPivot() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.75);
+        motor.set(ControlMode.DUTY_CYCLE, -0.55);
     }
 
     public void brake() {
@@ -44,9 +41,9 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(63),
-        HIGH(13),
-        MID(6);
+        STARTING_CONFIGURATION(150),
+        HIGH(83),
+        MID(72);
 
         @Override
         public double getPos() {
