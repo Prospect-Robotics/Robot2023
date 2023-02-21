@@ -67,10 +67,10 @@ public final class Constants
     public static final int PIGEON_ID = 13;
 
     // Steer offsets
-    public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(176.39689375);
-    public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(286.259765625);
-    public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(147.12890625);
-    public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(78.22265625);
+    public static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(176.1328125);
+    public static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(284.326171875);
+    public static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(149.501953125);
+    public static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(252.7734375);
 
     public static final double TRACKWIDTH = Units.inchesToMeters(19.5); // meters
     public static final double WHEELBASE = Units.inchesToMeters(21.5); // meters
