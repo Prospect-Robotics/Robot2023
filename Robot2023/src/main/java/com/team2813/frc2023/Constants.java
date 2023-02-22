@@ -17,10 +17,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants
-{
-    public static class OperatorConstants
-    {
+public final class Constants {
+    public static class OperatorConstants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final CommandPS4Controller DRIVER_CONTROLLER = new CommandPS4Controller(DRIVER_CONTROLLER_PORT);
 
@@ -66,6 +64,9 @@ public final class Constants
 
     // Other Drive Stuff
     public static final int PIGEON_ID = 14;
+
+    // Wrist
+    public static int WRIST_MOTOR_ID = 17;
 
     // Pivot
     public static final int PIVOT_MOTOR_ID = 18;
