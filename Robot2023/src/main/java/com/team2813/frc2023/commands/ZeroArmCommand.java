@@ -22,7 +22,7 @@ public class ZeroArmCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) > 0.25 && armSubsystem.getMotorVelocity() == 0;
+        return (Timer.getFPGATimestamp() - startTime) > 0.25 && Math.abs(armSubsystem.getMotorVelocity()) < 0.05;
     }
 
     @Override

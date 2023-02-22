@@ -25,11 +25,11 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     }
 
     public boolean positionReached() {
-        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05; //probably change value
+        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 1;
     }
 
     public void startRetractingArm() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.98); //probably change value
+        motor.set(ControlMode.DUTY_CYCLE, -0.5);
     }
 
     public void brake() {
@@ -37,10 +37,10 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     }
 
     public enum ExtensionLength implements Position {
-        INTAKE(2),
-        MIDDLE(25),
-        TOP(35),
-        DOUBLE_SUBSTATION(35);
+        INTAKE(3.59),
+        MIDDLE(11.8),
+        TOP(28.13),
+        DOUBLE_SUBSTATION(28.13);
 
         @Override
         public double getPos() {
