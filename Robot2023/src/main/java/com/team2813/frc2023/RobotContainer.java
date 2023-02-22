@@ -7,11 +7,7 @@ package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
-import com.team2813.frc2023.subsystems.Arm;
-import com.team2813.frc2023.subsystems.Drive;
-import com.team2813.frc2023.subsystems.ExampleSubsystem;
-import com.team2813.frc2023.subsystems.Pivot;
-import com.team2813.frc2023.subsystems.Spatula;
+import com.team2813.frc2023.subsystems.*;
 import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
@@ -33,6 +29,7 @@ public class RobotContainer
     private final Spatula spatula = new Spatula();
     private final Pivot pivot = new Pivot();
     private final Arm arm = new Arm();
+    private final Wrist wrist = new Wrist();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
     
@@ -74,20 +71,34 @@ public class RobotContainer
 
         TOP_NODE_BUTTON.onTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
-                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm)
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
+                )
         ));
 
         MID_NODE_BUTTON.onTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot),
-                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm)
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
+                )
         ));
 
-        SINGLE_SUB_BUTTON.onTrue(new ZeroArmCommand(arm));
+        GROUND_INTAKE_BUTTON.onTrue(new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist));
+
+        SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
+                new ZeroArmCommand(arm),
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE))
+        ));
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
         doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
-                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm)
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
+                )
         ));
     }
     
