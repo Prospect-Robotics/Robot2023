@@ -29,7 +29,7 @@ public class DefaultPivotCommand extends CommandBase {
                 additionalPos = (additionalPos + 0.2) / (1 - 0.2);
             }
 
-            double position = pivotSubsystem.getMotorPosition() + additionalPos;
+            double position = pivotSubsystem.getMotorPosition() + (4 * additionalPos);
             position = MathUtil.clamp(position, 0, Pivot.Rotations.STARTING_CONFIGURATION.getPos());
 
             pivotSubsystem.setPosition(position);

@@ -68,6 +68,9 @@ public final class Constants
     // Pivot
     public static final int PIVOT_MOTOR_ID = 18;
 
+    // Arm
+    public static final int ARM_MOTOR_ID = 19;
+
     // Pneumatics
     public static final int PCM_ID = 20;
 

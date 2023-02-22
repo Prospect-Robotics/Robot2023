@@ -60,5 +60,6 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Position", getMotorPosition());
+        SmartDashboard.putNumber("Goal Position", goalRotations);
     }
 }
