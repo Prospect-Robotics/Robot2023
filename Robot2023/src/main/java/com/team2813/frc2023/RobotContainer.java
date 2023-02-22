@@ -6,7 +6,6 @@
 package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.Autos;
-import com.team2813.frc2023.commands.StopIntakeCommand;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Intake;
 import com.team2813.frc2023.util.Limelight;
@@ -69,13 +68,6 @@ public class RobotContainer
                 new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake)
         ));
-
-        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(intake::open, intake),
-                new WaitCommand(1),
-                new InstantCommand(intake::outtake, intake)
-        ));
-        OUTTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
     }
     
     
