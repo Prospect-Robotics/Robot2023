@@ -78,6 +78,4 @@ public final class Constants
 
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
     public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
-
-    public static final int MOTOR_WRIST_ID = 18;
 }

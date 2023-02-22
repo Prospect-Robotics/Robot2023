@@ -5,20 +5,16 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.commands.Autos;
-import com.team2813.frc2023.commands.DefaultDriveCommand;
-import com.team2813.frc2023.commands.DefaultPivotCommand;
-import com.team2813.frc2023.commands.ZeroPivotCommand;
+import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
+import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.Drive;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Pivot;
 import com.team2813.frc2023.subsystems.Spatula;
 import com.team2813.frc2023.util.Limelight;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -36,6 +32,7 @@ public class RobotContainer
     private final Drive drive = new Drive();
     private final Spatula spatula = new Spatula();
     private final Pivot pivot = new Pivot();
+    private final Arm arm = new Arm();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
     
@@ -53,6 +50,7 @@ public class RobotContainer
         ));
 
         pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
+        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
 
         // Configure the trigger bindings
         configureBindings();
@@ -74,9 +72,23 @@ public class RobotContainer
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
 
-        STOW_BUTTON.onTrue(new ZeroPivotCommand(pivot));
-        TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot));
-        MID_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot));
+        STOW_BUTTON.onTrue(new SequentialCommandGroup(
+                new ZeroArmCommand(arm),
+                new ParallelCommandGroup(
+                        new ZeroPivotCommand(pivot),
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm)
+                )
+        ));
+
+        TOP_NODE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm)
+        ));
+
+        MID_NODE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot),
+                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm)
+        ));
     }
     
     
