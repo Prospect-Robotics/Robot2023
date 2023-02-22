@@ -72,14 +72,6 @@ public class RobotContainer
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
 
-        STOW_BUTTON.onTrue(new SequentialCommandGroup(
-                new ZeroArmCommand(arm),
-                new ParallelCommandGroup(
-                        new ZeroPivotCommand(pivot),
-                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm)
-                )
-        ));
-
         TOP_NODE_BUTTON.onTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
                 new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm)
@@ -88,6 +80,14 @@ public class RobotContainer
         MID_NODE_BUTTON.onTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot),
                 new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm)
+        ));
+
+        SINGLE_SUB_BUTTON.onTrue(new ZeroArmCommand(arm));
+
+        Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
+        doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm)
         ));
     }
     
