@@ -1,9 +1,9 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.team2813.frc2023.subsystems.Subsystem1d.Position;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
 
@@ -37,10 +37,10 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     }
 
     public enum ExtensionLength implements Position {
-        INTAKE(26),
-        MIDDLE(62.25),
-        TOP(136.6),
-        DOUBLE_SUBSTATION(80);
+        INTAKE(2),
+        MIDDLE(25),
+        TOP(35),
+        DOUBLE_SUBSTATION(35);
 
         @Override
         public double getPos() {
@@ -49,8 +49,13 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
 
         final double position;
 
-        ExtensionLength(double position ) {
+        ExtensionLength(double position) {
             this.position = position;
         }
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Arm Position", motor.getEncoderPosition());
     }
 }
