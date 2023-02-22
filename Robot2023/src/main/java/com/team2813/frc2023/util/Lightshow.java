@@ -14,7 +14,6 @@ public class Lightshow extends SubsystemBase {
     private BlinkLightsCommand flashLight;
     private final CANifier canifier;
 
- 
     public Lightshow(int canifierID) {
         canifier = new CANifier(canifierID);
         setLight(Light.DEFAULT);
@@ -45,8 +44,8 @@ public class Lightshow extends SubsystemBase {
     
 
     public enum Light {
-        DEFAULT(0, 0, 0,true, 0.5), //white
-        ENABLED(0, 255, 0,false, null), //green
+        DEFAULT(0, 0, 0,true, 0.5), //rainbow
+        ENABLED(65, 105, 225,true, 0.5), //royal blue
         DISABLED(255, 0, 0,false, null), //red
         AUTONOMOUS(255, 0, 255,true, 0.75), //flashing purple
         AUTO_BALANCE(0, 0, 128,true, 0.5), //flashing navy blue

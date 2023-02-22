@@ -15,7 +15,7 @@ public class BlinkLightsCommand extends RepeatCommand {
         super(new SequentialCommandGroup(
                 new InstantCommand(() -> LIGHTSHOW.setLight(light)),
                 new WaitCommand(period),
-                new InstantCommand(() -> LIGHTSHOW.setLight(Light.DEFAULT)),
+                new InstantCommand(() -> LIGHTSHOW.setLight(255,255,0)),
                 new WaitCommand(period)
         ));
     }
