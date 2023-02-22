@@ -27,7 +27,7 @@ public final class Constants
         public static final CommandPS4Controller OPERATOR_CONTROLLER = new CommandPS4Controller(OPERATOR_CONTROLLER_PORT);
 
         // Operator controls
-        public static final Trigger INTAKE_BUTTON = OPERATOR_CONTROLLER.R1();
+        public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
     }
 

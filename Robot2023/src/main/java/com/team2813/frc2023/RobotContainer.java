@@ -10,6 +10,8 @@ import com.team2813.frc2023.commands.StopIntakeCommand;
 import com.team2813.frc2023.subsystems.ExampleSubsystem;
 import com.team2813.frc2023.subsystems.Intake;
 import com.team2813.frc2023.util.Limelight;
+
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -29,7 +31,7 @@ public class RobotContainer
     private final Intake intake = new Intake();
     private final Limelight limelight = Limelight.getInstance();
 
-    
+    private XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -50,12 +52,23 @@ public class RobotContainer
      */
     private void configureBindings()
     {
-        INTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
+        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(intake::open, intake),
                 new WaitCommand(0.4),
                 new InstantCommand(intake::intake, intake)
         ));
-        INTAKE_BUTTON.onFalse(new StopIntakeCommand(intake));
+        INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));
+
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(0.4),
+                new InstantCommand(intake::intake, intake)
+        ));
+        intakeConeTrigger.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake)
+        ));
 
         OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(intake::open, intake),
