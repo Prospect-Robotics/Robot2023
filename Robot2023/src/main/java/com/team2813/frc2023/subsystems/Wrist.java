@@ -7,12 +7,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
 
-
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public Wrist() {
         super(new SparkMaxWrapper(WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true));
 
-        motor.configPID(0.25, 0, 0); // TODO: Tune PID
+        motor.configPID(0.25, 0, 0);
         motor.configMotionMagic(11000, 10000);
     }
 
@@ -21,11 +20,11 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public boolean positionReached() {
-        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05;
+        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 1;
     }
 
     public void startStowingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.5); // TODO: Test for value to put as 2nd parameter
+        motor.set(ControlMode.DUTY_CYCLE, -0.5);
     }
 
     public void brake() {
@@ -34,9 +33,8 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public enum Rotations implements Position {
         INTAKE(9),
-        OUTTAKE(7.53),
+        OUTTAKE(20),
         DOUBLE_SUBSTATION(40);
-        // TODO: EXACT VALUES TBD (calculations might be off)
 
         @Override
         public double getPos() {

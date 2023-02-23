@@ -1,6 +1,5 @@
 package com.team2813.frc2023.subsystems;
 
-
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
@@ -41,7 +40,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
 
     public enum Rotations implements Position {
         STARTING_CONFIGURATION(150),
-        HIGH(80),
+        HIGH(83),
         MID(72);
 
         @Override
