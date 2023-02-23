@@ -35,6 +35,9 @@ public final class Constants {
 
         public static final Trigger TOP_NODE_BUTTON = OPERATOR_CONTROLLER.triangle();
         public static final Trigger MID_NODE_BUTTON = OPERATOR_CONTROLLER.cross(); // actually maps to circle
+
+        public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
+        public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
     }
 
     // IDs
@@ -65,6 +68,10 @@ public final class Constants {
     // Other Drive Stuff
     public static final int PIGEON_ID = 14;
 
+    // Intake
+    public static final int INTAKE_MASTER_ID = 15;
+    public static final int INTAKE_FOLLOWER_ID = 16;
+
     // Wrist
     public static int WRIST_MOTOR_ID = 17;
 
@@ -77,6 +84,7 @@ public final class Constants {
     // Pneumatics
     public static final int PCM_ID = 20;
 
+    public static final int INTAKE_PISTON_CHANNEL = 0;
     public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
     public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 

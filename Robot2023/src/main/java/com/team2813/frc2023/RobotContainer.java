@@ -30,6 +30,7 @@ public class RobotContainer
     private final Pivot pivot = new Pivot();
     private final Arm arm = new Arm();
     private final Wrist wrist = new Wrist();
+    private final Intake intake = new Intake();
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
     private final Limelight limelight = Limelight.getInstance();
     
@@ -99,6 +100,24 @@ public class RobotContainer
                         new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
                         new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
                 )
+        ));
+
+        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(0.4),
+                new InstantCommand(intake::intake, intake)
+        ));
+        INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));
+
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(0.4),
+                new InstantCommand(intake::intake, intake)
+        ));
+        intakeConeTrigger.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake)
         ));
     }
     
