@@ -29,7 +29,7 @@ public class DefaultArmCommand extends CommandBase {
                 additionalPos = (additionalPos + 0.2) / (1 - 0.2);
             }
 
-            double position = armSubsystem.getMotorPosition() + additionalPos;
+            double position = armSubsystem.getMotorPosition() + (3 * additionalPos);
             position = MathUtil.clamp(position, 0, Arm.ExtensionLength.TOP.getPos());
 
             armSubsystem.setPosition(position);
