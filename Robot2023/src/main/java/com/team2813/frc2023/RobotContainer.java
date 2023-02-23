@@ -111,6 +111,26 @@ public class RobotContainer
                 new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake)
         ));
+
+        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(1),
+                new InstantCommand(intake::outtake, intake)
+        ));
+        OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new InstantCommand(intake::close, intake),
+                new ParallelCommandGroup(
+                        new ZeroWristCommand(wrist),
+                        new SequentialCommandGroup(
+                                new ZeroArmCommand(arm),
+                                new ParallelCommandGroup(
+                                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm),
+                                        new ZeroPivotCommand(pivot)
+                                )
+                        )
+                )
+        ));
     }
     
     
