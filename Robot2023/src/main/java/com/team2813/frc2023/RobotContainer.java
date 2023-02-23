@@ -88,10 +88,7 @@ public class RobotContainer
 
         GROUND_INTAKE_BUTTON.onTrue(new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist));
 
-        SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
-                new ZeroArmCommand(arm),
-                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE))
-        ));
+        SINGLE_SUB_BUTTON.onTrue(new ZeroArmCommand(arm));
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
         doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
@@ -104,7 +101,7 @@ public class RobotContainer
 
         INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
         INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
-                new InstantCommand(intake::stop, intake),
+                new InstantCommand(intake::idle, intake),
                 new ZeroWristCommand(wrist)
         ));
 
@@ -113,6 +110,7 @@ public class RobotContainer
         intakeConeTrigger.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake),
+                new WaitCommand(0.4),
                 new ZeroWristCommand(wrist)
         ));
 
