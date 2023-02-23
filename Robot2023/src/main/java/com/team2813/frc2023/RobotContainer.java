@@ -103,13 +103,17 @@ public class RobotContainer
         ));
 
         INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
-        INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));
+        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new ZeroWristCommand(wrist)
+        ));
 
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
         intakeConeTrigger.whileTrue(new StartIntakeCommand(intake));
         intakeConeTrigger.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::close, intake),
-                new InstantCommand(intake::stop, intake)
+                new InstantCommand(intake::stop, intake),
+                new ZeroWristCommand(wrist)
         ));
 
         OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(

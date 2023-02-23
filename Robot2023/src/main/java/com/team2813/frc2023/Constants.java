@@ -37,7 +37,7 @@ public final class Constants {
         public static final Trigger MID_NODE_BUTTON = OPERATOR_CONTROLLER.cross(); // actually maps to circle
 
         public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
-        public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.L1();
+        public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.circle(); // actually maps to square
     }
 
     // IDs
