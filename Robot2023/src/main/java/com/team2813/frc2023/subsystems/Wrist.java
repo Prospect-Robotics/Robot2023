@@ -1,8 +1,8 @@
 package com.team2813.frc2023.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
+import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2813.lib.motors.ControlMode;
-import com.team2813.lib.motors.TalonFXWrapper;
+import com.team2813.lib.motors.SparkMaxWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
@@ -10,10 +10,10 @@ import static com.team2813.frc2023.Constants.*;
 
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public Wrist() {
-        super(new TalonFXWrapper(WRIST_MOTOR_ID, TalonFXInvertType.Clockwise));
+        super(new SparkMaxWrapper(WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true));
 
         motor.configPID(0.25, 0, 0); // TODO: Tune PID
-        motor.configMotionMagic(10000, 10000);
+        motor.configMotionMagic(11000, 10000);
     }
 
     public double getMotorVelocity() {
@@ -25,7 +25,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void startStowingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.05); // TODO: Test for value to put as 2nd parameter
+        motor.set(ControlMode.DUTY_CYCLE, -0.5); // TODO: Test for value to put as 2nd parameter
     }
 
     public void brake() {
