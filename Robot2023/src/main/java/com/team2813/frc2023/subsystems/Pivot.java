@@ -2,7 +2,6 @@ package com.team2813.frc2023.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.team2813.frc2023.Constants;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -60,6 +59,5 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Position", getMotorPosition());
-        SmartDashboard.putNumber("Goal Position", goalRotations);
     }
 }

@@ -1,18 +1,19 @@
 package com.team2813.frc2023.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.team2813.lib.motors.SparkMaxWrapper;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
+import com.team2813.lib.motors.TalonFXWrapper;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
 
 
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public Wrist() {
-        super(new SparkMaxWrapper(WRIST_MOTOR_ID, MotorType.kBrushless, true)); //TODO: Find ot if its inverted or not
+        super(new TalonFXWrapper(WRIST_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0, 0, 0); // TODO: Tune PID
-        motor.configMotionMagic(11000, 10000);
+        motor.configPID(0.25, 0, 0); // TODO: Tune PID
+        motor.configMotionMagic(10000, 10000);
     }
 
     public double getMotorVelocity() {
@@ -24,7 +25,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void startStowingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, 0); // TODO: Test for value to put as 2nd parameter
+        motor.set(ControlMode.DUTY_CYCLE, -0.05); // TODO: Test for value to put as 2nd parameter
     }
 
     public void brake() {
@@ -47,5 +48,10 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         Rotations(double position ) {
             this.position = position;
         }
+    }
+
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Wrist Position", motor.getEncoderPosition());
     }
 }
