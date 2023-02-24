@@ -12,7 +12,7 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     public Arm() {
         super(new TalonFXWrapper(ARM_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0.25, 0, 0); // TODO: tune
+        motor.configPID(0.5, 0, 0); // TODO: tune
         motor.configMotionMagic(21000, 20000);
     }
 
@@ -25,8 +25,7 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     }
 
     public boolean positionReached() {
-        return false;
-        //return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.1;
+        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.025;
     }
 
     public void startRetractingArm() {
