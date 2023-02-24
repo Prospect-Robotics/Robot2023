@@ -66,5 +66,4 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putBoolean("Valid apriltag", values.hasTargets());
         SmartDashboard.putNumber("Id of primary AprilTag", values.primaryApriltag());
     }
-
 }

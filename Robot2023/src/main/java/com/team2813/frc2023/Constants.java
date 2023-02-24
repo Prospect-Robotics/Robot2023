@@ -39,6 +39,7 @@ public final class Constants {
         public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.circle(); // actually maps to square
     }
+
     // IDs
 
     // Swerve Modules
@@ -86,9 +87,6 @@ public final class Constants {
     public static final int INTAKE_PISTON_CHANNEL = 0;
     public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
     public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
-
-    // LEDs
-    public static int CANIFIER_ID = 21;
 
     // Physical Constants
 

@@ -5,12 +5,9 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.util.Lightshow;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
-import static com.team2813.frc2023.Constants.*;
 
 
 
@@ -25,8 +22,6 @@ public class Robot extends TimedRobot
     private Command autonomousCommand;
     
     private RobotContainer robotContainer;
-
-    public static final Lightshow LIGHTSHOW = new Lightshow(CANIFIER_ID);
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -38,7 +33,6 @@ public class Robot extends TimedRobot
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
-        LIGHTSHOW.setDefaultLight(Lightshow.Light.DEFAULT);
     }
     
     
@@ -62,9 +56,7 @@ public class Robot extends TimedRobot
     
     /** This method is called once each time the robot enters Disabled mode. */
     @Override
-    public void disabledInit() {
-        LIGHTSHOW.setLight(Lightshow.Light.DISABLED);
-    }
+    public void disabledInit() {}
     
     
     @Override
@@ -82,7 +74,6 @@ public class Robot extends TimedRobot
         {
             autonomousCommand.schedule();
         }
-        LIGHTSHOW.setLight(Lightshow.Light.AUTONOMOUS);
     }
     
     
@@ -102,7 +93,6 @@ public class Robot extends TimedRobot
         {
             autonomousCommand.cancel();
         }
-        LIGHTSHOW.setLight(Lightshow.Light.ENABLED);
     }
     
     
