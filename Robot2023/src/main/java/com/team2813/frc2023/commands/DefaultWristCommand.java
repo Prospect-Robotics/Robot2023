@@ -14,7 +14,6 @@ public class DefaultWristCommand extends CommandBase {
 
     @Override
     public void execute() {
-        //wristSubsystem.brake();
-        wristSubsystem.setPosition(wristSubsystem.getCurrentGoalRotation());
+        wristSubsystem.setPosition(wristSubsystem.getMotorPosition());
     }
 }

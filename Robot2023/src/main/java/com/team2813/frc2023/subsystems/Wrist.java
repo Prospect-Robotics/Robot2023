@@ -15,6 +15,10 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         motor.configMotionMagic(11000, 10000);
     }
 
+    public double getMotorPosition() {
+        return motor.getEncoderPosition();
+    }
+
     public double getMotorVelocity() {
         return motor.getVelocity();
     }
