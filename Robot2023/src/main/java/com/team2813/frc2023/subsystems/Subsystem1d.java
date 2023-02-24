@@ -14,6 +14,8 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     protected TalonFXProWrapper talonFXPro;
     protected Position currentPosition;
 
+    private double currentGoalRotation = 0;
+
     public Subsystem1d(SparkMaxWrapper motor) {
         this.motor = motor;
         motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 25);
@@ -62,6 +64,8 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     }
 
     public void setPosition(double encoderRotations) {
+        currentGoalRotation = encoderRotations;
+
         if (talonFXPro != null) talonFXPro.set(ControlMode.MOTION_MAGIC, encoderRotations);
         else motor.set(ControlMode.MOTION_MAGIC, encoderRotations);
     }
@@ -69,5 +73,13 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     public void setPosition(P position) {
         currentPosition = position;
         setPosition(position.getPos());
+    }
+
+    public double getCurrentGoalRotation() {
+        return currentGoalRotation;
+    }
+
+    public void setCurrentGoalRotation(double rotation) {
+        currentGoalRotation = rotation;
     }
 }

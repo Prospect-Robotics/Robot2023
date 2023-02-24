@@ -19,6 +19,7 @@ public class ZeroWristCommand extends CommandBase {
     public void initialize() {
         startTime = Timer.getFPGATimestamp();
         wristSubsystem.startStowingWrist();
+        wristSubsystem.setCurrentGoalRotation(0);
     }
 
     @Override

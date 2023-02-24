@@ -24,7 +24,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void startStowingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.5);
+        motor.set(ControlMode.DUTY_CYCLE, -0.3);
     }
 
     public void brake() {

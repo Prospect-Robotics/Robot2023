@@ -89,7 +89,6 @@ public final class Constants {
     public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 
     // Physical Constants
-
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
     public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
 }

@@ -49,6 +49,7 @@ public class RobotContainer
 
         pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
         arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
+        wrist.setDefaultCommand(new DefaultWristCommand(wrist));
 
         // Configure the trigger bindings
         configureBindings();

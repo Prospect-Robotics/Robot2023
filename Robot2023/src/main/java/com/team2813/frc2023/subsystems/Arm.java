@@ -25,7 +25,8 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     }
 
     public boolean positionReached() {
-        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.1;
+        return false;
+        //return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.1;
     }
 
     public void startRetractingArm() {
