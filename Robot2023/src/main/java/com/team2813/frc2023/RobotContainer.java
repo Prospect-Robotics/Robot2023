@@ -36,6 +36,8 @@ public class RobotContainer
     
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
     private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
+
+    private IntakeType currentIntakeMode = IntakeType.GROUND;
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -90,7 +92,10 @@ public class RobotContainer
         INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
         INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::idle, intake),
-                new ZeroWristCommand(wrist)
+                new InstantCommand(() -> {
+                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
+                    else new StowAllCommand(pivot, arm, wrist).schedule();
+                })
         ));
 
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
@@ -102,14 +107,21 @@ public class RobotContainer
                 //new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake),
                 new WaitCommand(0.4),
-                new ZeroWristCommand(wrist)
+                new InstantCommand(() -> {
+                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
+                    else new StowAllCommand(pivot, arm, wrist).schedule();
+                })
         ));
 
-        GROUND_INTAKE_BUTTON.onTrue(new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist));
+        GROUND_INTAKE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.GROUND)
+        ));
 
         SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
                 new ZeroArmCommand(arm),
-                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot)
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.SINGLE_SUB)
         ));
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
@@ -118,7 +130,8 @@ public class RobotContainer
                 new ParallelCommandGroup(
                         new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
                         new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
-                )
+                ),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.DOUBLE_SUB)
         ));
 
         OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
@@ -129,16 +142,7 @@ public class RobotContainer
         OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::stop, intake),
                 new InstantCommand(intake::close, intake),
-                new ParallelCommandGroup(
-                        new ZeroWristCommand(wrist),
-                        new SequentialCommandGroup(
-                                new ZeroArmCommand(arm),
-                                new ParallelCommandGroup(
-                                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm),
-                                        new ZeroPivotCommand(pivot)
-                                )
-                        )
-                )
+                new StowAllCommand(pivot, arm, wrist)
         ));
     }
     
@@ -170,5 +174,9 @@ public class RobotContainer
         value = deadband(value, 0.1);
         value = Math.copySign(value * value, value);
         return value;
+    }
+
+    private enum IntakeType {
+        GROUND, SINGLE_SUB, DOUBLE_SUB
     }
 }
