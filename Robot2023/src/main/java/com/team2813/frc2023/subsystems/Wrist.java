@@ -8,6 +8,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static com.team2813.frc2023.Constants.*;
 
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
+
+    private boolean positionSet = false;
+
     public Wrist() {
         super(new SparkMaxWrapper(WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true));
 
@@ -23,12 +26,21 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         return motor.getVelocity();
     }
 
+    public boolean isPositionSet() {
+        return positionSet;
+    }
+
+    public void idle() {
+        motor.set(ControlMode.DUTY_CYCLE, -0.25);
+    }
+
     public boolean positionReached() {
         return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 1;
     }
 
     public void startStowingWrist() {
         motor.set(ControlMode.DUTY_CYCLE, -0.3);
+        positionSet = false;
     }
 
     public void brake() {
@@ -50,6 +62,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         Rotations(double position ) {
             this.position = position;
         }
+    }
+
+    @Override
+    public void setPosition(Rotations position) {
+        super.setPosition(position);
+        positionSet = true;
     }
 
     @Override

@@ -16,8 +16,8 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
 
     public Subsystem1d(SparkMaxWrapper motor) {
         this.motor = motor;
-        motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 25);
-        motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 100);
+        motor.configPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 25);
+        motor.configPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 100);
         motor.set(ControlMode.DUTY_CYCLE, 0);
         motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
@@ -26,7 +26,7 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
         this.motor = motor;
 
         if (!motor.isOnCANivore()) {
-            motor.setStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 125);
+            motor.configStatusFramePeriod(StatusFrameEnhanced.Status_21_FeedbackIntegrated, 125);
         }
 
         motor.set(ControlMode.DUTY_CYCLE, 0);

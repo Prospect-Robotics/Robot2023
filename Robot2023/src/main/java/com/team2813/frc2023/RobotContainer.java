@@ -87,9 +87,30 @@ public class RobotContainer
                 )
         ));
 
+        INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
+        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
+                new InstantCommand(intake::idle, intake),
+                new ZeroWristCommand(wrist)
+        ));
+
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::intake, intake)
+        ));
+        intakeConeTrigger.onFalse(new SequentialCommandGroup(
+                //new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake),
+                new WaitCommand(0.4),
+                new ZeroWristCommand(wrist)
+        ));
+
         GROUND_INTAKE_BUTTON.onTrue(new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist));
 
-        SINGLE_SUB_BUTTON.onTrue(new ZeroArmCommand(arm));
+        SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
+                new ZeroArmCommand(arm),
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot)
+        ));
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
         doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
@@ -100,24 +121,9 @@ public class RobotContainer
                 )
         ));
 
-        INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
-        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
-                new InstantCommand(intake::idle, intake),
-                new ZeroWristCommand(wrist)
-        ));
-
-        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
-        intakeConeTrigger.whileTrue(new StartIntakeCommand(intake));
-        intakeConeTrigger.onFalse(new SequentialCommandGroup(
-                new InstantCommand(intake::close, intake),
-                new InstantCommand(intake::stop, intake),
-                new WaitCommand(0.4),
-                new ZeroWristCommand(wrist)
-        ));
-
         OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(intake::open, intake),
-                new WaitCommand(1),
+                new WaitCommand(0.25),
                 new InstantCommand(intake::outtake, intake)
         ));
         OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
