@@ -33,9 +33,6 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
-        limelight.setLights(false);
-        limelight.setStream(2);
-
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
@@ -94,6 +91,7 @@ public class Robot extends TimedRobot
     public void teleopInit()
     {
         limelight.setLights(false);
+        limelight.setStream(2);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

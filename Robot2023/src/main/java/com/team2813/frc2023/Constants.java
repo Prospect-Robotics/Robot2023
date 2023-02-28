@@ -38,6 +38,9 @@ public final class Constants {
 
         public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
         public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.circle(); // actually maps to square
+
+        public static final Trigger WRIST_UP = OPERATOR_CONTROLLER.povUp();
+        public static final Trigger WRIST_DOWN = OPERATOR_CONTROLLER.povDown();
     }
 
     // IDs

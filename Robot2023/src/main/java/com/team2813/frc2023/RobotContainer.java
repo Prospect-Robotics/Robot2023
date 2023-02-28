@@ -100,11 +100,11 @@ public class RobotContainer
 
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
         intakeConeTrigger.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::open, intake),
                 new InstantCommand(intake::intake, intake)
         ));
         intakeConeTrigger.onFalse(new SequentialCommandGroup(
-                //new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake),
                 new WaitCommand(0.4),
                 new InstantCommand(() -> {
@@ -144,6 +144,12 @@ public class RobotContainer
                 new InstantCommand(intake::close, intake),
                 new StowAllCommand(pivot, arm, wrist)
         ));
+
+        WRIST_UP.whileTrue(new InstantCommand(wrist::up, wrist));
+        WRIST_UP.onFalse(new InstantCommand(wrist::brake, wrist));
+
+        WRIST_DOWN.whileTrue(new InstantCommand(wrist::down, wrist));
+        WRIST_DOWN.onFalse(new InstantCommand(wrist::brake, wrist));
     }
     
     
