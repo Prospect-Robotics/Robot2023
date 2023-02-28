@@ -5,19 +5,15 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.commands.AutoSplineCommand;
 import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
-import com.team2813.frc2023.commands.DefaultDriveCommand;
-import com.team2813.frc2023.subsystems.Drive;
-import com.team2813.frc2023.subsystems.Spatula;
-import com.team2813.frc2023.util.Limelight;
+import com.team2813.frc2023.commands.*;
+import com.team2813.frc2023.commands.util.LockFunctionCommand;
+import com.team2813.frc2023.subsystems.*;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -36,7 +32,10 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive = new Drive();
     private final Spatula spatula = new Spatula();
-    private final Limelight limelight = Limelight.getInstance();
+    private final Pivot pivot = new Pivot();
+    private final Arm arm = new Arm();
+    private final Wrist wrist = new Wrist();
+    private final Intake intake = new Intake();
 
     /**
      * String key is the name of the event marker in an auto routine,
@@ -54,17 +53,22 @@ public class RobotContainer {
     }};
 
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
+    private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
 
-    /**
-     * The container for the robot. Contains subsystems, OI devices, and commands.
-     */
-    public RobotContainer() {
+    private IntakeType currentIntakeMode = IntakeType.GROUND;
+
+    /** The container for the robot. Contains subsystems, OI devices, and commands. */
+    public RobotContainer()
+    {
         drive.setDefaultCommand(new DefaultDriveCommand(
                 () -> -modifyAxis(driverController.getLeftY()) * Drive.MAX_VELOCITY,
                 () -> -modifyAxis(driverController.getLeftX()) * Drive.MAX_VELOCITY,
                 () -> -modifyAxis(driverController.getRightX()) * Drive.MAX_ANGULAR_VELOCITY,
                 drive
         ));
+        pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
+        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
+        wrist.setDefaultCommand(new DefaultWristCommand(wrist));
 
         // For spline testing purposes
         drive.initAutonomous(new Pose2d());
@@ -75,10 +79,6 @@ public class RobotContainer {
 
     Drive getDrive() {
         return drive;
-    }
-
-    Spatula getSpatula() {
-        return spatula;
     }
 
     /**
@@ -99,8 +99,85 @@ public class RobotContainer {
 
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
-
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
+
+        TOP_NODE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
+                )
+        ));
+
+        MID_NODE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
+                )
+        ));
+
+        INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
+        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
+                new InstantCommand(intake::idle, intake),
+                new InstantCommand(() -> {
+                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
+                    else new StowAllCommand(pivot, arm, wrist).schedule();
+                })
+        ));
+
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new InstantCommand(intake::intake, intake)
+        ));
+        intakeConeTrigger.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake),
+                new WaitCommand(0.4),
+                new InstantCommand(() -> {
+                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
+                    else new StowAllCommand(pivot, arm, wrist).schedule();
+                })
+        ));
+
+        GROUND_INTAKE_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.GROUND)
+        ));
+
+        SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
+                new ZeroArmCommand(arm),
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.SINGLE_SUB)
+        ));
+
+        Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
+        doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
+                ),
+                new InstantCommand(() -> currentIntakeMode = IntakeType.DOUBLE_SUB)
+        ));
+
+        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(0.25),
+                new InstantCommand(intake::outtake, intake)
+        ));
+        OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new InstantCommand(intake::close, intake),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
+
+        WRIST_UP.whileTrue(new InstantCommand(wrist::up, wrist));
+        WRIST_UP.onFalse(new InstantCommand(wrist::brake, wrist));
+
+        WRIST_DOWN.whileTrue(new InstantCommand(wrist::down, wrist));
+        WRIST_DOWN.onFalse(new InstantCommand(wrist::brake, wrist));
     }
 
 
@@ -139,5 +216,9 @@ public class RobotContainer {
         value = deadband(value, 0.1);
         value = Math.copySign(value * value, value);
         return value;
+    }
+
+    private enum IntakeType {
+        GROUND, SINGLE_SUB, DOUBLE_SUB
     }
 }

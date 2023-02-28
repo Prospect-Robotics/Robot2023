@@ -102,6 +102,10 @@ public class LimelightValues {
         return LedState.values()[(int) ledMode.getNumber(0)];
     }
 
+    public int getLedStateNum() {
+        return ledMode.getNumber(-1).intValue();
+    }
+
     public NetworkTableEntry getStream() {
         return stream;
     }
