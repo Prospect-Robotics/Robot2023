@@ -136,6 +136,10 @@ public class Drive extends SubsystemBase {
         return odometry.getPoseMeters();
     }
 
+    public Pigeon2Wrapper getPigeon() {
+        return pigeon;
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return kinematics.toChassisSpeeds(
                 frontLeftModule.getState(),
