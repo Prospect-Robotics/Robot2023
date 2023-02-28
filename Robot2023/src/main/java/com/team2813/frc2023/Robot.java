@@ -24,7 +24,7 @@ public class Robot extends TimedRobot
     
     private RobotContainer robotContainer;
 
-    private Limelight limelight = Limelight.getInstance();
+    private final Limelight limelight = Limelight.getInstance();
     
     /**
      * This method is run when the robot is first started up and should be used for any
