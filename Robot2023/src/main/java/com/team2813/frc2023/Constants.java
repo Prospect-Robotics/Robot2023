@@ -34,7 +34,6 @@ public final class Constants {
         public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
 
         // Operator controls
-        public static final Trigger GROUND_INTAKE_BUTTON = OPERATOR_CONTROLLER.square(); // actually maps to cross
         public static final Trigger SINGLE_SUB_BUTTON = OPERATOR_CONTROLLER.L1();
 
         public static final Trigger TOP_NODE_BUTTON = OPERATOR_CONTROLLER.triangle();

@@ -117,49 +117,51 @@ public class RobotContainer {
                 )
         ));
 
-        INTAKE_CUBE_BUTTON.whileTrue(new StartIntakeCommand(intake));
+        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
+                new StartIntakeCommand(intake)
+        ));
         INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::idle, intake),
-                new InstantCommand(() -> {
-                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
-                    else new StowAllCommand(pivot, arm, wrist).schedule();
-                })
+                new ZeroWristCommand(wrist)
         ));
 
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
         intakeConeTrigger.whileTrue(new SequentialCommandGroup(
-                new InstantCommand(intake::open, intake),
-                new InstantCommand(intake::intake, intake)
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
+                new StartIntakeCommand(intake)
         ));
         intakeConeTrigger.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake),
                 new WaitCommand(0.4),
-                new InstantCommand(() -> {
-                    if (currentIntakeMode.equals(IntakeType.GROUND)) new ZeroWristCommand(wrist).schedule();
-                    else new StowAllCommand(pivot, arm, wrist).schedule();
-                })
+                new ZeroWristCommand(wrist)
         ));
 
-        GROUND_INTAKE_BUTTON.onTrue(new SequentialCommandGroup(
-                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
-                new InstantCommand(() -> currentIntakeMode = IntakeType.GROUND)
-        ));
-
-        SINGLE_SUB_BUTTON.onTrue(new ParallelCommandGroup(
+        SINGLE_SUB_BUTTON.whileTrue(new ParallelCommandGroup(
                 new ZeroArmCommand(arm),
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
-                new InstantCommand(() -> currentIntakeMode = IntakeType.SINGLE_SUB)
+                new StartIntakeCommand(intake)
+        ));
+        SINGLE_SUB_BUTTON.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake),
+                new StowAllCommand(pivot, arm, wrist)
         ));
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
-        doubleSubstationTrigger.onTrue(new SequentialCommandGroup(
+        doubleSubstationTrigger.whileTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
                         new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
                 ),
-                new InstantCommand(() -> currentIntakeMode = IntakeType.DOUBLE_SUB)
+                new StartIntakeCommand(intake)
+        ));
+        doubleSubstationTrigger.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake),
+                new StowAllCommand(pivot, arm, wrist)
         ));
 
         OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
