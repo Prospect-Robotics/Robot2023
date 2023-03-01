@@ -8,18 +8,22 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
 public class AutoBalanceCommand extends CommandBase {
-    private Drive drive;
+    private final Drive drive;
+    private final Limelight limelight = Limelight.getInstance();
+
     private boolean startedClimb = false;
     private boolean finishedClimb = false;
     private double movementSpeed = 1.5;
     private double stationX;
     public AutoBalanceCommand(Drive drive) {
         this.drive = drive;
+        addRequirements(drive);
     }
     @Override
     public void initialize() {
+        limelight.setLights(true);
+
         switch (DriverStation.getAlliance()) {
             case Red:
                 stationX = 12.7046;
@@ -30,11 +34,12 @@ public class AutoBalanceCommand extends CommandBase {
             default:
                 break;
         }
-        Limelight.getInstance().getPosition().ifPresentOrElse((Pose2d pose) -> {
+        limelight.getPosition().ifPresentOrElse((Pose2d pose) -> {
             if (!(pose.getX() < stationX)) {
                 movementSpeed = -movementSpeed;
             }
         }, () -> {
+            limelight.setLights(false);
             if (!(drive.getPose().getX() < stationX)) {
                 movementSpeed = -movementSpeed;
             }
@@ -43,7 +48,7 @@ public class AutoBalanceCommand extends CommandBase {
     @Override
     public void execute() {
         double pitch = drive.getPigeon().getPitch();
-        if (-0.2 > pitch || pitch > 0.2) {
+        if (-1 > pitch || pitch > 1) {
             startedClimb = true;
         }
         if (startedClimb) {
@@ -93,10 +98,12 @@ public class AutoBalanceCommand extends CommandBase {
             drive.drive(speed);
         }
     }
+
     @Override
     public boolean isFinished() {
         return finishedClimb;
     }
+
     @Override
     public void end(boolean interrupted) {
         ChassisSpeeds speed = ChassisSpeeds.fromFieldRelativeSpeeds(0.0,
@@ -104,5 +111,6 @@ public class AutoBalanceCommand extends CommandBase {
                                                                      0.0,
                                                                      drive.getRotation());
         drive.drive(speed);
+        limelight.setLights(false);
     }
 }

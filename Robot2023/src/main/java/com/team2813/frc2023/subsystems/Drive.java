@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import com.team2813.frc2023.Constants;
 import com.team2813.lib.imu.Pigeon2Wrapper;
 import com.team2813.lib.swerve.controllers.SwerveModule;
 import com.team2813.lib.swerve.helpers.Mk4iSwerveModuleHelper;
@@ -210,5 +211,10 @@ public class Drive extends SubsystemBase {
         frontRightModule.set(moduleStates[1].speedMetersPerSecond * multiplier, moduleStates[1].angle.getRadians());
         backLeftModule.set(moduleStates[2].speedMetersPerSecond * multiplier, moduleStates[2].angle.getRadians());
         backRightModule.set(moduleStates[3].speedMetersPerSecond * multiplier, moduleStates[3].angle.getRadians());
+
+        SmartDashboard.putString("Front Left Demand", moduleStates[0].toString());
+        SmartDashboard.putString("Front Right Demand", moduleStates[1].toString());
+        SmartDashboard.putString("Back Left Demand", moduleStates[2].toString());
+        SmartDashboard.putString("Back Right Demand", moduleStates[3].toString());
     }
 }
