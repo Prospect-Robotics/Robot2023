@@ -8,6 +8,7 @@ package com.team2813.frc2023;
 import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.ShuffleboardData;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -48,6 +49,8 @@ public class Robot extends TimedRobot
         ROBOT_CONTAINER.populateMenus();
 
         limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+
+        CameraServer.startAutomaticCapture();
     }
     
     

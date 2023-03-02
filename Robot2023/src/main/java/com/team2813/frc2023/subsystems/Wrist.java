@@ -31,15 +31,15 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.2);
+        motor.set(ControlMode.DUTY_CYCLE, 0.3);
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.2);
+        motor.set(ControlMode.DUTY_CYCLE, -0.3);
     }
 
     public void idle() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.25);
+        motor.set(ControlMode.DUTY_CYCLE, -0.2);
     }
 
     public boolean positionReached() {
