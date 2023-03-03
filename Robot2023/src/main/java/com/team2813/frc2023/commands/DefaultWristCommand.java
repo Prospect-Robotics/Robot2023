@@ -14,7 +14,9 @@ public class DefaultWristCommand extends CommandBase {
 
     @Override
     public void execute() {
-        if (wristSubsystem.isPositionSet()) wristSubsystem.setPosition(wristSubsystem.getMotorPosition());
-        else wristSubsystem.idle();
+        if (!wristSubsystem.isUsingManualControl()) {
+            if (wristSubsystem.isPositionSet()) wristSubsystem.setPosition(wristSubsystem.getMotorPosition());
+            else wristSubsystem.idle();
+        }
     }
 }

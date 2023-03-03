@@ -49,8 +49,6 @@ public class Robot extends TimedRobot
         ROBOT_CONTAINER.populateMenus();
 
         limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
-
-        CameraServer.startAutomaticCapture();
     }
     
     

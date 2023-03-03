@@ -10,6 +10,7 @@ import static com.team2813.frc2023.Constants.*;
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     private boolean positionSet = false;
+    private boolean manualControl = false;
 
     public Wrist() {
         super(new SparkMaxWrapper(WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true));
@@ -30,12 +31,18 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         return positionSet;
     }
 
+    public boolean isUsingManualControl() {
+        return manualControl;
+    }
+
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.3);
+        motor.set(ControlMode.DUTY_CYCLE, 0.15);
+        manualControl = true;
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.3);
+        motor.set(ControlMode.DUTY_CYCLE, -0.15);
+        manualControl = true;
     }
 
     public void idle() {
@@ -49,10 +56,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public void startStowingWrist() {
         motor.set(ControlMode.DUTY_CYCLE, -0.3);
         positionSet = false;
+        manualControl = false;
     }
 
     public void brake() {
         motor.set(ControlMode.DUTY_CYCLE, 0);
+        manualControl = false;
     }
 
     public enum Rotations implements Position {
@@ -76,6 +85,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public void setPosition(Rotations position) {
         super.setPosition(position);
         positionSet = true;
+        manualControl = false;
     }
 
     @Override
