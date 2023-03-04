@@ -52,22 +52,38 @@ public class RobotContainer {
         put("top-node-cone", new SequentialCommandGroup(
                 new TopNodeConfigurationCommand(pivot, arm, wrist),
                 new AutoScoreConeCommand(intake),
-                new StowAllCommand(pivot, arm, wrist)
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
         ));
         put("top-node-cube", new SequentialCommandGroup(
                 new TopNodeConfigurationCommand(pivot, arm, wrist),
                 new AutoScoreCubeCommand(intake),
-                new StowAllCommand(pivot, arm, wrist)
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
         ));
         put("mid-node-cone", new SequentialCommandGroup(
                 new MidNodeConfigurationCommand(pivot, arm, wrist),
                 new AutoScoreConeCommand(intake),
-                new StowAllCommand(pivot, arm, wrist)
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
         ));
         put("mid-node-cube", new SequentialCommandGroup(
                 new MidNodeConfigurationCommand(pivot, arm, wrist),
                 new AutoScoreCubeCommand(intake),
-                new StowAllCommand(pivot, arm, wrist)
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
+        ));
+        put("stow", new ParallelCommandGroup(
+                new ZeroPivotCommand(pivot),
+                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm)
         ));
     }};
 
