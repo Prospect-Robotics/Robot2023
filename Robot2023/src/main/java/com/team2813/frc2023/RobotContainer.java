@@ -49,13 +49,21 @@ public class RobotContainer {
      * {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
-        
+        put("top-node-cone", new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
+                ),
+                new InstantCommand(intake::open, intake),
+                new WaitCommand(0.25),
+                new InstantCommand(intake::close),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
     }};
 
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
     private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
-
-    private IntakeType currentIntakeMode = IntakeType.GROUND;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -218,9 +226,5 @@ public class RobotContainer {
         value = deadband(value, 0.1);
         value = Math.copySign(value * value, value);
         return value;
-    }
-
-    private enum IntakeType {
-        GROUND, SINGLE_SUB, DOUBLE_SUB
     }
 }
