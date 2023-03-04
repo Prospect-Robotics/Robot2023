@@ -43,21 +43,30 @@ public class RobotContainer {
      * <p>
      * Refer to this when creating event markers in Path Planner.
      * Note: this is just the default event map that is meant to have easy-to-
-     * predict commands (such as intake, place-cube-high, etc.), not commands such
-     * as rotating a specific number of degrees. You'll have to customize the event map
-     * that TrajectoryAutoBuilder.java uses to use commands like that (use
-     * {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
+     * predict commands, not commands such as rotating a specific number of degrees.
+     * You'll have to customize the event map that TrajectoryAutoBuilder.java uses
+     * to use commands like that
+     * (use {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
         put("top-node-cone", new SequentialCommandGroup(
-                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
-                new ParallelCommandGroup(
-                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm),
-                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
-                ),
-                new InstantCommand(intake::open, intake),
-                new WaitCommand(0.25),
-                new InstantCommand(intake::close),
+                new TopNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreConeCommand(intake),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
+        put("top-node-cube", new SequentialCommandGroup(
+                new TopNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreCubeCommand(intake),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
+        put("mid-node-cone", new SequentialCommandGroup(
+                new MidNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreConeCommand(intake),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
+        put("mid-node-cube", new SequentialCommandGroup(
+                new MidNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreCubeCommand(intake),
                 new StowAllCommand(pivot, arm, wrist)
         ));
     }};
@@ -109,21 +118,8 @@ public class RobotContainer {
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
         SPATULA_BUTTON.toggleOnTrue(new StartEndCommand(spatula::extend, spatula::retract, spatula));
 
-        TOP_NODE_BUTTON.onTrue(new SequentialCommandGroup(
-                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
-                new ParallelCommandGroup(
-                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.TOP), arm),
-                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
-                )
-        ));
-
-        MID_NODE_BUTTON.onTrue(new SequentialCommandGroup(
-                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot),
-                new ParallelCommandGroup(
-                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.MIDDLE), arm),
-                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.OUTTAKE), wrist)
-                )
-        ));
+        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist));
+        MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
         INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
                 new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
