@@ -31,7 +31,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public void startZeroingPivot() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.55);
+        motor.set(ControlMode.DUTY_CYCLE, -0.75);
     }
 
     public void brake() {
