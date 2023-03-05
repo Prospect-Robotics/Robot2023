@@ -13,6 +13,7 @@ public enum AutoRoutine {
 
     // Commented out because they are not ready yet, will crash the code
 //    L1_1CO_1CU("L1-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L1 - 1Co - 1Cu")),
+    L1_1CO_MOBILITY("L1-1Co-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Mobility")),
     L1_1CO_MOBILITY_CLIMB("L1-1Co-Mobility-Climb", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Mobility - Climb")),
 //    L2_1CO_INTAKE1("L2-1Co-Intake1", AUTO_FACTORY.buildPathGroupAuto("L2 - 1Co - Intake1")),
 //    L3_1CO_1CU("L3-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L3 - 1Co - 1Cu")),
