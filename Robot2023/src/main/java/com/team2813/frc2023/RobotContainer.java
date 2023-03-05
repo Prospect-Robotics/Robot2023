@@ -161,10 +161,12 @@ public class RobotContainer {
         SINGLE_SUB_BUTTON.whileTrue(new ParallelCommandGroup(
                 new ZeroArmCommand(arm),
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
-                new StartIntakeCommand(intake)
+                new InstantCommand(intake::open, intake)
         ));
         SINGLE_SUB_BUTTON.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::idle, intake),
+                new WaitCommand(0.25),
                 new InstantCommand(intake::stop, intake),
                 new StowAllCommand(pivot, arm, wrist)
         ));

@@ -42,7 +42,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         STARTING_CONFIGURATION(175),
         HIGH(108),
         MID(97),
-        SINGLE_SUBSTATION(62);
+        SINGLE_SUBSTATION(30);
 
         @Override
         public double getPos() {
