@@ -64,7 +64,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         manualControl = false;
     }
 
-    public enum Rotations implements Position {
+    public enum Rotations implements Subsystem1d.Position {
         INTAKE(9),
         OUTTAKE(20),
         DOUBLE_SUBSTATION(40);
