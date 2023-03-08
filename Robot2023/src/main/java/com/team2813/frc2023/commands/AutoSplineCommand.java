@@ -39,7 +39,7 @@ public class AutoSplineCommand extends SequentialCommandGroup {
     public AutoSplineCommand(BooleanSupplier spliningDisabled, NodeType nodeType, Drive driveSubsystem) {
         super(
                 new InstantCommand(() -> limelight.setLights(true)),
-                new WaitCommand(0.125),
+                //new WaitCommand(0.125),
                 new InstantCommand(() -> {
                     Optional<Pose2d> robotPose = limelight.getPosition();
                     if (robotPose.isPresent()) {

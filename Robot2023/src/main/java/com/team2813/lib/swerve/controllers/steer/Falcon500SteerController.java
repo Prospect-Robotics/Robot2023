@@ -63,7 +63,6 @@ public class Falcon500SteerController implements SteerController {
 
             com.ctre.phoenixpro.configs.TalonFXConfiguration motorConfiguration = new com.ctre.phoenixpro.configs.TalonFXConfiguration();
             motorConfiguration.Slot0.kP = 0.2;
-            motorConfiguration.Slot0.kD = 0.1;
 
             motorConfiguration.Voltage.PeakForwardVoltage = mk4Configuration.getNominalVoltage();
             motorConfiguration.Voltage.PeakReverseVoltage = -mk4Configuration.getNominalVoltage();

@@ -21,10 +21,8 @@ import java.util.Map;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants
-{
-    public static class OperatorConstants
-    {
+public final class Constants {
+    public static class OperatorConstants {
         public static final int DRIVER_CONTROLLER_PORT = 0;
         public static final CommandPS4Controller DRIVER_CONTROLLER = new CommandPS4Controller(DRIVER_CONTROLLER_PORT);
 
@@ -34,6 +32,18 @@ public final class Constants
         // Driver controls
         public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
         public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
+
+        // Operator controls
+        public static final Trigger SINGLE_SUB_BUTTON = OPERATOR_CONTROLLER.L1();
+
+        public static final Trigger TOP_NODE_BUTTON = OPERATOR_CONTROLLER.triangle();
+        public static final Trigger MID_NODE_BUTTON = OPERATOR_CONTROLLER.cross(); // actually maps to circle
+
+        public static final Trigger INTAKE_CUBE_BUTTON = OPERATOR_CONTROLLER.R1();
+        public static final Trigger OUTTAKE_BUTTON = OPERATOR_CONTROLLER.circle(); // actually maps to square
+
+        public static final Trigger WRIST_UP = OPERATOR_CONTROLLER.povUp();
+        public static final Trigger WRIST_DOWN = OPERATOR_CONTROLLER.povDown();
     }
 
     // IDs
@@ -44,6 +54,7 @@ public final class Constants
     public static final int FRONT_LEFT_DRIVE_ID = 2;
     public static final int FRONT_LEFT_STEER_ID = 3;
     public static final int FRONT_LEFT_ENCODER_ID = 4;
+
 
     // Front Right
     public static final int FRONT_RIGHT_DRIVE_ID = 5;
@@ -63,14 +74,27 @@ public final class Constants
     // Other Drive Stuff
     public static final int PIGEON_ID = 14;
 
+    // Intake
+    public static final int INTAKE_MASTER_ID = 15;
+    public static final int INTAKE_FOLLOWER_ID = 16;
+
+    // Wrist
+    public static int WRIST_MOTOR_ID = 17;
+
+    // Pivot
+    public static final int PIVOT_MOTOR_ID = 18;
+
+    // Arm
+    public static final int ARM_MOTOR_ID = 19;
+
     // Pneumatics
     public static final int PCM_ID = 20;
 
+    public static final int INTAKE_PISTON_CHANNEL = 0;
     public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
     public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
 
     // Physical Constants
-
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
     public static final double WHEELBASE = Units.inchesToMeters(22.75); // meters
 

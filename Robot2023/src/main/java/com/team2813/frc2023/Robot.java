@@ -25,7 +25,7 @@ public class Robot extends TimedRobot
     private final Limelight limelight = Limelight.getInstance();
 
     private Command autonomousCommand;
-    
+
     public static RobotContainer ROBOT_CONTAINER;
     public static TrajectoryAutoBuilder AUTO_FACTORY;
     
@@ -104,7 +104,8 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
-        limelight.setLights(true);
+        limelight.setLights(false);
+        limelight.setStream(0);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

@@ -4,6 +4,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.swervedrivespecialties.swervelib.Mk4iSwerveModuleHelper.GearRatio;
 import com.swervedrivespecialties.swervelib.SdsModuleConfigurations;
+import com.team2813.frc2023.Constants;
 import com.team2813.lib.imu.Pigeon2Wrapper;
 import com.team2813.lib.swerve.controllers.SwerveModule;
 import com.team2813.lib.swerve.helpers.Mk4iSwerveModuleHelper;
@@ -54,10 +55,10 @@ public class Drive extends SubsystemBase {
         String canbus = "swerve";
         boolean licensed = true;
 
-        double frontLeftSteerOffset = -Math.toRadians(146.25);
-        double frontRightSteerOffset = -Math.toRadians(250.13671875);
-        double backLeftSteerOffset = -Math.toRadians(115.048828125);
-        double backRightSteerOffset = -Math.toRadians(359.033203125);
+        double frontLeftSteerOffset = -Math.toRadians(139.218759375);
+        double frontRightSteerOffset = -Math.toRadians(252.59765625);
+        double backLeftSteerOffset = -Math.toRadians(112.587890625);
+        double backRightSteerOffset = -Math.toRadians(348.92578125);
 
         double kP = 1.8;
         double kI = 0;
@@ -150,7 +151,7 @@ public class Drive extends SubsystemBase {
     }
 
     public void enableSlowMode(boolean enable) {
-        multiplier = enable ? 0.25 : 1;
+        multiplier = enable ? 0.4 : 1;
     }
 
     public void drive(ChassisSpeeds demand) {
@@ -210,5 +211,10 @@ public class Drive extends SubsystemBase {
         frontRightModule.set(moduleStates[1].speedMetersPerSecond * multiplier, moduleStates[1].angle.getRadians());
         backLeftModule.set(moduleStates[2].speedMetersPerSecond * multiplier, moduleStates[2].angle.getRadians());
         backRightModule.set(moduleStates[3].speedMetersPerSecond * multiplier, moduleStates[3].angle.getRadians());
+
+        SmartDashboard.putString("Front Left Demand", moduleStates[0].toString());
+        SmartDashboard.putString("Front Right Demand", moduleStates[1].toString());
+        SmartDashboard.putString("Back Left Demand", moduleStates[2].toString());
+        SmartDashboard.putString("Back Right Demand", moduleStates[3].toString());
     }
 }

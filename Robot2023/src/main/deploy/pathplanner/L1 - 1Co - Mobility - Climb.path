@@ -3,12 +3,39 @@
     {
       "anchorPoint": {
         "x": 1.85,
-        "y": 4.9812552509720405
+        "y": 4.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.630428772396006,
-        "y": 4.441699556476035
+        "x": 2.8499999999999983,
+        "y": 4.98
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "top-node-cone"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.8960014458490475,
+        "y": 4.98
+      },
+      "prevControl": {
+        "x": 2.8960014458490475,
+        "y": 4.98
+      },
+      "nextControl": {
+        "x": 4.8960014458490395,
+        "y": 4.98
       },
       "holonomicAngle": 180.0,
       "isReversal": false,
@@ -24,18 +51,18 @@
     },
     {
       "anchorPoint": {
-        "x": 6.478160840937068,
-        "y": 4.566953556984038
+        "x": 6.304732224849067,
+        "y": 4.123747093648034
       },
       "prevControl": {
-        "x": 5.777731814915688,
-        "y": 4.54506514992087
+        "x": 6.324002071081065,
+        "y": 4.721112326840039
       },
       "nextControl": {
-        "x": 7.094795920361072,
-        "y": 4.586223403216039
+        "x": 6.279251973437521,
+        "y": 3.333859299890024
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 90.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
@@ -49,12 +76,12 @@
     },
     {
       "anchorPoint": {
-        "x": 7.836685000293078,
-        "y": 4.644032941912038
+        "x": 3.664763291065045,
+        "y": 2.8037626267560243
       },
       "prevControl": {
-        "x": 7.451288075653076,
-        "y": 4.624763095680038
+        "x": 5.206350989625058,
+        "y": 2.842302319220024
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -64,7 +91,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [],
-        "executionBehavior": "parallel",
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
@@ -72,9 +99,9 @@
   ],
   "markers": [
     {
-      "position": 1.0036363636363195,
+      "position": 0.0,
       "names": [
-        "event"
+        "stow"
       ]
     }
   ]
