@@ -31,7 +31,8 @@ public enum AutoRoutine {
     )),
     FORWARD_TEST("Forward Test", AUTO_FACTORY.buildTrajectoryAuto("Forward Test")),
     STRAFE_TEST("Strafe Test", AUTO_FACTORY.buildTrajectoryAuto("Strafe Test")),
-    COMBO_TEST("Combo Test", AUTO_FACTORY.buildTrajectoryAuto("Combo Test"));
+    COMBO_TEST("Combo Test", AUTO_FACTORY.buildTrajectoryAuto("Combo Test")),
+    L1_1CO_1CU_2("L1-1Co-1Cu (new)", AUTO_FACTORY.buildPathGroupAuto("L1 - 1Co - 1Cu-2"));
     
     private final String name;
     private final Command command;

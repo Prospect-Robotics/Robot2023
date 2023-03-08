@@ -36,7 +36,7 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
         motor.set(ControlMode.DUTY_CYCLE, 0);
     }
 
-    public enum ExtensionLength implements Position {
+    public enum ExtensionLength implements Subsystem1d.Position {
         INTAKE(5),
         MIDDLE(15),
         DOUBLE_SUBSTATION(53),

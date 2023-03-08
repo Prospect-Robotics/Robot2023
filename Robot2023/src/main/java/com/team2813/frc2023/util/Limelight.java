@@ -9,6 +9,7 @@ import com.team2813.lib.util.LimelightValues.LedState;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -68,6 +69,9 @@ public class Limelight extends SubsystemBase {
             SmartDashboard.putNumber("x position (meters):", position.getX());
             SmartDashboard.putNumber("y position (meters):", position.getY());
             SmartDashboard.putNumber("robot heading (degrees):", position.getRotation().getDegrees());
+            if (!DriverStation.isAutonomousEnabled()) {
+                // Possibly update the driver station?
+            }
         });
         SmartDashboard.putBoolean("Valid apriltag", values.hasTargets());
         SmartDashboard.putNumber("Id of primary AprilTag", values.primaryApriltag());

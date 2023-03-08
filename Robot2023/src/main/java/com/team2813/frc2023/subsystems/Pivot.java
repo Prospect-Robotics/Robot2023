@@ -37,7 +37,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     public void brake() {
         motor.set(ControlMode.DUTY_CYCLE, 0);
     }
-
+    
     public enum Rotations implements Position {
         STARTING_CONFIGURATION(183),
         HIGH(116),

@@ -85,6 +85,20 @@ public class RobotContainer {
                 new ZeroPivotCommand(pivot),
                 new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm)
         ));
+        put("start-intake", new SequentialCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
+                new StartIntakeCommand(intake)
+        ));
+        put("intake-cube", new ParallelCommandGroup(
+                new InstantCommand(intake::intake, intake),
+                new InstantCommand(intake::close, intake)
+        ));
+        put("intake-cone", new SequentialCommandGroup(
+                new InstantCommand(intake::close, intake),
+                new InstantCommand(intake::stop, intake),
+                new WaitCommand(0.4),
+                new ZeroWristCommand(wrist)
+        ));
     }};
 
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
