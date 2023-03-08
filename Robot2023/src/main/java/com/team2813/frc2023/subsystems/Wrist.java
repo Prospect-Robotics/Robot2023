@@ -67,7 +67,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public enum Rotations implements Position {
         INTAKE(9),
         OUTTAKE(20),
-        DOUBLE_SUBSTATION(40);
+        DOUBLE_SUBSTATION(25);
 
         @Override
         public double getPos() {

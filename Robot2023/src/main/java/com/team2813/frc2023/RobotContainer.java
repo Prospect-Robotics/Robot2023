@@ -173,16 +173,17 @@ public class RobotContainer {
 
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
         doubleSubstationTrigger.whileTrue(new SequentialCommandGroup(
-                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot),
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.DOUBLE_SUBSTATION), pivot),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.DOUBLE_SUBSTATION), arm),
-                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist)
-                ),
-                new StartIntakeCommand(intake)
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.DOUBLE_SUBSTATION), wrist),
+                        new StartIntakeCommand(intake)
+                )
         ));
         doubleSubstationTrigger.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::close, intake),
                 new InstantCommand(intake::stop, intake),
+                new WaitCommand(0.4),
                 new StowAllCommand(pivot, arm, wrist)
         ));
 

@@ -39,10 +39,11 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(175),
-        HIGH(108),
-        MID(97),
-        SINGLE_SUBSTATION(30);
+        STARTING_CONFIGURATION(183),
+        HIGH(116),
+        MID(112),
+        DOUBLE_SUBSTATION(103),
+        SINGLE_SUBSTATION(38);
 
         @Override
         public double getPos() {
