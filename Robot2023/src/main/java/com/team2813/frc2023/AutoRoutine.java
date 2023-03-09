@@ -21,19 +21,18 @@ public enum AutoRoutine {
     L3_1CO_CLIMB("L3-1Co-Climb", AUTO_FACTORY.buildTrajectoryAuto("L3 - 1Co - Climb")),
     L1_1C_GET_AWAY("L1-1C-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1C - Get out of the way")),
     L3_MOBILITY("L3-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L3 - Mobility")),
-    L1_MOBILITY_GET_AWAY("L1-Mobility-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility - Get out of the way")),
-    AUTO_BALANCE_BLUE("Auto Balance Blue", new SequentialCommandGroup(
-            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Pose2d(14.68, 2.75, new Rotation2d(180)))),
-            new AutoBalanceCommand(ROBOT_CONTAINER.getDrive())
-    )),
-    AUTO_BALANCE_RED("Auto Balance Red", new SequentialCommandGroup(
-            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Pose2d(1.85, 2.75, new Rotation2d(180)))),
-            new AutoBalanceCommand(ROBOT_CONTAINER.getDrive())
-    )),
-    FORWARD_TEST("Forward Test", AUTO_FACTORY.buildTrajectoryAuto("Forward Test")),
-    STRAFE_TEST("Strafe Test", AUTO_FACTORY.buildTrajectoryAuto("Strafe Test")),
-    COMBO_TEST("Combo Test", AUTO_FACTORY.buildTrajectoryAuto("Combo Test")),
-    L1_1CO_1CU_2("L1-1Co-1Cu (new)", AUTO_FACTORY.buildPathGroupAuto("L1 - 1Co - 1Cu-2"));
+    L1_MOBILITY_GET_AWAY("L1-Mobility-Get out of the way", AUTO_FACTORY.buildTrajectoryAuto("L1 - Mobility - Get out of the way"));
+//    AUTO_BALANCE_BLUE("Auto Balance Blue", new SequentialCommandGroup(
+//            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Pose2d(14.68, 2.75, new Rotation2d(180)))),
+//            new AutoBalanceCommand(ROBOT_CONTAINER.getDrive())
+//    )),
+//    AUTO_BALANCE_RED("Auto Balance Red", new SequentialCommandGroup(
+//            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Pose2d(1.85, 2.75, new Rotation2d(180)))),
+//            new AutoBalanceCommand(ROBOT_CONTAINER.getDrive())
+//    )),
+//    FORWARD_TEST("Forward Test", AUTO_FACTORY.buildTrajectoryAuto("Forward Test")),
+//    STRAFE_TEST("Strafe Test", AUTO_FACTORY.buildTrajectoryAuto("Strafe Test")),
+//    COMBO_TEST("Combo Test", AUTO_FACTORY.buildTrajectoryAuto("Combo Test"));
     
     private final String name;
     private final Command command;

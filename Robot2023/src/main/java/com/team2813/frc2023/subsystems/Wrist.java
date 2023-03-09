@@ -36,12 +36,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.15);
+        motor.set(ControlMode.DUTY_CYCLE, 0.75);
         manualControl = true;
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.15);
+        motor.set(ControlMode.DUTY_CYCLE, -0.75);
         manualControl = true;
     }
 
@@ -61,7 +61,6 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public void brake() {
         motor.set(ControlMode.DUTY_CYCLE, 0);
-        manualControl = false;
     }
 
     public enum Rotations implements Subsystem1d.Position {

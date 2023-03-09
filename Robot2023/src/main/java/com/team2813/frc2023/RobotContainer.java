@@ -89,7 +89,7 @@ public class RobotContainer {
                 new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
                 new StartIntakeCommand(intake)
         ));
-        put("intake-cube", new ParallelCommandGroup(
+        put("intake-cube", new SequentialCommandGroup(
                 new InstantCommand(intake::intake, intake),
                 new InstantCommand(intake::close, intake)
         ));
@@ -118,7 +118,7 @@ public class RobotContainer {
         wrist.setDefaultCommand(new DefaultWristCommand(wrist));
 
         // For spline testing purposes
-        drive.initAutonomous(new Pose2d());
+        //drive.initAutonomous(new Pose2d());
 
         // Configure the trigger bindings
         configureBindings();
@@ -138,11 +138,11 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings() {
-        Trigger apriltagSplineTrigger = new Trigger(() -> driverController.getLeftTriggerAxis() == 1);
-        apriltagSplineTrigger.whileTrue(new AutoSplineCommand(apriltagSplineTrigger.negate(), NodeType.CUBE, drive));
-
-        Trigger reflectiveSplineTrigger = new Trigger(() -> driverController.getRightTriggerAxis() == 1);
-        reflectiveSplineTrigger.whileTrue(new AutoSplineCommand(reflectiveSplineTrigger.negate(), NodeType.CONE, drive));
+//        Trigger apriltagSplineTrigger = new Trigger(() -> driverController.getLeftTriggerAxis() == 1);
+//        apriltagSplineTrigger.whileTrue(new AutoSplineCommand(apriltagSplineTrigger.negate(), NodeType.CUBE, drive));
+//
+//        Trigger reflectiveSplineTrigger = new Trigger(() -> driverController.getRightTriggerAxis() == 1);
+//        reflectiveSplineTrigger.whileTrue(new AutoSplineCommand(reflectiveSplineTrigger.negate(), NodeType.CONE, drive));
 
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
