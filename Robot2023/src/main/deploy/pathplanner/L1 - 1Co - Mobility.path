@@ -16,19 +16,21 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
+        "names": [
+          "top-node-cone"
+        ],
+        "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
       }
     },
     {
       "anchorPoint": {
-        "x": 5.957874992673063,
+        "x": 6.0,
         "y": 4.98
       },
       "prevControl": {
-        "x": 4.957874992673063,
+        "x": 5.0,
         "y": 4.98
       },
       "nextControl": null,
@@ -45,5 +47,12 @@
       }
     }
   ],
-  "markers": []
+  "markers": [
+    {
+      "position": 0.0,
+      "names": [
+        "stow"
+      ]
+    }
+  ]
 }
