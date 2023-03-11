@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -55,10 +56,10 @@ public class Drive extends SubsystemBase {
         String canbus = "swerve";
         boolean licensed = true;
 
-        double frontLeftSteerOffset = -Math.toRadians(139.218759375);
-        double frontRightSteerOffset = -Math.toRadians(252.59765625);
-        double backLeftSteerOffset = -Math.toRadians(112.587890625);
-        double backRightSteerOffset = -Math.toRadians(348.92578125);
+        double frontLeftSteerOffset = -Math.toRadians(140.361328125);
+        double frontRightSteerOffset = -Math.toRadians(252.0703125);
+        double backLeftSteerOffset = -Math.toRadians(115.6640625);
+        double backRightSteerOffset = -Math.toRadians(359.033203125);
 
         double kP = 1.8;
         double kI = 0;
@@ -173,6 +174,23 @@ public class Drive extends SubsystemBase {
                 backRightModule.getPosition()
         };
         odometry = new SwerveDriveOdometry(kinematics, initialPose.getRotation(), modulePositions, initialPose);
+    }
+
+    public void initAutonomous(Rotation2d initialRotation) {
+        frontLeftModule.resetDriveEncoder();
+        frontRightModule.resetDriveEncoder();
+        backLeftModule.resetDriveEncoder();
+        backRightModule.resetDriveEncoder();
+
+        pigeon.setHeading(initialRotation.getDegrees());
+
+        SwerveModulePosition[] modulePositions = {
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                backLeftModule.getPosition(),
+                backRightModule.getPosition()
+        };
+        odometry = new SwerveDriveOdometry(kinematics, initialRotation, modulePositions, new Pose2d(0, 0, initialRotation));
     }
 
     public void resetOdometry(Pose2d currentPose) {

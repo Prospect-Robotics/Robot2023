@@ -44,6 +44,8 @@ public final class Constants {
 
         public static final Trigger WRIST_UP = OPERATOR_CONTROLLER.povUp();
         public static final Trigger WRIST_DOWN = OPERATOR_CONTROLLER.povDown();
+
+        public static final Trigger STOW_BUTTON = OPERATOR_CONTROLLER.square(); // actually maps to cross
     }
 
     // IDs

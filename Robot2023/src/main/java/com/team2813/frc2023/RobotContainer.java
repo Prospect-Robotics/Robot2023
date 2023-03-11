@@ -9,9 +9,7 @@ import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.*;
-import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -128,6 +126,22 @@ public class RobotContainer {
         return drive;
     }
 
+    Pivot getPivot() {
+        return pivot;
+    }
+
+    Arm getArm() {
+        return arm;
+    }
+
+    Wrist getWrist() {
+        return wrist;
+    }
+
+    Intake getIntake() {
+        return intake;
+    }
+
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
      * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -211,6 +225,8 @@ public class RobotContainer {
                 new InstantCommand(intake::close, intake),
                 new StowAllCommand(pivot, arm, wrist)
         ));
+
+        STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
 
         WRIST_UP.whileTrue(new InstantCommand(wrist::up, wrist));
         WRIST_UP.onFalse(new InstantCommand(wrist::brake, wrist));
