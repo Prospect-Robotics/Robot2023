@@ -3,6 +3,7 @@ package com.team2813.frc2023.subsystems;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.SparkMaxWrapper;
+import com.team2813.lib.util.ConfigUtils;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
@@ -17,6 +18,9 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
         motor.configPID(0.25, 0, 0);
         motor.configMotionMagic(11000, 10000);
+
+        SparkMaxWrapper sparkMax = (SparkMaxWrapper) motor;
+        ConfigUtils.revConfig(() -> sparkMax.setSmartCurrentLimit(30));
     }
 
     public double getMotorPosition() {

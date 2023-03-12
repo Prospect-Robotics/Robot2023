@@ -38,9 +38,9 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
 
     public enum ExtensionLength implements Subsystem1d.Position {
         INTAKE(5),
-        MIDDLE(15),
+        MIDDLE(18),
         DOUBLE_SUBSTATION(53),
-        TOP(55);
+        TOP(58);
 
         @Override
         public double getPos() {
