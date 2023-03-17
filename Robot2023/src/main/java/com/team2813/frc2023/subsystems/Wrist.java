@@ -40,12 +40,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.75);
+        motor.set(ControlMode.DUTY_CYCLE, -0.5);
         manualControl = true;
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.75);
+        motor.set(ControlMode.DUTY_CYCLE, 0.5);
         manualControl = true;
     }
 
