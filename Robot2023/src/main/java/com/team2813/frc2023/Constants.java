@@ -89,12 +89,8 @@ public final class Constants {
     // Arm
     public static final int ARM_MOTOR_ID = 19;
 
-    // Pneumatics
-    public static final int PCM_ID = 20;
-
-    public static final int INTAKE_PISTON_CHANNEL = 0;
-    public static final int SPATULA_PISTON_CHANNEL_ONE = 1;
-    public static final int SPATULA_PISTON_CHANNEL_TWO = 2;
+    // LEDs
+    public static final int CANIFIER_ID = 21;
 
     // Physical Constants
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters

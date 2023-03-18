@@ -14,19 +14,10 @@ public class Intake extends SubsystemBase {
     // Neo 550 and Falcon motors are brushless, kBrushless enum value - refer to MotorType class 
     private final SparkMaxWrapper motorOne = new SparkMaxWrapper(INTAKE_MASTER_ID, MotorType.kBrushless, false);
     private final SparkMaxWrapper motorTwo = new SparkMaxWrapper(INTAKE_FOLLOWER_ID, MotorType.kBrushless, true);
-    private final SolenoidGroup piston = new SolenoidGroup(PCM_ID, PneumaticsModuleType.CTREPCM, INTAKE_PISTON_CHANNEL);
 
     public Intake() {
         ConfigUtils.revConfig(() -> motorOne.setSmartCurrentLimit(30));
         ConfigUtils.revConfig(() -> motorTwo.setSmartCurrentLimit(30));
-    }
-
-    public void open() {
-        piston.extend(); // actually retracts the piston
-    }
-
-    public void close() {
-        piston.retract(); // actually extends the piston
     }
 
     public void intake () {

@@ -6,6 +6,7 @@
 package com.team2813.frc2023;
 
 import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
+import com.team2813.frc2023.util.Lightshow;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -28,6 +29,7 @@ public class Robot extends TimedRobot
 
     public static RobotContainer ROBOT_CONTAINER;
     public static TrajectoryAutoBuilder AUTO_FACTORY;
+    public static Lightshow LIGHTSHOW;
     
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -43,6 +45,8 @@ public class Robot extends TimedRobot
         // Instantiate the auto factory, which will return commands to follow trajectories while
         // also doing other actions.
         AUTO_FACTORY = new TrajectoryAutoBuilder(ROBOT_CONTAINER.getDrive());
+
+        LIGHTSHOW = new Lightshow();
 
         ShuffleboardData.init();
         ROBOT_CONTAINER.populateMenus();
@@ -73,6 +77,7 @@ public class Robot extends TimedRobot
     @Override
     public void disabledInit() {
         limelight.setLights(false);
+        LIGHTSHOW.setLight(Lightshow.Light.DISABLED);
     }
     
     
@@ -85,6 +90,7 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         limelight.setLights(true);
+        LIGHTSHOW.setLight(Lightshow.Light.AUTONOMOUS);
 
         autonomousCommand = ROBOT_CONTAINER.getAutonomousCommand();
         
@@ -106,6 +112,8 @@ public class Robot extends TimedRobot
     {
         limelight.setLights(false);
         limelight.setStream(0);
+
+        LIGHTSHOW.setLight(Lightshow.Light.ENABLED);
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to

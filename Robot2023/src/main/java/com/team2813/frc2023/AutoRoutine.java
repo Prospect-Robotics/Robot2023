@@ -18,18 +18,18 @@ public enum AutoRoutine {
 //    L1_1CO_1CU("L1-1Co-1Cu", AUTO_FACTORY.buildPathGroupAuto("L1 - 1Co - 1Cu")),
 //    L1_1CO_INTAKE("L1-1Co-intake", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - intake")),
     SCORE_CONE("Score Cone", new SequentialCommandGroup(
-            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Rotation2d(Math.PI))),
-            new TopNodeConfigurationCommand(
-                    ROBOT_CONTAINER.getPivot(),
-                    ROBOT_CONTAINER.getArm(),
-                    ROBOT_CONTAINER.getWrist()
-            ),
-            new AutoScoreConeCommand(ROBOT_CONTAINER.getIntake()),
-            new StowAllCommand(
-                    ROBOT_CONTAINER.getPivot(),
-                    ROBOT_CONTAINER.getArm(),
-                    ROBOT_CONTAINER.getWrist()
-            )
+            new InstantCommand(() -> ROBOT_CONTAINER.getDrive().initAutonomous(new Rotation2d(Math.PI)))
+//            new TopNodeConfigurationCommand(
+//                    ROBOT_CONTAINER.getPivot(),
+//                    ROBOT_CONTAINER.getArm(),
+//                    ROBOT_CONTAINER.getWrist()
+//            ),
+//            new AutoScoreConeCommand(ROBOT_CONTAINER.getIntake()),
+//            new StowAllCommand(
+//                    ROBOT_CONTAINER.getPivot(),
+//                    ROBOT_CONTAINER.getArm(),
+//                    ROBOT_CONTAINER.getWrist()
+//            )
     )),
     L1_1CO_MOBILITY("L1-1Co-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Mobility")),
     L1_1CO_MOBILITY_CLIMB("L1-1Co-Mobility-Climb", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Mobility - Climb")),

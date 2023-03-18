@@ -11,8 +11,8 @@ public class AutoScoreCubeCommand extends SequentialCommandGroup {
         super(
                 new InstantCommand(intakeSubsystem::outtake, intakeSubsystem),
                 new WaitCommand(0.25),
-                new InstantCommand(intakeSubsystem::stop, intakeSubsystem),
-                new InstantCommand(intakeSubsystem::close, intakeSubsystem)
+                new InstantCommand(intakeSubsystem::stop, intakeSubsystem)
+                //new InstantCommand(intakeSubsystem::close, intakeSubsystem)
         );
     }
 }

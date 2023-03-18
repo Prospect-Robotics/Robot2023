@@ -8,7 +8,7 @@ public class StartIntakeCommand extends SequentialCommandGroup {
 
     public StartIntakeCommand(Intake intakeSubsystem) {
         super(
-                new InstantCommand(intakeSubsystem::open, intakeSubsystem),
+                //new InstantCommand(intakeSubsystem::open, intakeSubsystem),
                 new InstantCommand(intakeSubsystem::intake, intakeSubsystem)
         );
     }
