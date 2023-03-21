@@ -1,5 +1,6 @@
 package com.team2813.frc2023.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
@@ -16,6 +17,10 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         motor.configMotionMagic(21000, 21000);
 
         motor.setEncoderPosition(Rotations.STARTING_CONFIGURATION.position);
+
+        // For finding starting config position from zero
+//        motor.setEncoderPosition(0);
+//        ((TalonFXWrapper) motor).setNeutralMode(NeutralMode.Coast);
     }
 
     public double getMotorPosition() {
@@ -39,11 +44,11 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
     
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(171),
-        HIGH(110),
-        MID(106),
-        DOUBLE_SUBSTATION(104),
-        SINGLE_SUBSTATION(36);
+        STARTING_CONFIGURATION(182),
+        HIGH(121),
+        MID(117),
+        DOUBLE_SUBSTATION(115),
+        SINGLE_SUBSTATION(47);
 
         @Override
         public double getPos() {
