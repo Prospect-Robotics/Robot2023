@@ -1,42 +1,37 @@
 package com.team2813.frc2023.subsystems;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
-import com.team2813.lib.motors.SparkMaxWrapper;
-import com.team2813.lib.solenoid.SolenoidGroup;
-import com.team2813.lib.util.ConfigUtils;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import com.team2813.lib.motors.TalonFXWrapper;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static com.team2813.frc2023.Constants.*;
 
 public class Intake extends SubsystemBase {
-    // Neo 550 and Falcon motors are brushless, kBrushless enum value - refer to MotorType class 
-    private final SparkMaxWrapper motorOne = new SparkMaxWrapper(INTAKE_MASTER_ID, MotorType.kBrushless, false);
-    private final SparkMaxWrapper motorTwo = new SparkMaxWrapper(INTAKE_FOLLOWER_ID, MotorType.kBrushless, true);
 
-    public Intake() {
-        ConfigUtils.revConfig(() -> motorOne.setSmartCurrentLimit(30));
-        ConfigUtils.revConfig(() -> motorTwo.setSmartCurrentLimit(30));
+    private final TalonFXWrapper intakeMotor = new TalonFXWrapper(INTAKE_MOTOR_ID, TalonFXInvertType.CounterClockwise);
+
+    public void intakeCube() {
+        intakeMotor.set(ControlMode.DUTY_CYCLE, 0.7);
     }
 
-    public void intake () {
-        motorOne.set(ControlMode.DUTY_CYCLE, .6);
-        motorTwo.set(ControlMode.DUTY_CYCLE, .6);
+    public void placeCube() {
+        intakeMotor.set(ControlMode.DUTY_CYCLE, -0.2);
     }
 
-    public void outtake() {
-        motorOne.set(ControlMode.DUTY_CYCLE, -.2);
-        motorTwo.set(ControlMode.DUTY_CYCLE, -.2);
+    public void shootCube() {
+        intakeMotor.set(ControlMode.DUTY_CYCLE, -1);
     }
 
-    public void idle() {
-        motorOne.set(ControlMode.DUTY_CYCLE, .05);
-        motorTwo.set(ControlMode.DUTY_CYCLE, .05);
+    public void intakeCone() {
+        intakeMotor.set(ControlMode.DUTY_CYCLE, -0.7);
+    }
+
+    public void placeCone() {
+        intakeMotor.set(ControlMode.DUTY_CYCLE, 0.2);
     }
 
     public void stop() {
-        motorOne.set(ControlMode.DUTY_CYCLE, 0);
-        motorTwo.set(ControlMode.DUTY_CYCLE, 0);
+        intakeMotor.set(ControlMode.DUTY_CYCLE, 0);
     }
 }

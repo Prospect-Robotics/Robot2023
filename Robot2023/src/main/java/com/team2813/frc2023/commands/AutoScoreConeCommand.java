@@ -9,9 +9,9 @@ public class AutoScoreConeCommand extends SequentialCommandGroup {
 
     public AutoScoreConeCommand(Intake intakeSubsystem) {
         super(
-                //new InstantCommand(intakeSubsystem::open, intakeSubsystem),
-                new WaitCommand(0.25)
-                //new InstantCommand(intakeSubsystem::close, intakeSubsystem)
+                new InstantCommand(intakeSubsystem::placeCone, intakeSubsystem),
+                new WaitCommand(0.25),
+                new InstantCommand(intakeSubsystem::stop, intakeSubsystem)
         );
     }
 }

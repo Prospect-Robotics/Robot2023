@@ -77,8 +77,7 @@ public final class Constants {
     public static final int PIGEON_ID = 14;
 
     // Intake
-    public static final int INTAKE_MASTER_ID = 15;
-    public static final int INTAKE_FOLLOWER_ID = 16;
+    public static final int INTAKE_MOTOR_ID = 15;
 
     // Wrist
     public static int WRIST_MOTOR_ID = 17;
