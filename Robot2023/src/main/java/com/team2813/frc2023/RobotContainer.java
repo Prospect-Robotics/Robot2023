@@ -31,8 +31,8 @@ public class RobotContainer {
     private final Drive drive = new Drive();
     private final Pivot pivot = new Pivot();
 //    private final Arm arm = new Arm();
-//    private final Wrist wrist = new Wrist();
-//    private final Intake intake = new Intake();
+    private final Wrist wrist = new Wrist();
+    private final Intake intake = new Intake();
 
     /**
      * String key is the name of the event marker in an auto routine,
@@ -112,7 +112,7 @@ public class RobotContainer {
         ));
         pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
 //        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
-//        wrist.setDefaultCommand(new DefaultWristCommand(wrist));
+        wrist.setDefaultCommand(new DefaultWristCommand(wrist));
 
         // For spline testing purposes
         //drive.initAutonomous(new Pose2d());
@@ -226,13 +226,19 @@ public class RobotContainer {
 //
 //        STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
 //
-//        WRIST_UP.whileTrue(new InstantCommand(wrist::up, wrist));
-//        WRIST_UP.onFalse(new InstantCommand(wrist::brake, wrist));
-//
-//        WRIST_DOWN.whileTrue(new InstantCommand(wrist::down, wrist));
-//        WRIST_DOWN.onFalse(new InstantCommand(wrist::brake, wrist));
+        WRIST_UP.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(wrist::up, wrist),
+                new WaitUntilCommand(WRIST_UP.negate())
+        ));
+        WRIST_UP.onFalse(new InstantCommand(wrist::brake, wrist));
 
-        // Temporary controls for pivot testing
+        WRIST_DOWN.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(wrist::down, wrist),
+                new WaitUntilCommand(WRIST_DOWN.negate())
+        ));
+        WRIST_DOWN.onFalse(new InstantCommand(wrist::brake, wrist));
+
+        // Temporary controls for testing
 
         TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot));
         MID_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot));
@@ -242,6 +248,13 @@ public class RobotContainer {
         doubleSubstationTrigger.onFalse(new ZeroPivotCommand(pivot));
 
         STOW_BUTTON.onTrue(new ZeroPivotCommand(pivot));
+
+        INTAKE_CUBE_BUTTON.whileTrue(new InstantCommand(intake::intakeCube, intake));
+        INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));
+
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        intakeConeTrigger.whileTrue(new InstantCommand(intake::intakeCone, intake));
+        intakeConeTrigger.onFalse(new InstantCommand(intake::stop, intake));
     }
 
 

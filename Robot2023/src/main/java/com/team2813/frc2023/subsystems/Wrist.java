@@ -1,8 +1,10 @@
 package com.team2813.frc2023.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.SparkMaxWrapper;
+import com.team2813.lib.motors.TalonFXWrapper;
 import com.team2813.lib.util.ConfigUtils;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -10,17 +12,11 @@ import static com.team2813.frc2023.Constants.*;
 
 public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
-    private boolean positionSet = false;
-    private boolean manualControl = false;
-
     public Wrist() {
-        super(new SparkMaxWrapper(WRIST_MOTOR_ID, CANSparkMaxLowLevel.MotorType.kBrushless, true));
+        super(new TalonFXWrapper(WRIST_MOTOR_ID, TalonFXInvertType.Clockwise));
 
         motor.configPID(0.25, 0, 0);
         motor.configMotionMagic(11000, 10000);
-
-        SparkMaxWrapper sparkMax = (SparkMaxWrapper) motor;
-        ConfigUtils.revConfig(() -> sparkMax.setSmartCurrentLimit(30));
     }
 
     public double getMotorPosition() {
@@ -31,26 +27,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         return motor.getVelocity();
     }
 
-    public boolean isPositionSet() {
-        return positionSet;
-    }
-
-    public boolean isUsingManualControl() {
-        return manualControl;
-    }
-
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.5);
-        manualControl = true;
+        motor.set(ControlMode.DUTY_CYCLE, -0.05);
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.5);
-        manualControl = true;
-    }
-
-    public void idle() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.2);
+        motor.set(ControlMode.DUTY_CYCLE, 0.05);
     }
 
     public boolean positionReached() {
@@ -59,8 +41,6 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public void startStowingWrist() {
         motor.set(ControlMode.DUTY_CYCLE, -0.3);
-        positionSet = false;
-        manualControl = false;
     }
 
     public void brake() {
@@ -82,13 +62,6 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         Rotations(double position ) {
             this.position = position;
         }
-    }
-
-    @Override
-    public void setPosition(Rotations position) {
-        super.setPosition(position);
-        positionSet = true;
-        manualControl = false;
     }
 
     @Override

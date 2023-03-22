@@ -28,7 +28,6 @@ public class ZeroWristCommand extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        wristSubsystem.idle();
         wristSubsystem.zeroSensors();
     }
 }

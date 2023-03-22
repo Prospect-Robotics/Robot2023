@@ -80,16 +80,16 @@ public final class Constants {
     public static final int INTAKE_MOTOR_ID = 15;
 
     // Wrist
-    public static int WRIST_MOTOR_ID = 17;
+    public static int WRIST_MOTOR_ID = 16;
 
     // Pivot
-    public static final int PIVOT_MOTOR_ID = 18;
+    public static final int PIVOT_MOTOR_ID = 17;
 
     // Arm
-    public static final int ARM_MOTOR_ID = 19;
+    public static final int ARM_MOTOR_ID = 18;
 
     // LEDs
-    public static final int CANIFIER_ID = 21;
+    public static final int CANIFIER_ID = 19;
 
     // Physical Constants
     public static final double TRACKWIDTH = Units.inchesToMeters(20.75); // meters
