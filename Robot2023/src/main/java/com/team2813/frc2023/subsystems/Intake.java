@@ -1,5 +1,6 @@
 package com.team2813.frc2023.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
@@ -10,6 +11,10 @@ import static com.team2813.frc2023.Constants.*;
 public class Intake extends SubsystemBase {
 
     private final TalonFXWrapper intakeMotor = new TalonFXWrapper(INTAKE_MOTOR_ID, TalonFXInvertType.CounterClockwise);
+
+    public Intake() {
+        intakeMotor.setNeutralMode(NeutralMode.Brake);
+    }
 
     public void intakeCube() {
         intakeMotor.set(ControlMode.DUTY_CYCLE, 0.7);
