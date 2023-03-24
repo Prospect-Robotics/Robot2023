@@ -44,7 +44,7 @@ public class Lightshow extends SubsystemBase {
 
 
     public enum Light {
-        DEFAULT(255, 255, 255,true, 0.5), //rainbow
+        DEFAULT(255, 255, 255,true, 0.0), //white
         ENABLED(65, 105, 225,true, 0.5), //royal blue
         DISABLED(255, 0, 0,false, 0.0), //red
         AUTONOMOUS(255, 0, 255,true, 0.75), //flashing purple
