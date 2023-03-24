@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
     }
 
     public void placeCone() {
-        intakeMotor.set(ControlMode.DUTY_CYCLE, 0.2);
+        intakeMotor.set(ControlMode.DUTY_CYCLE, 0.4);
     }
 
     public void stop() {

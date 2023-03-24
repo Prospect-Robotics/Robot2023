@@ -20,7 +20,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(Wrist.Rotations.OUTTAKE),
+                                () -> wristSubsystem.setPosition(Wrist.Rotations.TOP_SCORE),
                                 wristSubsystem
                         )
                 )

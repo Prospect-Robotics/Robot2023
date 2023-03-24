@@ -161,7 +161,7 @@ public class RobotContainer {
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
 
         TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist));
-//        MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
+        MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
 //        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
 //                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
@@ -213,16 +213,11 @@ public class RobotContainer {
 //                new StowAllCommand(pivot, arm, wrist)
 //        ));
 //
-//        OUTTAKE_BUTTON.whileTrue(new SequentialCommandGroup(
-//                new InstantCommand(intake::open, intake),
-//                new WaitCommand(0.25),
-//                new InstantCommand(intake::outtake, intake)
-//        ));
-//        OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
-//                new InstantCommand(intake::stop, intake),
-//                new InstantCommand(intake::close, intake),
-//                new StowAllCommand(pivot, arm, wrist)
-//        ));
+        OUTTAKE_BUTTON.whileTrue(new InstantCommand(intake::placeCone));
+        OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
 //
         STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
 //
