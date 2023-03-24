@@ -30,7 +30,7 @@ public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final Drive drive = new Drive();
     private final Pivot pivot = new Pivot();
-//    private final Arm arm = new Arm();
+    private final Arm arm = new Arm();
     private final Wrist wrist = new Wrist();
     private final Intake intake = new Intake();
 
@@ -111,7 +111,7 @@ public class RobotContainer {
                 drive
         ));
         pivot.setDefaultCommand(new DefaultPivotCommand(() -> -operatorController.getLeftY(), pivot));
-//        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
+        arm.setDefaultCommand(new DefaultArmCommand(() -> -operatorController.getRightY(), arm));
         wrist.setDefaultCommand(new DefaultWristCommand(wrist));
 
         // For spline testing purposes
@@ -160,7 +160,7 @@ public class RobotContainer {
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
 
-//        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist));
+        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist));
 //        MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
 //        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
@@ -224,7 +224,7 @@ public class RobotContainer {
 //                new StowAllCommand(pivot, arm, wrist)
 //        ));
 //
-//        STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
+        STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
 //
         WRIST_UP.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(wrist::up, wrist),
@@ -240,14 +240,9 @@ public class RobotContainer {
 
         // Temporary controls for testing
 
-        TOP_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.HIGH), pivot));
-        MID_NODE_BUTTON.onTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.MID), pivot));
-
         Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
         doubleSubstationTrigger.whileTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.DOUBLE_SUBSTATION), pivot));
         doubleSubstationTrigger.onFalse(new ZeroPivotCommand(pivot));
-
-        STOW_BUTTON.onTrue(new ZeroPivotCommand(pivot));
 
         INTAKE_CUBE_BUTTON.whileTrue(new InstantCommand(intake::intakeCube, intake));
         INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));

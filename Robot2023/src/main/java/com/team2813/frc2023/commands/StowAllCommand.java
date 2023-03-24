@@ -1,6 +1,5 @@
 package com.team2813.frc2023.commands;
 
-import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.Pivot;
 import com.team2813.frc2023.subsystems.Wrist;
@@ -14,14 +13,7 @@ public class StowAllCommand extends ParallelCommandGroup {
                 new ZeroWristCommand(wristSubsystem),
                 new SequentialCommandGroup(
                         new ZeroArmCommand(armSubsystem),
-                        new ParallelCommandGroup(
-                                new LockFunctionCommand(
-                                        armSubsystem::positionReached,
-                                        () -> armSubsystem.setPosition(Arm.ExtensionLength.INTAKE),
-                                        armSubsystem
-                                ),
-                                new ZeroPivotCommand(pivotSubsystem)
-                        )
+                        new ZeroPivotCommand(pivotSubsystem)
                 )
         );
     }

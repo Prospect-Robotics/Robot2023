@@ -15,8 +15,8 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public Wrist() {
         super(new TalonFXWrapper(WRIST_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0.25, 0, 0);
-        motor.configMotionMagic(11000, 10000);
+        motor.configPID(0.75, 0, 0);
+        motor.configMotionMagic(12000, 10000);
     }
 
     public double getMotorPosition() {
@@ -28,11 +28,11 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void up() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.05);
+        motor.set(ControlMode.DUTY_CYCLE, -0.15);
     }
 
     public void down() {
-        motor.set(ControlMode.DUTY_CYCLE, 0.05);
+        motor.set(ControlMode.DUTY_CYCLE, 0.15);
     }
 
     public boolean positionReached() {
@@ -40,7 +40,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public void startStowingWrist() {
-        motor.set(ControlMode.DUTY_CYCLE, -0.3);
+        motor.set(ControlMode.DUTY_CYCLE, -0.55);
     }
 
     public void brake() {
