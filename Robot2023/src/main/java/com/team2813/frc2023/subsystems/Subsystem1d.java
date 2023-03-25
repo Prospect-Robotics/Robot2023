@@ -13,6 +13,7 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     protected Motor motor;
     protected TalonFXProWrapper talonFXPro;
     protected Position currentPosition;
+    protected double currentEncoderRotationSetpoint;
 
     public Subsystem1d(SparkMaxWrapper motor) {
         this.motor = motor;
@@ -62,6 +63,8 @@ public class Subsystem1d<P extends Subsystem1d.Position> extends SubsystemBase {
     }
 
     public void setPosition(double encoderRotations) {
+        currentEncoderRotationSetpoint = encoderRotations;
+
         if (talonFXPro != null) talonFXPro.set(ControlMode.MOTION_MAGIC, encoderRotations);
         else motor.set(ControlMode.MOTION_MAGIC, encoderRotations);
     }

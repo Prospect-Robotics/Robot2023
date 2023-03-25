@@ -1,6 +1,5 @@
 package com.team2813.frc2023.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
@@ -9,6 +8,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import static com.team2813.frc2023.Constants.*;
 
 public class Pivot extends Subsystem1d<Pivot.Rotations> {
+
+    private boolean positionSet = false;
 
     public Pivot() {
         super(new TalonFXWrapper(PIVOT_MOTOR_ID, TalonFXInvertType.Clockwise));
@@ -27,8 +28,12 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         return motor.getEncoderPosition();
     }
 
-    public double getMotorVelocity(){
-        return motor.getVelocity();
+    public double getGoalPosition() {
+        return currentEncoderRotationSetpoint;
+    }
+
+    public boolean isPositionSet() {
+        return positionSet;
     }
 
     public boolean positionReached() {
@@ -41,12 +46,19 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
 
     public void startZeroingPivot() {
         motor.set(ControlMode.DUTY_CYCLE, -0.75);
+        positionSet = false;
     }
 
     public void brake() {
         motor.set(ControlMode.DUTY_CYCLE, 0);
     }
-    
+
+    @Override
+    public void setPosition(double encoderRotations) {
+        super.setPosition(encoderRotations);
+        positionSet = true;
+    }
+
     public enum Rotations implements Position {
         STARTING_CONFIGURATION(189),
         HIGH(125),

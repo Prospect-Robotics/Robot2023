@@ -35,7 +35,8 @@ public class DefaultPivotCommand extends CommandBase {
             pivotSubsystem.setPosition(position);
         }
         else {
-            pivotSubsystem.brake();
+            if (pivotSubsystem.isPositionSet()) pivotSubsystem.setPosition(pivotSubsystem.getGoalPosition());
+            else pivotSubsystem.brake();
         }
     }
 
