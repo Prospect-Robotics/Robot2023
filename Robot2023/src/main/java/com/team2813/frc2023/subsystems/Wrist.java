@@ -19,10 +19,6 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         motor.configMotionMagic(12000, 24000);
     }
 
-    public double getMotorPosition() {
-        return motor.getEncoderPosition();
-    }
-
     public double getMotorVelocity() {
         return motor.getVelocity();
     }
@@ -37,6 +33,10 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public boolean positionReached() {
         return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 1;
+    }
+
+    public boolean atZero() {
+        return ((TalonFXWrapper) motor).getSensorCollection().isRevLimitSwitchClosed() == 1;
     }
 
     public void startStowingWrist() {

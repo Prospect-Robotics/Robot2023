@@ -12,7 +12,7 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
     public Arm() {
         super(new TalonFXWrapper(ARM_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0.5, 0, 0); // TODO: tune
+        motor.configPID(0.5, 0, 0);
         motor.configMotionMagic(21000, 20000);
     }
 
