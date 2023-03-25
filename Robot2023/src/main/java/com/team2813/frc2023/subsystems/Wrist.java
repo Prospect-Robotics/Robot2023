@@ -15,8 +15,8 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     public Wrist() {
         super(new TalonFXWrapper(WRIST_MOTOR_ID, TalonFXInvertType.Clockwise));
 
-        motor.configPID(0.75, 0, 0);
-        motor.configMotionMagic(12000, 10000);
+        motor.configPID(0.5, 0, 0);
+        motor.configMotionMagic(12000, 24000);
     }
 
     public double getMotorPosition() {
