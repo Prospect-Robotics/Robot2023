@@ -11,6 +11,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
 
     public TopNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem) {
         super(
+                new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
                 new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.HIGH), pivotSubsystem),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(

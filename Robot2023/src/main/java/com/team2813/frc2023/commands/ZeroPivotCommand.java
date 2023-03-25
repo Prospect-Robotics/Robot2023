@@ -23,7 +23,8 @@ public class ZeroPivotCommand extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (Timer.getFPGATimestamp() - startTime) > 0.25 && Math.abs(pivotSubsystem.getMotorVelocity()) < 0.05;
+        //return (Timer.getFPGATimestamp() - startTime) > 0.25 && Math.abs(pivotSubsystem.getMotorVelocity()) < 0.05;
+        return pivotSubsystem.atZero();
     }
 
     @Override

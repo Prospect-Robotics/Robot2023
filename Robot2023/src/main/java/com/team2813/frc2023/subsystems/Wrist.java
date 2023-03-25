@@ -49,8 +49,8 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
 
     public enum Rotations implements Subsystem1d.Position {
         INTAKE(9),
-        TOP_SCORE(60),
-        MID_SCORE(65),
+        TOP_SCORE(64),
+        MID_SCORE(67),
         DOUBLE_SUBSTATION(25);
 
         @Override

@@ -11,6 +11,7 @@ public class MidNodeConfigurationCommand extends SequentialCommandGroup {
 
     public MidNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem) {
         super(
+                new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
                 new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.MID), pivotSubsystem),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(

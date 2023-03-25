@@ -167,22 +167,20 @@ public class RobotContainer {
 //                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
 //                new StartIntakeCommand(intake)
 //        ));
-//        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
-//                new InstantCommand(intake::idle, intake),
-//                new ZeroWristCommand(wrist)
-//        ));
+        INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new ZeroWristCommand(wrist)
+        ));
 //
-//        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
+        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
 //        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
 //                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
 //                new StartIntakeCommand(intake)
 //        ));
-//        intakeConeTrigger.onFalse(new SequentialCommandGroup(
-//                new InstantCommand(intake::close, intake),
-//                new InstantCommand(intake::stop, intake),
-//                new WaitCommand(0.4),
-//                new ZeroWristCommand(wrist)
-//        ));
+        intakeConeTrigger.onFalse(new ParallelCommandGroup(
+                new InstantCommand(intake::stop, intake),
+                new ZeroWristCommand(wrist)
+        ));
 //
 //        SINGLE_SUB_BUTTON.whileTrue(new ParallelCommandGroup(
 //                new ZeroArmCommand(arm),
@@ -240,11 +238,7 @@ public class RobotContainer {
         doubleSubstationTrigger.onFalse(new ZeroPivotCommand(pivot));
 
         INTAKE_CUBE_BUTTON.whileTrue(new InstantCommand(intake::intakeCube, intake));
-        INTAKE_CUBE_BUTTON.onFalse(new InstantCommand(intake::stop, intake));
-
-        Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
         intakeConeTrigger.whileTrue(new InstantCommand(intake::intakeCone, intake));
-        intakeConeTrigger.onFalse(new InstantCommand(intake::stop, intake));
     }
 
 

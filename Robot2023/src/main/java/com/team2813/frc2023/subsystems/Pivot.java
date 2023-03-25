@@ -35,6 +35,10 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.05;
     }
 
+    public boolean atZero() {
+        return ((TalonFXWrapper) motor).getSensorCollection().isRevLimitSwitchClosed() == 1;
+    }
+
     public void startZeroingPivot() {
         motor.set(ControlMode.DUTY_CYCLE, -0.75);
     }
@@ -44,11 +48,11 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
     
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(174),
-        HIGH(116),
-        MID(120),
-        DOUBLE_SUBSTATION(107),
-        SINGLE_SUBSTATION(38);
+        STARTING_CONFIGURATION(189),
+        HIGH(125),
+        MID(127),
+        DOUBLE_SUBSTATION(122),
+        SINGLE_SUBSTATION(53);
 
         @Override
         public double getPos() {
