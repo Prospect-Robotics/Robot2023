@@ -35,7 +35,8 @@ public class DefaultArmCommand extends CommandBase {
             armSubsystem.setPosition(position);
         }
         else {
-            armSubsystem.brake();
+            if (armSubsystem.isPositionSet()) armSubsystem.setPosition(armSubsystem.getGoalPosition());
+            else armSubsystem.brake();
         }
     }
 

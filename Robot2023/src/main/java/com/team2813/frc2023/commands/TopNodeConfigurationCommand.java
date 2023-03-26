@@ -4,6 +4,7 @@ import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.Pivot;
 import com.team2813.frc2023.subsystems.Wrist;
+import com.team2813.frc2023.util.NodeType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -13,7 +14,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
 
     private static boolean firstRun = true;
 
-    public TopNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem) {
+    public TopNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem, NodeType nodeType) {
         super(
                 new ConditionalCommand(
                         new InstantCommand(),
@@ -30,7 +31,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(Wrist.Rotations.TOP_SCORE),
+                                () -> wristSubsystem.setPosition(nodeType.getConeScoringWristRotations()),
                                 wristSubsystem
                         )
                 )

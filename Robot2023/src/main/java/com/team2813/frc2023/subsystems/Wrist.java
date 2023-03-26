@@ -1,11 +1,8 @@
 package com.team2813.frc2023.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.team2813.lib.motors.ControlMode;
-import com.team2813.lib.motors.SparkMaxWrapper;
 import com.team2813.lib.motors.TalonFXWrapper;
-import com.team2813.lib.util.ConfigUtils;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static com.team2813.frc2023.Constants.*;
@@ -19,10 +16,6 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
         motor.configMotionMagic(12000, 24000);
     }
 
-    public double getMotorVelocity() {
-        return motor.getVelocity();
-    }
-
     public void up() {
         motor.set(ControlMode.DUTY_CYCLE, -0.15);
     }
@@ -32,7 +25,7 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public boolean positionReached() {
-        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 1;
+        return Math.abs(currentPosition.getPos() - motor.getEncoderPosition()) < 0.5;
     }
 
     public boolean atZero() {
@@ -48,9 +41,12 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public enum Rotations implements Subsystem1d.Position {
-        INTAKE(9),
-        TOP_SCORE(64),
-        MID_SCORE(67),
+        TOP_SCORE_CONE(64),
+        MID_SCORE_CONE(67),
+        TOP_SCORE_CUBE(36),
+        CUBE_INTAKE(9),
+        GROUND_CONE_INTAKE(21),
+        SINGLE_SUBSTATION(16),
         DOUBLE_SUBSTATION(25);
 
         @Override

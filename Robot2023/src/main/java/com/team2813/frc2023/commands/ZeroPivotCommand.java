@@ -1,11 +1,14 @@
 package com.team2813.frc2023.commands;
 
 import com.team2813.frc2023.subsystems.Pivot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class ZeroPivotCommand extends CommandBase {
 
     private final Pivot pivotSubsystem;
+
+    private double startTime;
 
     public ZeroPivotCommand(Pivot pivotSubsystem) {
         this.pivotSubsystem = pivotSubsystem;
@@ -14,12 +17,14 @@ public class ZeroPivotCommand extends CommandBase {
 
     @Override
     public void initialize() {
+        startTime = Timer.getFPGATimestamp();
         pivotSubsystem.startZeroingPivot();
     }
 
     @Override
     public boolean isFinished() {
-        return pivotSubsystem.atZero();
+        return pivotSubsystem.atZero() ||
+                (((Timer.getFPGATimestamp() - startTime) > 0.25 && Math.abs(pivotSubsystem.getMotorVelocity()) < 0.05));
     }
 
     @Override

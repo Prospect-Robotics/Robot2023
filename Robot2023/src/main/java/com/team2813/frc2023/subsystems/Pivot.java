@@ -28,6 +28,10 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         return motor.getEncoderPosition();
     }
 
+    public double getMotorVelocity() {
+        return motor.getVelocity();
+    }
+
     public double getGoalPosition() {
         return currentEncoderRotationSetpoint;
     }
@@ -63,8 +67,8 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         STARTING_CONFIGURATION(189),
         HIGH(125),
         MID(127),
-        DOUBLE_SUBSTATION(122),
-        SINGLE_SUBSTATION(53);
+        SINGLE_SUBSTATION(46),
+        DOUBLE_SUBSTATION(122);
 
         @Override
         public double getPos() {

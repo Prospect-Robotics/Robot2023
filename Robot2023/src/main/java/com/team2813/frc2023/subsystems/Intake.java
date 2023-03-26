@@ -24,10 +24,6 @@ public class Intake extends SubsystemBase {
         intakeMotor.set(ControlMode.DUTY_CYCLE, -0.2);
     }
 
-    public void shootCube() {
-        intakeMotor.set(ControlMode.DUTY_CYCLE, -1);
-    }
-
     public void intakeCone() {
         intakeMotor.set(ControlMode.DUTY_CYCLE, -0.7);
     }

@@ -30,7 +30,7 @@ public class MidNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(Wrist.Rotations.MID_SCORE),
+                                () -> wristSubsystem.setPosition(Wrist.Rotations.MID_SCORE_CONE),
                                 wristSubsystem
                         )
                 )

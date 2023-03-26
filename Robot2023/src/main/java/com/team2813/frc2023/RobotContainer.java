@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.*;
+import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.*;
@@ -46,60 +47,59 @@ public class RobotContainer {
      * (use {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
-//        put("top-node-cone", new SequentialCommandGroup(
-//                new TopNodeConfigurationCommand(pivot, arm, wrist),
-//                new AutoScoreConeCommand(intake),
-//                new ParallelCommandGroup(
-//                        new ZeroArmCommand(arm),
-//                        new ZeroWristCommand(wrist)
-//                )
-//        ));
-//        put("top-node-cube", new SequentialCommandGroup(
-//                new TopNodeConfigurationCommand(pivot, arm, wrist),
-//                new AutoScoreCubeCommand(intake),
-//                new ParallelCommandGroup(
-//                        new ZeroArmCommand(arm),
-//                        new ZeroWristCommand(wrist)
-//                )
-//        ));
-//        put("mid-node-cone", new SequentialCommandGroup(
-//                new MidNodeConfigurationCommand(pivot, arm, wrist),
-//                new AutoScoreConeCommand(intake),
-//                new ParallelCommandGroup(
-//                        new ZeroArmCommand(arm),
-//                        new ZeroWristCommand(wrist)
-//                )
-//        ));
-//        put("mid-node-cube", new SequentialCommandGroup(
-//                new MidNodeConfigurationCommand(pivot, arm, wrist),
-//                new AutoScoreCubeCommand(intake),
-//                new ParallelCommandGroup(
-//                        new ZeroArmCommand(arm),
-//                        new ZeroWristCommand(wrist)
-//                )
-//        ));
-//        put("stow", new ParallelCommandGroup(
-//                new ZeroPivotCommand(pivot),
-//                new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.INTAKE), arm)
-//        ));
-//        put("start-intake", new SequentialCommandGroup(
-//                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
-//                new StartIntakeCommand(intake)
-//        ));
-//        put("intake-cube", new SequentialCommandGroup(
-//                new InstantCommand(intake::intake, intake),
-//                new InstantCommand(intake::close, intake)
-//        ));
-//        put("intake-cone", new SequentialCommandGroup(
-//                new InstantCommand(intake::close, intake),
-//                new InstantCommand(intake::stop, intake),
-//                new WaitCommand(0.4),
-//                new ZeroWristCommand(wrist)
-//        ));
+        put("top-node-cone", new SequentialCommandGroup(
+                new TopNodeConfigurationCommand(pivot, arm, wrist, NodeType.CONE),
+                new AutoScoreConeCommand(intake),
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
+        ));
+        put("top-node-cube", new SequentialCommandGroup(
+                new TopNodeConfigurationCommand(pivot, arm, wrist, NodeType.CUBE),
+                new AutoScoreCubeCommand(intake),
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
+        ));
+        put("mid-node-cone", new SequentialCommandGroup(
+                new MidNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreConeCommand(intake),
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
+        ));
+        put("mid-node-cube", new SequentialCommandGroup(
+                new MidNodeConfigurationCommand(pivot, arm, wrist),
+                new AutoScoreCubeCommand(intake),
+                new ParallelCommandGroup(
+                        new ZeroArmCommand(arm),
+                        new ZeroWristCommand(wrist)
+                )
+        ));
+        put("stow", new ParallelCommandGroup(
+                new ZeroPivotCommand(pivot)
+        ));
+        put("start-intake-cone", new ParallelCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.GROUND_CONE_INTAKE), wrist),
+                new InstantCommand(intake::intakeCone)
+        ));
+        put("start-intake-cube", new ParallelCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.CUBE_INTAKE), wrist),
+                new InstantCommand(intake::intakeCube)
+        ));
+        put("stop-intake", new ParallelCommandGroup(
+                new ZeroWristCommand(wrist),
+                new InstantCommand(intake::stop)
+        ));
     }};
 
     private final XboxController driverController = new XboxController(DRIVER_CONTROLLER_PORT);
     private final XboxController operatorController = new XboxController(OPERATOR_CONTROLLER_PORT);
+
+    private NodeType nodeType = NodeType.CONE;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer()
@@ -129,17 +129,17 @@ public class RobotContainer {
         return pivot;
     }
 
-//    Arm getArm() {
-//        return arm;
-//    }
+    Arm getArm() {
+        return arm;
+    }
 
-//    Wrist getWrist() {
-//        return wrist;
-//    }
-//
-//    Intake getIntake() {
-//        return intake;
-//    }
+    Wrist getWrist() {
+        return wrist;
+    }
+
+    Intake getIntake() {
+        return intake;
+    }
 
     /**
      * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -160,40 +160,44 @@ public class RobotContainer {
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
 
-        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist));
+        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist, nodeType));
         MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
-//        INTAKE_CUBE_BUTTON.whileTrue(new SequentialCommandGroup(
-//                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
-//                new StartIntakeCommand(intake)
-//        ));
+        INTAKE_CUBE_BUTTON.whileTrue(new ParallelCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.CUBE_INTAKE), wrist),
+                new InstantCommand(intake::intakeCube, intake),
+                new InstantCommand(() -> nodeType = NodeType.CUBE)
+        ));
         INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::stop, intake),
                 new ZeroWristCommand(wrist)
         ));
-//
+
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
-//        intakeConeTrigger.whileTrue(new SequentialCommandGroup(
-//                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.INTAKE), wrist),
-//                new StartIntakeCommand(intake)
-//        ));
+        intakeConeTrigger.whileTrue(new ParallelCommandGroup(
+                new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.GROUND_CONE_INTAKE), wrist),
+                new InstantCommand(intake::intakeCone),
+                new InstantCommand(() -> nodeType = NodeType.CONE)
+        ));
         intakeConeTrigger.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::stop, intake),
                 new ZeroWristCommand(wrist)
         ));
-//
-//        SINGLE_SUB_BUTTON.whileTrue(new ParallelCommandGroup(
-//                new ZeroArmCommand(arm),
-//                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
-//                new InstantCommand(intake::open, intake)
-//        ));
-//        SINGLE_SUB_BUTTON.onFalse(new SequentialCommandGroup(
-//                new InstantCommand(intake::close, intake),
-//                new InstantCommand(intake::idle, intake),
-//                new WaitCommand(0.25),
-//                new InstantCommand(intake::stop, intake),
-//                new StowAllCommand(pivot, arm, wrist)
-//        ));
+
+        SINGLE_SUB_BUTTON.whileTrue(new SequentialCommandGroup(
+                new StowAllCommand(pivot, arm, wrist),
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.SINGLE_SUBSTATION), arm),
+                        new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.SINGLE_SUBSTATION), wrist),
+                        new InstantCommand(intake::intakeCone, intake)
+                ),
+                new InstantCommand(() -> nodeType = NodeType.CONE)
+        ));
+        SINGLE_SUB_BUTTON.onFalse(new ParallelCommandGroup(
+                new StowAllCommand(pivot, arm, wrist),
+                new InstantCommand(intake::stop, intake)
+        ));
 //
 //        Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
 //        doubleSubstationTrigger.whileTrue(new SequentialCommandGroup(
@@ -211,14 +215,23 @@ public class RobotContainer {
 //                new StowAllCommand(pivot, arm, wrist)
 //        ));
 //
-        OUTTAKE_BUTTON.whileTrue(new InstantCommand(intake::placeCone));
+        OUTTAKE_BUTTON.whileTrue(new InstantCommand(() -> {
+            switch (nodeType) {
+                case CUBE:
+                    intake.placeCube();
+                    break;
+                case CONE:
+                    intake.placeCone();
+                    break;
+            }
+        }));
         OUTTAKE_BUTTON.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::stop, intake),
                 new StowAllCommand(pivot, arm, wrist)
         ));
-//
+
         STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
-//
+
         WRIST_UP.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(wrist::up, wrist),
                 new WaitUntilCommand(WRIST_UP.negate())
@@ -230,15 +243,6 @@ public class RobotContainer {
                 new WaitUntilCommand(WRIST_DOWN.negate())
         ));
         WRIST_DOWN.onFalse(new InstantCommand(wrist::brake, wrist));
-
-        // Temporary controls for testing
-
-        Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);
-        doubleSubstationTrigger.whileTrue(new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.DOUBLE_SUBSTATION), pivot));
-        doubleSubstationTrigger.onFalse(new ZeroPivotCommand(pivot));
-
-        INTAKE_CUBE_BUTTON.whileTrue(new InstantCommand(intake::intakeCube, intake));
-        intakeConeTrigger.whileTrue(new InstantCommand(intake::intakeCone, intake));
     }
 
 
