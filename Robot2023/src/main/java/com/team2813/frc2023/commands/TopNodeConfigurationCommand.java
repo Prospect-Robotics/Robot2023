@@ -33,7 +33,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(nodeType.getConeScoringWristRotations()),
+                                () -> wristSubsystem.setPosition(nodeType.getScoringWristRotationsHigh()),
                                 wristSubsystem
                         )
                 )
@@ -57,7 +57,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(nodeTypeSupplier.get().getConeScoringWristRotations()),
+                                () -> wristSubsystem.setPosition(nodeTypeSupplier.get().getScoringWristRotationsHigh()),
                                 wristSubsystem
                         )
                 )

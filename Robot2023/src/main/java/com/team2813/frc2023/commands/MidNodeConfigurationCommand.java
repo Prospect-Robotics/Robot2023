@@ -4,16 +4,19 @@ import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.Arm;
 import com.team2813.frc2023.subsystems.Pivot;
 import com.team2813.frc2023.subsystems.Wrist;
+import com.team2813.frc2023.util.NodeType;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+import java.util.function.Supplier;
+
 public class MidNodeConfigurationCommand extends SequentialCommandGroup {
 
     private static boolean firstRun = true;
 
-    public MidNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem) {
+    public MidNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem, NodeType nodeType) {
         super(
                 new ConditionalCommand(
                         new ZeroWristCommand(wristSubsystem),
@@ -21,7 +24,7 @@ public class MidNodeConfigurationCommand extends SequentialCommandGroup {
                         () -> firstRun
                 ),
                 new InstantCommand(() -> firstRun = false),
-                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.MID), pivotSubsystem),
+                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(nodeType.getScoringPivotRotationsMid()), pivotSubsystem),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(
                                 armSubsystem::positionReached,
@@ -30,7 +33,31 @@ public class MidNodeConfigurationCommand extends SequentialCommandGroup {
                         ),
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
-                                () -> wristSubsystem.setPosition(Wrist.Rotations.MID_SCORE_CONE),
+                                () -> wristSubsystem.setPosition(nodeType.getScoringWristRotationsMid()),
+                                wristSubsystem
+                        )
+                )
+        );
+    }
+
+    public MidNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem, Supplier<NodeType> nodeTypeSupplier) {
+        super(
+                new ConditionalCommand(
+                        new ZeroWristCommand(wristSubsystem),
+                        new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
+                        () -> firstRun
+                ),
+                new InstantCommand(() -> firstRun = false),
+                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(nodeTypeSupplier.get().getScoringPivotRotationsMid()), pivotSubsystem),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(
+                                armSubsystem::positionReached,
+                                () -> armSubsystem.setPosition(Arm.ExtensionLength.MIDDLE),
+                                armSubsystem
+                        ),
+                        new LockFunctionCommand(
+                                wristSubsystem::positionReached,
+                                () -> wristSubsystem.setPosition(nodeTypeSupplier.get().getScoringWristRotationsMid()),
                                 wristSubsystem
                         )
                 )

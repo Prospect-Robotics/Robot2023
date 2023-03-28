@@ -57,7 +57,7 @@ public class Arm extends Subsystem1d<Arm.ExtensionLength> {
         TOP(44),
         MIDDLE(13),
         SINGLE_SUBSTATION(5),
-        DOUBLE_SUBSTATION(53);
+        DOUBLE_SUBSTATION(26);
 
         @Override
         public double getPos() {

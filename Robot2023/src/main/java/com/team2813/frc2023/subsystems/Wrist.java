@@ -41,13 +41,14 @@ public class Wrist extends Subsystem1d<Wrist.Rotations> {
     }
 
     public enum Rotations implements Subsystem1d.Position {
-        TOP_SCORE_CONE(64),
+        TOP_SCORE_CONE(65),
         MID_SCORE_CONE(67),
         TOP_SCORE_CUBE(36),
-        CUBE_INTAKE(9),
+        MID_SCORE_CUBE(41),
+        CUBE_INTAKE(8),
         GROUND_CONE_INTAKE(21),
-        SINGLE_SUBSTATION(16),
-        DOUBLE_SUBSTATION(25);
+        SINGLE_SUBSTATION(18),
+        DOUBLE_SUBSTATION(68);
 
         @Override
         public double getPos() {
