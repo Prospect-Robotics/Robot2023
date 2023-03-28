@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.*;
+import com.team2813.frc2023.util.Lightshow;
 import com.team2813.frc2023.util.NodeType;
 import com.team2813.frc2023.util.ShuffleboardData;
 import edu.wpi.first.wpilibj.XboxController;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.team2813.frc2023.Constants.OperatorConstants.*;
+import static com.team2813.frc2023.Robot.LIGHTSHOW;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -164,27 +166,32 @@ public class RobotContainer {
         MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
         INTAKE_CUBE_BUTTON.whileTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.CUBE_INTAKE)),
                 new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.CUBE_INTAKE), wrist),
                 new InstantCommand(intake::intakeCube, intake),
                 new InstantCommand(() -> nodeType = NodeType.CUBE)
         ));
         INTAKE_CUBE_BUTTON.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::stop, intake),
-                new ZeroWristCommand(wrist)
+                new ZeroWristCommand(wrist),
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.ENABLED))
         ));
 
         Trigger intakeConeTrigger = new Trigger(() -> operatorController.getRightTriggerAxis() == 1);
         intakeConeTrigger.whileTrue(new ParallelCommandGroup(
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.CONE_INTAKE)),
                 new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.GROUND_CONE_INTAKE), wrist),
                 new InstantCommand(intake::intakeCone),
                 new InstantCommand(() -> nodeType = NodeType.CONE)
         ));
         intakeConeTrigger.onFalse(new ParallelCommandGroup(
                 new InstantCommand(intake::stop, intake),
-                new ZeroWristCommand(wrist)
+                new ZeroWristCommand(wrist),
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.ENABLED))
         ));
 
         SINGLE_SUB_BUTTON.whileTrue(new SequentialCommandGroup(
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.CONE_INTAKE)),
                 new StowAllCommand(pivot, arm, wrist),
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.SINGLE_SUBSTATION), pivot),
                 new ParallelCommandGroup(
@@ -196,7 +203,8 @@ public class RobotContainer {
         ));
         SINGLE_SUB_BUTTON.onFalse(new ParallelCommandGroup(
                 new StowAllCommand(pivot, arm, wrist),
-                new InstantCommand(intake::stop, intake)
+                new InstantCommand(intake::stop, intake),
+                new InstantCommand(() -> LIGHTSHOW.setLight(Lightshow.Light.ENABLED))
         ));
 //
 //        Trigger doubleSubstationTrigger = new Trigger(() -> operatorController.getLeftTriggerAxis() == 1);

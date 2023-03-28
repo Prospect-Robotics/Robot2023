@@ -49,7 +49,8 @@ public class Lightshow extends SubsystemBase {
         DISABLED(255, 0, 0,false, 0.0), //red
         AUTONOMOUS(255, 0, 255,true, 0.75), //flashing purple
         AUTO_BALANCE(0, 0, 128,true, 0.5), //flashing navy blue
-        PICKUP(255, 111, 0,false, 0.0); //orange
+        CUBE_INTAKE(60, 0, 184, false, 0.0), //cube purple
+        CONE_INTAKE(255, 197, 5, false, 0.0); // cone yellow
 
 
         final int r;
