@@ -16,7 +16,7 @@ public class MidNodeConfigurationCommand extends SequentialCommandGroup {
     public MidNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem) {
         super(
                 new ConditionalCommand(
-                        new InstantCommand(),
+                        new ZeroWristCommand(wristSubsystem),
                         new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
                         () -> firstRun
                 ),

@@ -160,7 +160,7 @@ public class RobotContainer {
         SLOWMODE_BUTTON.whileTrue(new InstantCommand(() -> drive.enableSlowMode(true), drive));
         SLOWMODE_BUTTON.onFalse(new InstantCommand(() -> drive.enableSlowMode(false), drive));
 
-        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist, nodeType));
+        TOP_NODE_BUTTON.onTrue(new TopNodeConfigurationCommand(pivot, arm, wrist, () -> nodeType));
         MID_NODE_BUTTON.onTrue(new MidNodeConfigurationCommand(pivot, arm, wrist));
 
         INTAKE_CUBE_BUTTON.whileTrue(new ParallelCommandGroup(

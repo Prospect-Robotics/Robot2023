@@ -85,5 +85,7 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Position", getMotorPosition());
+        SmartDashboard.putNumber("Pivot Motor Supply Current (A)", ((TalonFXWrapper) motor).getSupplyCurrent());
+        SmartDashboard.putNumber("Pivot Motor Stator Current (A)", ((TalonFXWrapper) motor).getStatorCurrent());
     }
 }

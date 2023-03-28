@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
+import java.util.function.Supplier;
+
 public class TopNodeConfigurationCommand extends SequentialCommandGroup {
 
     private static boolean firstRun = true;
@@ -17,7 +19,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
     public TopNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem, NodeType nodeType) {
         super(
                 new ConditionalCommand(
-                        new InstantCommand(),
+                        new ZeroWristCommand(wristSubsystem),
                         new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
                         () -> firstRun
                 ),
@@ -32,6 +34,30 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         new LockFunctionCommand(
                                 wristSubsystem::positionReached,
                                 () -> wristSubsystem.setPosition(nodeType.getConeScoringWristRotations()),
+                                wristSubsystem
+                        )
+                )
+        );
+    }
+
+    public TopNodeConfigurationCommand(Pivot pivotSubsystem, Arm armSubsystem, Wrist wristSubsystem, Supplier<NodeType> nodeTypeSupplier) {
+        super(
+                new ConditionalCommand(
+                        new ZeroWristCommand(wristSubsystem),
+                        new StowAllCommand(pivotSubsystem, armSubsystem, wristSubsystem),
+                        () -> firstRun
+                ),
+                new InstantCommand(() -> firstRun = false),
+                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.HIGH), pivotSubsystem),
+                new ParallelCommandGroup(
+                        new LockFunctionCommand(
+                                armSubsystem::positionReached,
+                                () -> armSubsystem.setPosition(Arm.ExtensionLength.TOP),
+                                armSubsystem
+                        ),
+                        new LockFunctionCommand(
+                                wristSubsystem::positionReached,
+                                () -> wristSubsystem.setPosition(nodeTypeSupplier.get().getConeScoringWristRotations()),
                                 wristSubsystem
                         )
                 )
