@@ -24,7 +24,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         () -> firstRun
                 ),
                 new InstantCommand(() -> firstRun = false),
-                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.HIGH), pivotSubsystem),
+                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(nodeType.getScoringPivotRotationsHigh()), pivotSubsystem),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(
                                 armSubsystem::positionReached,
@@ -48,7 +48,7 @@ public class TopNodeConfigurationCommand extends SequentialCommandGroup {
                         () -> firstRun
                 ),
                 new InstantCommand(() -> firstRun = false),
-                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(Pivot.Rotations.HIGH), pivotSubsystem),
+                new LockFunctionCommand(pivotSubsystem::positionReached, () -> pivotSubsystem.setPosition(nodeTypeSupplier.get().getScoringPivotRotationsHigh()), pivotSubsystem),
                 new ParallelCommandGroup(
                         new LockFunctionCommand(
                                 armSubsystem::positionReached,

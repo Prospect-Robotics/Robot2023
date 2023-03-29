@@ -53,10 +53,10 @@ public class Drive extends SubsystemBase {
         String canbus = "swerve";
         boolean licensed = true;
 
-        double frontLeftSteerOffset = -Math.toRadians(77.695312525);
-        double frontRightSteerOffset = -Math.toRadians(46.142578125);
-        double backLeftSteerOffset = -Math.toRadians(115.83984375);
-        double backRightSteerOffset = -Math.toRadians(359.121093755);
+        double frontLeftSteerOffset = -Math.toRadians(74.619140625);
+        double frontRightSteerOffset = -Math.toRadians(43.2421875);
+        double backLeftSteerOffset = -Math.toRadians(116.279296875);
+        double backRightSteerOffset = -Math.toRadians(358.9453125);
 
         double kP = 1.8;
         double kI = 0;
