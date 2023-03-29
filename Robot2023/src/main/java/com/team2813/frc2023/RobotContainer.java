@@ -81,6 +81,13 @@ public class RobotContainer {
                         new ZeroWristCommand(wrist)
                 )
         ));
+        put("mid-node-cube-config", new MidNodeConfigurationCommand(pivot, arm, wrist, NodeType.CUBE));
+        put("wait-for-mid-node-cube-config", new WaitUntilCommand(get("mid-node-cube-config")::isFinished));
+        put("score-cube", new AutoScoreCubeCommand(intake));
+        put("reset-arm-wrist", new ParallelCommandGroup(
+                new ZeroArmCommand(arm),
+                new ZeroWristCommand(wrist)
+        ));
         put("stow", new ParallelCommandGroup(
                 new ZeroPivotCommand(pivot)
         ));
@@ -196,7 +203,8 @@ public class RobotContainer {
                         new LockFunctionCommand(arm::positionReached, () -> arm.setPosition(Arm.ExtensionLength.SINGLE_SUBSTATION), arm),
                         new LockFunctionCommand(wrist::positionReached, () -> wrist.setPosition(Wrist.Rotations.SINGLE_SUBSTATION), wrist),
                         new InstantCommand(intake::intakeCone, intake)
-                )
+                ),
+                new InstantCommand(() -> nodeType = NodeType.CONE)
         ));
         SINGLE_SUB_BUTTON.onFalse(new ParallelCommandGroup(
                 new StowAllCommand(pivot, arm, wrist),
@@ -217,7 +225,6 @@ public class RobotContainer {
         ));
         doubleSubstationTrigger.onFalse(new SequentialCommandGroup(
                 new InstantCommand(intake::stop, intake),
-                new WaitCommand(0.4),
                 new StowAllCommand(pivot, arm, wrist)
         ));
 

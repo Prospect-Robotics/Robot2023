@@ -48,6 +48,7 @@ public enum AutoRoutine {
     L1_1CU_MOBILITY("L1-1Cube-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Cu - Mobility")),
     L1_1CO_MOBILITY_CLIMB("L1-1Cone-Mobility-Climb", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Co - Mobility - Climb")),
     L1_1CU_MOBILITY_CLIMB("L1-1Cube-Mobility-Climb", AUTO_FACTORY.buildTrajectoryAuto("L1 - 1Cu - Mobility - Climb")),
+    L1_2CU("L1-2Cube", AUTO_FACTORY.buildPathGroupAuto("L1 - 2Cu")),
 //    L2_1CO_INTAKE1("L2-1Co-Intake1", AUTO_FACTORY.buildPathGroupAuto("L2 - 1Co - Intake1")),
 //    L3_1CO_INTAKE("L3-1Co-intake", AUTO_FACTORY.buildPathGroupAuto("L3 - 1Co - intake")),
     L3_1CO_MOBILITY("L3-1Cone-Mobility", AUTO_FACTORY.buildTrajectoryAuto("L3 - 1Co - Mobility")),
