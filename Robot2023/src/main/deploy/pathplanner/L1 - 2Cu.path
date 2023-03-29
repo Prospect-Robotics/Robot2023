@@ -1,0 +1,211 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.85,
+        "y": 4.43
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.30731893451155,
+        "y": 4.43
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "top-node-cube"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.0714620660010565,
+        "y": 4.990890174088041
+      },
+      "prevControl": {
+        "x": 3.9440113739183706,
+        "y": 4.990890174088041
+      },
+      "nextControl": {
+        "x": 5.6013828373810615,
+        "y": 4.990890174088041
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.670859303257069,
+        "y": 4.595858326332038
+      },
+      "prevControl": {
+        "x": 5.986779762021065,
+        "y": 4.8656361735800395
+      },
+      "nextControl": {
+        "x": 5.986779762021065,
+        "y": 4.8656361735800395
+      },
+      "holonomicAngle": 0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.07,
+        "y": 4.99
+      },
+      "prevControl": {
+        "x": 5.461876143193485,
+        "y": 4.99
+      },
+      "nextControl": {
+        "x": 4.678123856806516,
+        "y": 4.99
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.5491442136730447,
+        "y": 4.8270964811160395
+      },
+      "prevControl": {
+        "x": 4.397676816875959,
+        "y": 4.9508408190831314
+      },
+      "nextControl": {
+        "x": 2.624191594537037,
+        "y": 4.692207557492038
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.85,
+        "y": 4.43
+      },
+      "prevControl": {
+        "x": 2.508143536733022,
+        "y": 4.43
+      },
+      "nextControl": {
+        "x": 2.508143536733022,
+        "y": 4.43
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "wait-for-mid-node-cube-config",
+          "score-cube",
+          "reset-arm-wrist"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 2.7012709794650376,
+        "y": 4.43
+      },
+      "prevControl": {
+        "x": 2.3158740548250343,
+        "y": 4.449269846232
+      },
+      "nextControl": null,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 0.0,
+      "names": [
+        "stow"
+      ]
+    },
+    {
+      "position": 1.0,
+      "names": [
+        "start-intake-cube"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "stop-intake"
+      ]
+    },
+    {
+      "position": 4.0,
+      "names": [
+        "mid-node-cube-config"
+      ]
+    },
+    {
+      "position": 5.0,
+      "names": [
+        "stow"
+      ]
+    }
+  ]
+}
