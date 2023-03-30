@@ -5,7 +5,7 @@
 
 package com.team2813.frc2023;
 
-import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
+//import com.team2813.frc2023.commands.AutoSplineCommand.SubstationOffsetType;
 import com.team2813.frc2023.commands.*;
 import com.team2813.frc2023.commands.util.LockFunctionCommand;
 import com.team2813.frc2023.subsystems.*;
@@ -276,8 +276,8 @@ public class RobotContainer {
             ShuffleboardData.routineChooser.addOption(routine.getName(), routine);
         }
 
-        ShuffleboardData.offsetChooser.addOption("Left", SubstationOffsetType.LEFT);
-        ShuffleboardData.offsetChooser.addOption("Right", SubstationOffsetType.RIGHT);
+//        ShuffleboardData.offsetChooser.addOption("Left", SubstationOffsetType.LEFT);
+//        ShuffleboardData.offsetChooser.addOption("Right", SubstationOffsetType.RIGHT);
     }
 
     private static double deadband(double value, double deadband) {

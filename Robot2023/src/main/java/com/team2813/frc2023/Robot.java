@@ -9,6 +9,7 @@ import com.team2813.frc2023.commands.util.TrajectoryAutoBuilder;
 import com.team2813.frc2023.util.Lightshow;
 import com.team2813.frc2023.util.Limelight;
 import com.team2813.frc2023.util.ShuffleboardData;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -23,7 +24,7 @@ import static com.team2813.frc2023.Constants.*;
  */
 public class Robot extends TimedRobot
 {
-    private final Limelight limelight = Limelight.getInstance();
+    //private final Limelight limelight = Limelight.getInstance();
 
     private Command autonomousCommand;
 
@@ -51,7 +52,8 @@ public class Robot extends TimedRobot
         ShuffleboardData.init();
         ROBOT_CONTAINER.populateMenus();
 
-        limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+        //limelight.setPipeline(APRILTAG_PIPELINE_INDEX);
+        CameraServer.startAutomaticCapture();
     }
     
     
@@ -76,7 +78,7 @@ public class Robot extends TimedRobot
     /** This method is called once each time the robot enters Disabled mode. */
     @Override
     public void disabledInit() {
-        limelight.setLights(false);
+        //limelight.setLights(false);
         LIGHTSHOW.setLight(Lightshow.Light.DISABLED);
     }
     
@@ -89,7 +91,7 @@ public class Robot extends TimedRobot
     @Override
     public void autonomousInit()
     {
-        limelight.setLights(true);
+        //limelight.setLights(true);
         LIGHTSHOW.setLight(Lightshow.Light.AUTONOMOUS);
 
         autonomousCommand = ROBOT_CONTAINER.getAutonomousCommand();
@@ -110,8 +112,8 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
-        limelight.setLights(false);
-        limelight.setStream(0);
+//        limelight.setLights(false);
+//        limelight.setStream(0);
 
         LIGHTSHOW.setLight(Lightshow.Light.ENABLED);
 

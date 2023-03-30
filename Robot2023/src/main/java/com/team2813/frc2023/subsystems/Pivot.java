@@ -1,5 +1,6 @@
 package com.team2813.frc2023.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.team2813.lib.motors.ControlMode;
 import com.team2813.lib.motors.TalonFXWrapper;
@@ -64,13 +65,13 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
     }
 
     public enum Rotations implements Position {
-        STARTING_CONFIGURATION(181),
-        HIGH_CONE(122),
-        HIGH_CUBE(111),
-        MID_CONE(122),
-        MID_CUBE(100),
+        STARTING_CONFIGURATION(189),
+        HIGH_CONE(129),
+        HIGH_CUBE(118),
+        MID_CONE(127),
+        MID_CUBE(107),
         SINGLE_SUBSTATION(49),
-        DOUBLE_SUBSTATION(120);
+        DOUBLE_SUBSTATION(117);
 
         @Override
         public double getPos() {
