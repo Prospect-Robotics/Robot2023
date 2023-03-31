@@ -25,7 +25,7 @@ public class ZeroPivotCommand extends CommandBase {
     @Override
     public boolean isFinished() {
         if (pivotSubsystem.atZero()) return true;
-        else if (((Timer.getFPGATimestamp() - startTime) > 0.25 && Math.abs(pivotSubsystem.getMotorVelocity()) < 0.1)) {
+        else if (((Timer.getFPGATimestamp() - startTime) > 0.125 && Math.abs(pivotSubsystem.getMotorVelocity()) < 0.1)) {
             DriverStation.reportError("Limit switch not reached", false);
             return true;
         }

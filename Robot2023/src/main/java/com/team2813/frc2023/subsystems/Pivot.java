@@ -70,8 +70,8 @@ public class Pivot extends Subsystem1d<Pivot.Rotations> {
         HIGH_CUBE(118),
         MID_CONE(127),
         MID_CUBE(107),
-        SINGLE_SUBSTATION(49),
-        DOUBLE_SUBSTATION(117);
+        SINGLE_SUBSTATION(53),
+        DOUBLE_SUBSTATION(119);
 
         @Override
         public double getPos() {
