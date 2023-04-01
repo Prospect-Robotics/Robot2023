@@ -245,7 +245,10 @@ public class RobotContainer {
                 new StowAllCommand(pivot, arm, wrist)
         ));
 
-        STOW_BUTTON.onTrue(new StowAllCommand(pivot, arm, wrist));
+        STOW_BUTTON.onTrue(new SequentialCommandGroup(
+                new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.RESET_START), pivot),
+                new StowAllCommand(pivot, arm, wrist)
+        ));
 
         WRIST_UP.whileTrue(new SequentialCommandGroup(
                 new InstantCommand(wrist::up, wrist),
