@@ -31,7 +31,6 @@ public final class Constants {
 
         // Driver controls
         public static final Trigger SLOWMODE_BUTTON = DRIVER_CONTROLLER.L1();
-        public static final Trigger SPATULA_BUTTON = DRIVER_CONTROLLER.R1();
 
         // Operator controls
         public static final Trigger SINGLE_SUB_BUTTON = OPERATOR_CONTROLLER.L1();

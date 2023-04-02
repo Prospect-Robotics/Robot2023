@@ -6,7 +6,7 @@ public class Units2813 {
     }
 
     public static int motorRevsToTicks(double revs, int cpr) {
-        return (int) revs * cpr;
+        return (int) (revs * cpr);
     }
 
     public static double motorRevsToWheelRevs(double revs, double gearRatio) {

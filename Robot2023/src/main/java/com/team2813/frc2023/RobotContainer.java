@@ -246,6 +246,7 @@ public class RobotContainer {
         ));
 
         STOW_BUTTON.onTrue(new SequentialCommandGroup(
+                new ZeroWristCommand(wrist),
                 new LockFunctionCommand(pivot::positionReached, () -> pivot.setPosition(Pivot.Rotations.RESET_START), pivot),
                 new StowAllCommand(pivot, arm, wrist)
         ));
