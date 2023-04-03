@@ -43,7 +43,7 @@ public class Falcon500DriveController implements DriveController {
             motorConfiguration.Voltage.PeakForwardVoltage = mk4Configuration.getNominalVoltage();
             motorConfiguration.Voltage.PeakReverseVoltage = -mk4Configuration.getNominalVoltage();
 
-            motorConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
+            motorConfiguration.CurrentLimits.SupplyCurrentLimit = mk4Configuration.getDriveCurrentLimit();
             motorConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
 
             motorConfiguration.TorqueCurrent.PeakForwardTorqueCurrent = 80;
