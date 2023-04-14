@@ -36,17 +36,6 @@ public class TrajectoryAutoBuilder extends BaseAutoBuilder {
         return new FollowCommand(trajectory, driveSubsystem);
     }
 
-    /**
-     * Use this to get a command to customize the event map.
-     * This should be the first command in your auto if
-     * you have custom events.
-     * @param addOnEventMap event map of custom events (Commands) and event markers (Strings)
-     * @return a command that customizes the event map
-     */
-    public CommandBase customizeEventMap(Map<String, Command> addOnEventMap) {
-        return new InstantCommand(() -> eventMap.putAll(addOnEventMap));
-    }
-
     public CommandBase buildTrajectoryAuto(String trajectoryName) {
         return buildTrajectoryAuto(trajectoryName, false);
     }

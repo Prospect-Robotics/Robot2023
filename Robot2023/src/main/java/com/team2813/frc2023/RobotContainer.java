@@ -42,11 +42,6 @@ public class RobotContainer {
      * Command value is the command associated with that event marker.
      * <p>
      * Refer to this when creating event markers in Path Planner.
-     * Note: this is just the default event map that is meant to have easy-to-
-     * predict commands, not commands such as rotating a specific number of degrees.
-     * You'll have to customize the event map that TrajectoryAutoBuilder.java uses
-     * to use commands like that
-     * (use {@link com.team2813.frc2023.commands.util.TrajectoryAutoBuilder#customizeEventMap(Map)}).
      */
     public final Map<String, Command> EVENT_MAP = new HashMap<>() {{
         put("top-node-cone", new SequentialCommandGroup(
